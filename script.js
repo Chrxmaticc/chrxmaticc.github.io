@@ -1,15 +1,41 @@
-// ========== LIVE STATS ==========
+// ========== TOPBAR ==========
+function loadTopbar() {
+  const topbar = document.createElement('header');
+  topbar.className = 'topbar';
+  topbar.innerHTML = `
+    <span class="logo">Chrxmaticc AI</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="commands.html">Commands</a>
+      <a href="faq.html">FAQ</a>
+      <a href="embed-builder.html">Embed Builder</a>
+    </nav>
+  `;
+  document.body.prepend(topbar);
+}
+
+// ========== FOOTER ==========
+function loadFooter() {
+  const footer = document.createElement('footer');
+  footer.className = 'footer';
+  footer.innerHTML = `
+    Chrxmaticc AI &copy; 2026 &mdash;
+    <a href="https://github.com/Chrxmaticc">GitHub</a> &middot;
+    <a href="https://twitch.tv/chrxmeelst">Twitch</a>
+  `;
+  document.body.appendChild(footer);
+}
+
+// ========== STATS ==========
 async function fetchStats() {
   try {
     const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/stats');
     const data = await res.json();
     document.getElementById('stat-servers').textContent = data.servers || '36';
     document.getElementById('stat-uptime').textContent = formatUptime(data.uptime || 0);
-    document.getElementById('stat-users').textContent = data.users || '0';
     document.getElementById('stat-commands').textContent = data.commands || '0';
-  } catch (e) {
-    console.log('Stats fetch failed, using defaults');
-  }
+  } catch (e) {}
 }
 
 function formatUptime(seconds) {
@@ -18,12 +44,11 @@ function formatUptime(seconds) {
   return d > 0 ? `${d}d ${h}h` : `${h}h`;
 }
 
-// ========== GUILD TICKER ==========
+// ========== GUILDS ==========
 function buildTicker(guilds, rowClass) {
   const row = document.querySelector(`.ticker-row.${rowClass}`);
   if (!row || !guilds.length) return;
   const icons = guilds.filter(g => g.icon).slice(0, 30);
-  // Double for seamless loop
   const html = [...icons, ...icons].map(g =>
     `<img src="https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64" alt="${g.name}" title="${g.name}">`
   ).join('');
@@ -37,51 +62,41 @@ async function fetchGuilds() {
     const half = Math.ceil(guilds.length / 2);
     buildTicker(guilds.slice(0, half), 'left');
     buildTicker(guilds.slice(half), 'right');
-  } catch (e) {
-    console.log('Guild fetch failed');
-  }
+  } catch (e) {}
 }
 
-// ========== SCROLL TO FEATURES ==========
+// ========== SCROLL TRANSITION ==========
 function setupScrollTransition() {
   const indicator = document.querySelector('.scroll-indicator');
   if (!indicator) return;
-
   indicator.addEventListener('click', () => {
     const transition = document.querySelector('.page-transition');
     transition.classList.add('active');
-    setTimeout(() => {
-      window.location.href = 'features.html';
-    }, 400);
+    setTimeout(() => { window.location.href = 'features.html'; }, 400);
   });
-
-  // Also trigger on scroll past 80% of hero
   window.addEventListener('scroll', () => {
-    const scrollPercent = window.scrollY / window.innerHeight;
-    if (scrollPercent > 0.8) {
+    if (window.scrollY / window.innerHeight > 0.8) {
       const transition = document.querySelector('.page-transition');
       transition.classList.add('active');
-      setTimeout(() => {
-        window.location.href = 'features.html';
-      }, 400);
+      setTimeout(() => { window.location.href = 'features.html'; }, 400);
     }
   }, { once: true });
 }
 
-// ========== FAQ TOGGLE ==========
+// ========== FAQ ==========
 function setupFaq() {
   document.querySelectorAll('.faq-item').forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('open');
-    });
+    item.addEventListener('click', () => item.classList.toggle('open'));
   });
 }
 
 // ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
+  loadTopbar();
+  loadFooter();
   fetchStats();
   fetchGuilds();
   setupScrollTransition();
   setupFaq();
-  setInterval(fetchStats, 60000); // Refresh stats every minute
+  setInterval(fetchStats, 60000);
 });
