@@ -4,11 +4,248 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chrxmaticc AI</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    @font-face {
+      font-family: 'Yuyu';
+      src: url('Yuyu-Regular.ttf') format('truetype');
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Yuyu', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ========== ANIMATED DOTS BACKGROUND ========== */
+    .dots-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff, #aaaaaa, #555555);
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(105vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.7; }
+      80%  { opacity: 0.2; }
+      100% { transform: translateY(-5vh) scale(1.8); opacity: 0; }
+    }
+
+    /* ========== TOPBAR ========== */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      z-index: 1000;
+    }
+    .topbar .logo {
+      font-size: 1.3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .topbar nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .topbar nav a:hover { color: #fff; }
+
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 20px 60px;
+    }
+    .hero h1 {
+      font-size: 4.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff, #c0c0c0, #888888, #c0c0c0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+      background-size: 300% 300%;
+    }
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .hero .desc {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 12px;
+    }
+
+    /* ========== STATS ========== */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 50px 0;
+      flex-wrap: wrap;
+      padding: 0 20px;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 24px 32px;
+      text-align: center;
+      min-width: 140px;
+      backdrop-filter: blur(6px);
+    }
+    .stat-box h2 {
+      font-size: 2.2rem;
+      background: linear-gradient(180deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-box p {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    /* ========== GUILD CARDS ========== */
+    .guild-cards-section {
+      padding: 60px 40px 80px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .guild-cards-section h2 {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 40px;
+    }
+    .guild-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 16px;
+    }
+    .guild-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.3s, transform 0.2s;
+      text-align: left;
+    }
+    .guild-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+    .guild-card img {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.1);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .guild-card .guild-info h3 {
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .guild-card .guild-info p {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.8rem;
+    }
+
+    /* ========== SCROLL INDICATOR ========== */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 1.5s infinite;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .scroll-indicator svg {
+      width: 32px; height: 32px;
+      stroke: rgba(255,255,255,0.4);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* ========== PAGE TRANSITION ========== */
+    .page-transition {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .page-transition.active { opacity: 1; }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.2);
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+    .footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  </style>
 </head>
 <body>
+
+  <!-- Animated Dots Background -->
+  <div class="dots-bg" id="dotsBg"></div>
+
+  <!-- Page Transition Overlay -->
   <div class="page-transition" id="transition"></div>
 
+  <!-- Hero -->
   <section class="hero">
     <h1>Chrxmaticc AI</h1>
     <p class="desc">a better bot than 60% of my competition</p>
@@ -17,15 +254,126 @@
       <div class="stat-box"><h2 id="stat-uptime">24h</h2><p>Uptime</p></div>
       <div class="stat-box"><h2 id="stat-commands">0</h2><p>Commands</p></div>
     </div>
-    <div class="ticker-section">
-      <div class="ticker-row left"></div>
-      <div class="ticker-row right"></div>
-    </div>
     <div class="scroll-indicator">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
     </div>
   </section>
 
-  <script src="script.js"></script>
+  <!-- Guild Cards -->
+  <section class="guild-cards-section">
+    <h2>Servers Using Chrxmaticc AI</h2>
+    <div class="guild-cards-grid" id="guild-cards">
+      <p style="color:rgba(255,255,255,0.3);">Loading servers...</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    Chrxmaticc AI &copy; 2026 &mdash;
+    <a href="https://github.com/Chrxmaticc">GitHub</a> &middot;
+    <a href="https://twitch.tv/chrxmeelst">Twitch</a>
+  </footer>
+
+  <script>
+    // ========== ANIMATED DOTS ==========
+    (function() {
+      const container = document.getElementById('dotsBg');
+      for (let i = 0; i < 70; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        const size = Math.random() * 5 + 1.5;
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.animationDuration = Math.random() * 10 + 8 + 's';
+        dot.style.animationDelay = Math.random() * 12 + 's';
+        container.appendChild(dot);
+      }
+    })();
+
+    // ========== TOPBAR ==========
+    (function() {
+      const topbar = document.createElement('header');
+      topbar.className = 'topbar';
+      topbar.innerHTML = `
+        <span class="logo">Chrxmaticc AI</span>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="features.html">Features</a>
+          <a href="commands.html">Commands</a>
+          <a href="faq.html">FAQ</a>
+          <a href="embed-builder.html">Embed Builder</a>
+        </nav>
+      `;
+      document.body.prepend(topbar);
+    })();
+
+    // ========== STATS ==========
+    async function fetchStats() {
+      try {
+        const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/stats');
+        const data = await res.json();
+        document.getElementById('stat-servers').textContent = data.servers || '36';
+        document.getElementById('stat-uptime').textContent = formatUptime(data.uptime || 0);
+        document.getElementById('stat-commands').textContent = data.commands || '0';
+      } catch (e) {}
+    }
+
+    function formatUptime(seconds) {
+      const d = Math.floor(seconds / 86400);
+      const h = Math.floor((seconds % 86400) / 3600);
+      return d > 0 ? `${d}d ${h}h` : `${h}h`;
+    }
+
+    // ========== GUILD CARDS ==========
+    async function fetchGuilds() {
+      const container = document.getElementById('guild-cards');
+      if (!container) return;
+      try {
+        const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/guilds');
+        const guilds = await res.json();
+        if (!guilds.length) {
+          container.innerHTML = '<p style="color:rgba(255,255,255,0.3);">No servers to show right now.</p>';
+          return;
+        }
+        container.innerHTML = guilds.map(g => `
+          <div class="guild-card">
+            <img src="${g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64` : 'https://cdn.discordapp.com/embed/avatars/0.png'}" alt="${g.name}">
+            <div class="guild-info">
+              <h3>${g.name}</h3>
+              <p>${g.memberCount || '?'} members</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = '<p style="color:rgba(255,255,255,0.3);">Failed to load servers.</p>';
+      }
+    }
+
+    // ========== SCROLL TRANSITION ==========
+    (function() {
+      const indicator = document.querySelector('.scroll-indicator');
+      if (!indicator) return;
+      indicator.addEventListener('click', () => {
+        const transition = document.getElementById('transition');
+        transition.classList.add('active');
+        setTimeout(() => { window.location.href = 'features.html'; }, 400);
+      });
+      window.addEventListener('scroll', () => {
+        if (window.scrollY / window.innerHeight > 0.8) {
+          const transition = document.getElementById('transition');
+          transition.classList.add('active');
+          setTimeout(() => { window.location.href = 'features.html'; }, 400);
+        }
+      }, { once: true });
+    })();
+
+    // ========== INIT ==========
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchStats();
+      fetchGuilds();
+      setInterval(fetchStats, 60000);
+    });
+  </script>
 </body>
 </html>
