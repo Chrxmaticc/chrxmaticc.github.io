@@ -28,6 +28,7 @@
       line-height: 1.6;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
     }
 
     a {
@@ -92,7 +93,7 @@
 
     /* ───── HERO ───── */
     .hero {
-      padding: 90px 0 70px;
+      padding: 100px 0 80px;
       text-align: center;
     }
 
@@ -131,44 +132,99 @@
       transform: translateY(-2px);
     }
 
-    /* ───── PREVIEW CARDS ───── */
-    .previews {
+    /* ───── FEATURE CATEGORIES ───── */
+    .features {
+      padding: 40px 0 80px;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+
+    .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      padding: 20px 0 80px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
     }
 
-    .preview-card {
-      padding: 18px;
+    .feature-card {
+      padding: 24px;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .feature-card svg {
+      width: 36px;
+      height: 36px;
+      stroke: #fff;
+      stroke-width: 1.5;
+      fill: none;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ───── PREVIEW SECTIONS ───── */
+    .preview-section {
+      padding: 40px 0;
+    }
+
+    .preview-section .inner {
       display: flex;
-      flex-direction: column;
-      gap: 14px;
+      align-items: center;
+      gap: 30px;
     }
 
-    .preview-card img {
+    .preview-section .text {
+      flex: 1;
+    }
+
+    .preview-section .image {
+      flex: 1;
+      text-align: center;
+    }
+
+    .preview-section .image img {
       width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: cover;
+      max-width: 380px;
       border-radius: 14px;
       border: 1px solid var(--border);
       filter: grayscale(20%);
       transition: transform 0.3s, filter 0.3s;
     }
 
-    .preview-card:hover img {
+    .preview-section .image img:hover {
       transform: scale(1.02);
       filter: grayscale(0%);
     }
 
-    .preview-card h3 {
-      font-size: 1.2rem;
+    .preview-section h2 {
+      font-size: 1.8rem;
       font-weight: 700;
+      margin-bottom: 12px;
     }
 
-    .preview-card p {
-      font-size: 0.95rem;
+    .preview-section p {
+      font-size: 1rem;
       color: var(--muted);
+      margin-bottom: 20px;
     }
 
     /* ───── GUILD MARQUEE ───── */
@@ -229,40 +285,6 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* ───── FUNNY FLEX SECTION ───── */
-    .flex {
-      padding: 40px 0 80px;
-      text-align: center;
-    }
-
-    .flex .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-
-    .flex-card {
-      padding: 24px;
-      text-align: left;
-    }
-
-    .flex-card .icon {
-      font-size: 2rem;
-      margin-bottom: 12px;
-    }
-
-    .flex-card h4 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .flex-card p {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
     /* ───── FOOTER ───── */
     footer {
       padding: 30px 0;
@@ -278,15 +300,15 @@
     }
 
     /* ───── RESPONSIVE ───── */
-    @media (max-width: 600px) {
-      .nav-links {
-        gap: 16px;
+    @media (max-width: 700px) {
+      .preview-section .inner {
+        flex-direction: column;
       }
-      .previews {
+      .preview-section .image img {
+        max-width: 100%;
+      }
+      .feature-grid {
         grid-template-columns: 1fr;
-      }
-      .hero {
-        padding: 70px 0 50px;
       }
     }
   </style>
@@ -295,9 +317,10 @@
   <nav>
     <div class="logo">chromed<span>.ai</span></div>
     <div class="nav-links">
-      <a href="#previews">previews</a>
+      <a href="#features">features</a>
+      <a href="#preview1">chat</a>
+      <a href="#preview2">customization</a>
       <a href="#guilds">guilds</a>
-      <a href="#flex">why chromed</a>
     </div>
   </nav>
 
@@ -309,17 +332,88 @@
     </a>
   </header>
 
-  <!-- PREVIEWS -->
-  <section id="previews" class="container previews">
-    <div class="glass preview-card">
-      <img src="preview1.png" alt="chat preview">
-      <h3>just ask. anything.</h3>
-      <p>a honest preview of the chat, ask chromed for any weird bullshit, even buying a car.</p>
+  <!-- FEATURES -->
+  <section id="features" class="features container">
+    <h2>10 reasons chromed runs circles around other bots</h2>
+    <div class="feature-grid">
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="15" r="1.5"/><path d="M8 16h8M8 8h8"/></svg>
+        <h3>AI & Chat</h3>
+        <p>10 modes, 5 models, hybrid Groq + Navy. Smarter, faster, meaner.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-5.5 2.5L12 17l-2.5-5.5L4 9l5.5-2.5z"/></svg>
+        <h3>Customization</h3>
+        <p>Per-server pfp, banner, nickname, bio. Even auto-rotate them.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3 4 5 1-3 4v5l-5-1-5 1v-5l-3-4 5-1z"/></svg>
+        <h3>Moderation</h3>
+        <p>Antinuke, blacklist/whitelist, command access. Actually works.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <h3>Profile & Images</h3>
+        <p>Avatar manipulation: spin, melt, toast, pixelate, globe, killcam.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="8"/></svg>
+        <h3>Economy & Games</h3>
+        <p>Merits, XP, duels, dungeons, mining, farm, gamble, pets. Grind forever.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-6M22 20H2"/></svg>
+        <h3>XP & Levels</h3>
+        <p>Level roles, prestige, leaderboards. Feed the addiction.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+        <h3>Embeds</h3>
+        <p>Interactive embed builder with buttons, colors, live preview.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+        <h3>Utility</h3>
+        <p>Birthdays, reminders, weather, QR, translate, search. Life admin.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <h3>Join to Create</h3>
+        <p>Temp voice channels with full owner control. VC without clutter.</p>
+      </div>
+      <div class="glass feature-card">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18M5 6h14v12H5z"/><circle cx="10" cy="10" r="2"/><circle cx="14" cy="10" r="2"/><path d="M7 14c1 1 2 1 3 0M14 14c1 1 2 1 3 0"/></svg>
+        <h3>Fun</h3>
+        <p>8ball, roasts, ships, wouldyourather, trivia. Never bored.</p>
+      </div>
     </div>
-    <div class="glass preview-card">
-      <img src="preview2.jpeg" alt="custom command preview">
-      <h3>customization at your hands</h3>
-      <p>make a simplified or advanced custom cmd, or even customize the bot’s appearance in your server.</p>
+  </section>
+
+  <!-- PREVIEW 1 -->
+  <section id="preview1" class="preview-section container">
+    <div class="inner">
+      <div class="text">
+        <h2>just ask. anything.</h2>
+        <p>a honest preview of the chat, ask chromed for any weird bullshit, even buying a car.</p>
+        <p class="muted">yes, he will find you a dealership and roast your budget at the same time.</p>
+      </div>
+      <div class="image">
+        <img src="preview1.png" alt="chat preview">
+      </div>
+    </div>
+  </section>
+
+  <!-- PREVIEW 2 -->
+  <section id="preview2" class="preview-section container">
+    <div class="inner">
+      <div class="image">
+        <img src="preview2.jpeg" alt="custom command preview">
+      </div>
+      <div class="text">
+        <h2>customization at your hands</h2>
+        <p>make a simplified or advanced custom cmd, or even customize the bot’s appearance in your server.</p>
+        <p class="muted">your server, your rules. chromed just enforces them.</p>
+      </div>
     </div>
   </section>
 
@@ -331,33 +425,6 @@
     </div>
   </section>
 
-  <!-- FUNNY FLEX -->
-  <section id="flex" class="flex container">
-    <h2>why chromed?</h2>
-    <div class="grid">
-      <div class="glass flex-card">
-        <div class="icon">⚡</div>
-        <h4>zero filter, all chaos</h4>
-        <p>built different. says what other bots are too scared to say.</p>
-      </div>
-      <div class="glass flex-card">
-        <div class="icon">🧠</div>
-        <h4>multiple AI modes</h4>
-        <p>from insane to depressed, we have a personality for every mood.</p>
-      </div>
-      <div class="glass flex-card">
-        <div class="icon">🎨</div>
-        <h4>per‑server customization</h4>
-        <p>change pfp, banner, nickname — even rotate them on a schedule.</p>
-      </div>
-      <div class="glass flex-card">
-        <div class="icon">🛡️</div>
-        <h4>antinuke that actually works</h4>
-        <p>won't just sit there while someone deletes your server.</p>
-      </div>
-    </div>
-  </section>
-
   <footer>
     <div class="container">
       <p>© 2026 Chromed. All rights reserved. Made with ♥ and a little too much caffeine.</p>
@@ -366,11 +433,9 @@
   </footer>
 
   <script>
-    // ─── FETCH GUILDS ───
     async function loadGuilds() {
       const track = document.getElementById('guild-track');
       if (!track) return;
-
       try {
         const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/guilds');
         const guilds = await res.json();
@@ -379,8 +444,6 @@
           track.innerHTML = '<div class="guild-chip">no servers found yet — be the first 😉</div>';
           return;
         }
-
-        // Duplicate for seamless marquee
         const chips = [...validGuilds, ...validGuilds].map(g => {
           const iconUrl = `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64`;
           return `
@@ -390,13 +453,11 @@
             </div>
           `;
         }).join('');
-
         track.innerHTML = chips;
       } catch (err) {
         track.innerHTML = '<div class="guild-chip">failed to load servers — blame Render</div>';
       }
     }
-
     loadGuilds();
   </script>
 </body>
