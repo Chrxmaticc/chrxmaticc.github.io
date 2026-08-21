@@ -3,377 +3,401 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chrxmaticc AI</title>
+  <title>Chromed — A machine designed to do all the hard work for you.</title>
   <style>
-    @font-face {
-      font-family: 'Yuyu';
-      src: url('Yuyu-Regular.ttf') format('truetype');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #000000;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.55);
+      --accent: #ffffff;
+      --radius: 20px;
+    }
 
     body {
-      font-family: 'Yuyu', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #000;
-      color: #fff;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
       overflow-x: hidden;
-      position: relative;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ========== ANIMATED DOTS BACKGROUND ========== */
-    .dots-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .dot {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, #ffffff, #aaaaaa, #555555);
-      animation: floatUp linear infinite;
-      opacity: 0;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(105vh) scale(0); opacity: 0; }
-      10%  { opacity: 0.7; }
-      80%  { opacity: 0.2; }
-      100% { transform: translateY(-5vh) scale(1.8); opacity: 0; }
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    /* ========== TOPBAR ========== */
-    .topbar {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      padding: 16px 40px;
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ───── GLASS CARD ───── */
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    /* ───── NAV ───── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 18px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      z-index: 1000;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .topbar .logo {
+
+    .logo {
+      font-weight: 700;
       font-size: 1.3rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff, #aaa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      letter-spacing: -0.02em;
     }
-    .topbar nav a {
-      color: #aaa;
-      text-decoration: none;
-      margin-left: 28px;
+
+    .logo span {
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
       font-size: 0.95rem;
+      color: var(--muted);
       transition: color 0.2s;
     }
-    .topbar nav a:hover { color: #fff; }
 
-    /* ========== HERO ========== */
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* ───── HERO ───── */
     .hero {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      padding: 90px 0 70px;
       text-align: center;
-      padding: 120px 20px 60px;
     }
+
     .hero h1 {
-      font-size: 4.5rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, #ffffff, #c0c0c0, #888888, #c0c0c0);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, #aaa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s ease-in-out infinite;
-      background-size: 300% 300%;
     }
-    @keyframes shimmer {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    .hero .desc {
+
+    .hero .sub {
       font-size: 1.2rem;
-      color: rgba(255,255,255,0.35);
-      margin-top: 12px;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 30px;
     }
 
-    /* ========== STATS ========== */
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 50px 0;
-      flex-wrap: wrap;
-      padding: 0 20px;
-    }
-    .stat-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 24px 32px;
-      text-align: center;
-      min-width: 140px;
-      backdrop-filter: blur(6px);
-    }
-    .stat-box h2 {
-      font-size: 2.2rem;
-      background: linear-gradient(180deg, #fff, #888);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .stat-box p {
-      color: rgba(255,255,255,0.3);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-top: 4px;
+    .hero .cta {
+      display: inline-block;
+      padding: 12px 28px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.2s;
     }
 
-    /* ========== GUILD CARDS ========== */
-    .guild-cards-section {
-      padding: 60px 40px 80px;
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .guild-cards-section h2 {
-      font-size: 2rem;
-      background: linear-gradient(135deg, #fff, #aaa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 40px;
-    }
-    .guild-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 16px;
-    }
-    .guild-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 20px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      transition: border-color 0.3s, transform 0.2s;
-      text-align: left;
-    }
-    .guild-card:hover {
-      border-color: rgba(255,255,255,0.15);
+    .hero .cta:hover {
+      background: rgba(255,255,255,0.12);
       transform: translateY(-2px);
     }
-    .guild-card img {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.1);
+
+    /* ───── PREVIEW CARDS ───── */
+    .previews {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 20px 0 80px;
+    }
+
+    .preview-card {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .preview-card img {
+      width: 100%;
+      aspect-ratio: 4/3;
       object-fit: cover;
-      flex-shrink: 0;
-    }
-    .guild-card .guild-info h3 {
-      font-size: 1rem;
-      color: #fff;
-      margin-bottom: 2px;
-    }
-    .guild-card .guild-info p {
-      color: rgba(255,255,255,0.35);
-      font-size: 0.8rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      filter: grayscale(20%);
+      transition: transform 0.3s, filter 0.3s;
     }
 
-    /* ========== SCROLL INDICATOR ========== */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: bounce 1.5s infinite;
-      cursor: pointer;
-      z-index: 10;
-    }
-    .scroll-indicator svg {
-      width: 32px; height: 32px;
-      stroke: rgba(255,255,255,0.4);
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(10px); }
+    .preview-card:hover img {
+      transform: scale(1.02);
+      filter: grayscale(0%);
     }
 
-    /* ========== PAGE TRANSITION ========== */
-    .page-transition {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
+    .preview-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
     }
-    .page-transition.active { opacity: 1; }
 
-    /* ========== FOOTER ========== */
-    .footer {
+    .preview-card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    /* ───── GUILD MARQUEE ───── */
+    .guild-section {
+      padding: 40px 0 70px;
+    }
+
+    .guild-section h2 {
       text-align: center;
-      padding: 40px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.2);
-      font-size: 0.8rem;
-      position: relative;
-      z-index: 1;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 28px;
     }
-    .footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+
+    .marquee {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+      animation: scroll 30s linear infinite;
+    }
+
+    .guild-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .guild-chip:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .guild-chip img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ───── FUNNY FLEX SECTION ───── */
+    .flex {
+      padding: 40px 0 80px;
+      text-align: center;
+    }
+
+    .flex .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .flex-card {
+      padding: 24px;
+      text-align: left;
+    }
+
+    .flex-card .icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .flex-card h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .flex-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ───── FOOTER ───── */
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    /* ───── RESPONSIVE ───── */
+    @media (max-width: 600px) {
+      .nav-links {
+        gap: 16px;
+      }
+      .previews {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        padding: 70px 0 50px;
+      }
+    }
   </style>
 </head>
 <body>
-
-  <!-- Animated Dots Background -->
-  <div class="dots-bg" id="dotsBg"></div>
-
-  <!-- Page Transition Overlay -->
-  <div class="page-transition" id="transition"></div>
-
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Chrxmaticc AI</h1>
-    <p class="desc">a better bot than 60% of my competition</p>
-    <div class="stats">
-      <div class="stat-box"><h2 id="stat-servers">36</h2><p>Servers</p></div>
-      <div class="stat-box"><h2 id="stat-uptime">24h</h2><p>Uptime</p></div>
-      <div class="stat-box"><h2 id="stat-commands">0</h2><p>Commands</p></div>
+  <nav>
+    <div class="logo">chromed<span>.ai</span></div>
+    <div class="nav-links">
+      <a href="#previews">previews</a>
+      <a href="#guilds">guilds</a>
+      <a href="#flex">why chromed</a>
     </div>
-    <div class="scroll-indicator">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+  </nav>
+
+  <header class="hero container">
+    <h1>A machine designed to do all the hard work for you.</h1>
+    <p class="sub">chromed, better than 60% of its competition.</p>
+    <a class="cta" href="https://discord.com/oauth2/authorize?client_id=1540000638661042326&scope=bot+applications.commands&permissions=544357739767" target="_blank">
+      add chromed to your server →
+    </a>
+  </header>
+
+  <!-- PREVIEWS -->
+  <section id="previews" class="container previews">
+    <div class="glass preview-card">
+      <img src="preview1.png" alt="chat preview">
+      <h3>just ask. anything.</h3>
+      <p>a honest preview of the chat, ask chromed for any weird bullshit, even buying a car.</p>
+    </div>
+    <div class="glass preview-card">
+      <img src="preview2.png" alt="custom command preview">
+      <h3>customization at your hands</h3>
+      <p>make a simplified or advanced custom cmd, or even customize the bot’s appearance in your server.</p>
     </div>
   </section>
 
-  <!-- Guild Cards -->
-  <section class="guild-cards-section">
-    <h2>Servers Using Chrxmaticc AI</h2>
-    <div class="guild-cards-grid" id="guild-cards">
-      <p style="color:rgba(255,255,255,0.3);">Loading servers...</p>
+  <!-- GUILD MARQUEE -->
+  <section id="guilds" class="guild-section container">
+    <h2>trusted by these servers</h2>
+    <div class="marquee" id="marquee">
+      <div class="marquee-track" id="guild-track"></div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    Chrxmaticc AI &copy; 2026 &mdash;
-    <a href="https://github.com/Chrxmaticc">GitHub</a> &middot;
-    <a href="https://twitch.tv/chrxmeelst">Twitch</a>
+  <!-- FUNNY FLEX -->
+  <section id="flex" class="flex container">
+    <h2>why chromed?</h2>
+    <div class="grid">
+      <div class="glass flex-card">
+        <div class="icon">⚡</div>
+        <h4>zero filter, all chaos</h4>
+        <p>built different. says what other bots are too scared to say.</p>
+      </div>
+      <div class="glass flex-card">
+        <div class="icon">🧠</div>
+        <h4>multiple AI modes</h4>
+        <p>from insane to depressed, we have a personality for every mood.</p>
+      </div>
+      <div class="glass flex-card">
+        <div class="icon">🎨</div>
+        <h4>per‑server customization</h4>
+        <p>change pfp, banner, nickname — even rotate them on a schedule.</p>
+      </div>
+      <div class="glass flex-card">
+        <div class="icon">🛡️</div>
+        <h4>antinuke that actually works</h4>
+        <p>won't just sit there while someone deletes your server.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Chromed. All rights reserved. Made with ♥ and a little too much caffeine.</p>
+      <p><a href="https://discord.gg/rTrJyPyayg" target="_blank">support server</a> · <a href="https://github.com/Chrxmaticc" target="_blank">github</a></p>
+    </div>
   </footer>
 
   <script>
-    // ========== ANIMATED DOTS ==========
-    (function() {
-      const container = document.getElementById('dotsBg');
-      for (let i = 0; i < 70; i++) {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        const size = Math.random() * 5 + 1.5;
-        dot.style.width = size + 'px';
-        dot.style.height = size + 'px';
-        dot.style.left = Math.random() * 100 + '%';
-        dot.style.animationDuration = Math.random() * 10 + 8 + 's';
-        dot.style.animationDelay = Math.random() * 12 + 's';
-        container.appendChild(dot);
-      }
-    })();
+    // ─── FETCH GUILDS ───
+    async function loadGuilds() {
+      const track = document.getElementById('guild-track');
+      if (!track) return;
 
-    // ========== TOPBAR ==========
-    (function() {
-      const topbar = document.createElement('header');
-      topbar.className = 'topbar';
-      topbar.innerHTML = `
-        <span class="logo">Chrxmaticc AI</span>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="features.html">Features</a>
-          <a href="commands.html">Commands</a>
-          <a href="faq.html">FAQ</a>
-          <a href="embed-builder.html">Embed Builder</a>
-        </nav>
-      `;
-      document.body.prepend(topbar);
-    })();
-
-    // ========== STATS ==========
-    async function fetchStats() {
-      try {
-        const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/stats');
-        const data = await res.json();
-        document.getElementById('stat-servers').textContent = data.servers || '36';
-        document.getElementById('stat-uptime').textContent = formatUptime(data.uptime || 0);
-        document.getElementById('stat-commands').textContent = data.commands || '0';
-      } catch (e) {}
-    }
-
-    function formatUptime(seconds) {
-      const d = Math.floor(seconds / 86400);
-      const h = Math.floor((seconds % 86400) / 3600);
-      return d > 0 ? `${d}d ${h}h` : `${h}h`;
-    }
-
-    // ========== GUILD CARDS ==========
-    async function fetchGuilds() {
-      const container = document.getElementById('guild-cards');
-      if (!container) return;
       try {
         const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/guilds');
         const guilds = await res.json();
-        if (!guilds.length) {
-          container.innerHTML = '<p style="color:rgba(255,255,255,0.3);">No servers to show right now.</p>';
+        const validGuilds = guilds.filter(g => g.icon).slice(0, 20);
+        if (!validGuilds.length) {
+          track.innerHTML = '<div class="guild-chip">no servers found yet — be the first 😉</div>';
           return;
         }
-        container.innerHTML = guilds.map(g => `
-          <div class="guild-card">
-            <img src="${g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64` : 'https://cdn.discordapp.com/embed/avatars/0.png'}" alt="${g.name}">
-            <div class="guild-info">
-              <h3>${g.name}</h3>
-              <p>${g.memberCount || '?'} members</p>
+
+        // Duplicate for seamless marquee
+        const chips = [...validGuilds, ...validGuilds].map(g => {
+          const iconUrl = `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64`;
+          return `
+            <div class="guild-chip">
+              <img src="${iconUrl}" alt="${g.name}">
+              <span>${g.name}</span>
             </div>
-          </div>
-        `).join('');
-      } catch (e) {
-        container.innerHTML = '<p style="color:rgba(255,255,255,0.3);">Failed to load servers.</p>';
+          `;
+        }).join('');
+
+        track.innerHTML = chips;
+      } catch (err) {
+        track.innerHTML = '<div class="guild-chip">failed to load servers — blame Render</div>';
       }
     }
 
-    // ========== SCROLL TRANSITION ==========
-    (function() {
-      const indicator = document.querySelector('.scroll-indicator');
-      if (!indicator) return;
-      indicator.addEventListener('click', () => {
-        const transition = document.getElementById('transition');
-        transition.classList.add('active');
-        setTimeout(() => { window.location.href = 'features.html'; }, 400);
-      });
-      window.addEventListener('scroll', () => {
-        if (window.scrollY / window.innerHeight > 0.8) {
-          const transition = document.getElementById('transition');
-          transition.classList.add('active');
-          setTimeout(() => { window.location.href = 'features.html'; }, 400);
-        }
-      }, { once: true });
-    })();
-
-    // ========== INIT ==========
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchStats();
-      fetchGuilds();
-      setInterval(fetchStats, 60000);
-    });
+    loadGuilds();
   </script>
 </body>
 </html>
