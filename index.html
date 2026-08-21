@@ -19,21 +19,48 @@
       --muted: rgba(255, 255, 255, 0.55);
       --accent: #ffffff;
       --radius: 20px;
+      --glow: 0 0 80px rgba(255,255,255,0.03);
     }
 
     body {
-      background: var(--bg);
+      background: #000;
       color: var(--text);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
+      position: relative;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    /* Background GIF */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('background.gif') center/cover no-repeat;
+      opacity: 0.2;
+      z-index: -2;
+      animation: bgPulse 10s ease-in-out infinite;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.95) 100%);
+      z-index: -1;
+    }
+
+    @keyframes bgPulse {
+      0%, 100% { opacity: 0.15; }
+      50% { opacity: 0.3; }
     }
 
     .container {
@@ -42,17 +69,59 @@
       padding: 0 24px;
     }
 
-    /* ───── GLASS CARD ───── */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Glass card */
     .glass {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: var(--glow);
+      transition: transform 0.4s ease, background 0.3s, border-color 0.3s;
     }
 
-    /* ───── NAV ───── */
+    .glass:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* Reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      z-index: -1;
+      animation: floatOrb 20s infinite alternate;
+    }
+
+    .orb1 { width: 400px; height: 400px; background: #fff; top: -100px; left: -100px; }
+    .orb2 { width: 300px; height: 300px; background: #fff; bottom: -50px; right: -50px; animation-delay: 5s; }
+    .orb3 { width: 200px; height: 200px; background: #fff; top: 40%; left: 60%; animation-delay: 10s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 60px) scale(1.3); }
+    }
+
+    /* Nav */
     nav {
       position: sticky;
       top: 0;
@@ -64,16 +133,28 @@
       background: rgba(0,0,0,0.75);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255,255,255,0.06);
+      animation: slideDown 0.6s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
     }
 
     .logo {
       font-weight: 700;
       font-size: 1.3rem;
       letter-spacing: -0.02em;
+      animation: pulseText 2s infinite;
     }
 
     .logo span {
       color: var(--muted);
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
 
     .nav-links {
@@ -84,17 +165,19 @@
     .nav-links a {
       font-size: 0.95rem;
       color: var(--muted);
-      transition: color 0.2s;
+      transition: color 0.2s, transform 0.2s;
     }
 
     .nav-links a:hover {
       color: var(--text);
+      transform: translateY(-2px);
     }
 
-    /* ───── HERO ───── */
+    /* Hero */
     .hero {
-      padding: 100px 0 80px;
+      padding: 120px 0 80px;
       text-align: center;
+      position: relative;
     }
 
     .hero h1 {
@@ -106,6 +189,7 @@
       background: linear-gradient(135deg, #fff 0%, #aaa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      animation: fadeInUp 1s ease;
     }
 
     .hero .sub {
@@ -113,6 +197,7 @@
       color: var(--muted);
       max-width: 560px;
       margin: 0 auto 30px;
+      animation: fadeInUp 1s ease 0.2s both;
     }
 
     .hero .cta {
@@ -124,15 +209,75 @@
       color: #fff;
       font-weight: 600;
       font-size: 1rem;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      animation: fadeInUp 1s ease 0.4s both;
     }
 
     .hero .cta:hover {
       background: rgba(255,255,255,0.12);
       transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255,255,255,0.1);
     }
 
-    /* ───── FEATURE CATEGORIES ───── */
+    .typing {
+      display: inline-block;
+      border-right: 2px solid #fff;
+      padding-right: 5px;
+      animation: blink 0.8s step-end infinite;
+      font-size: 1.3rem;
+      color: var(--muted);
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: #fff; }
+      50% { border-color: transparent; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 40px 0 60px;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 20px 30px;
+      min-width: 140px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .stat:nth-child(2) { animation-delay: 1s; }
+    .stat:nth-child(3) { animation-delay: 2s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .stat h3 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(180deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Features */
     .features {
       padding: 40px 0 80px;
     }
@@ -142,6 +287,7 @@
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease;
     }
 
     .feature-grid {
@@ -153,12 +299,8 @@
     .feature-card {
       padding: 24px;
       text-align: left;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .feature-card:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease;
     }
 
     .feature-card svg {
@@ -168,6 +310,11 @@
       stroke-width: 1.5;
       fill: none;
       margin-bottom: 16px;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover svg {
+      transform: rotate(8deg) scale(1.1);
     }
 
     .feature-card h3 {
@@ -181,7 +328,7 @@
       color: var(--muted);
     }
 
-    /* ───── PREVIEW SECTIONS ───── */
+    /* Preview sections */
     .preview-section {
       padding: 40px 0;
     }
@@ -207,12 +354,14 @@
       border-radius: 14px;
       border: 1px solid var(--border);
       filter: grayscale(20%);
-      transition: transform 0.3s, filter 0.3s;
+      transition: transform 0.3s, filter 0.3s, box-shadow 0.3s;
+      animation: float 8s ease-in-out infinite;
     }
 
     .preview-section .image img:hover {
-      transform: scale(1.02);
+      transform: scale(1.05);
       filter: grayscale(0%);
+      box-shadow: 0 0 40px rgba(255,255,255,0.1);
     }
 
     .preview-section h2 {
@@ -227,7 +376,39 @@
       margin-bottom: 20px;
     }
 
-    /* ───── GUILD MARQUEE ───── */
+    /* Command showcase */
+    .command-showcase {
+      padding: 60px 0;
+    }
+
+    .terminal {
+      background: #0a0a0a;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #ccc;
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: left;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: fadeInUp 1s ease;
+    }
+
+    .terminal .prompt {
+      color: #fff;
+    }
+
+    .terminal .cmd {
+      color: #aaffaa;
+    }
+
+    .terminal .comment {
+      color: #666;
+    }
+
+    /* Guild marquee */
     .guild-section {
       padding: 40px 0 70px;
     }
@@ -285,7 +466,55 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* ───── FOOTER ───── */
+    /* FAQ */
+    .faq {
+      padding: 40px 0 80px;
+    }
+
+    .faq h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .faq-item {
+      padding: 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .faq-item .question {
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-item .answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .faq-item.active .answer {
+      max-height: 200px;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      text-align: center;
+      padding: 80px 0;
+    }
+
+    .final-cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      animation: pulseText 3s infinite;
+    }
+
+    /* Footer */
     footer {
       padding: 30px 0;
       border-top: 1px solid var(--border);
@@ -299,7 +528,7 @@
       text-decoration: underline;
     }
 
-    /* ───── RESPONSIVE ───── */
+    /* Responsive */
     @media (max-width: 700px) {
       .preview-section .inner {
         flex-direction: column;
@@ -310,10 +539,18 @@
       .feature-grid {
         grid-template-columns: 1fr;
       }
+      .stats {
+        gap: 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Floating orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
   <nav>
     <div class="logo">chromed<span>.ai</span></div>
     <div class="nav-links">
@@ -321,67 +558,85 @@
       <a href="#preview1">chat</a>
       <a href="#preview2">customization</a>
       <a href="#guilds">guilds</a>
+      <a href="#faq">faq</a>
     </div>
   </nav>
 
   <header class="hero container">
     <h1>A machine designed to do all the hard work for you.</h1>
-    <p class="sub">chromed, better than 60% of its competition.</p>
+    <p class="sub"><span class="typing" id="typing"></span></p>
     <a class="cta" href="https://discord.com/oauth2/authorize?client_id=1540000638661042326&scope=bot+applications.commands&permissions=544357739767" target="_blank">
       add chromed to your server →
     </a>
   </header>
 
-  <!-- FEATURES -->
+  <!-- Stats -->
+  <section class="stats container">
+    <div class="glass stat">
+      <h3 class="counter" data-target="50">0</h3>
+      <p>servers</p>
+    </div>
+    <div class="glass stat">
+      <h3 class="counter" data-target="100">0</h3>
+      <p>commands</p>
+    </div>
+    <div class="glass stat">
+      <h3 class="counter" data-target="99">0</h3>
+      <p>uptime %</p>
+    </div>
+  </section>
+
+  <!-- Features -->
   <section id="features" class="features container">
     <h2>10 reasons chromed runs circles around other bots</h2>
     <div class="feature-grid">
-      <div class="glass feature-card">
+      <!-- Same 10 feature cards from previous version but with reveal class -->
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="15" r="1.5"/><path d="M8 16h8M8 8h8"/></svg>
         <h3>AI & Chat</h3>
         <p>10 modes, 5 models, hybrid Groq + Navy. Smarter, faster, meaner.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-5.5 2.5L12 17l-2.5-5.5L4 9l5.5-2.5z"/></svg>
         <h3>Customization</h3>
         <p>Per-server pfp, banner, nickname, bio. Even auto-rotate them.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M12 2l3 4 5 1-3 4v5l-5-1-5 1v-5l-3-4 5-1z"/></svg>
         <h3>Moderation</h3>
         <p>Antinuke, blacklist/whitelist, command access. Actually works.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
         <h3>Profile & Images</h3>
         <p>Avatar manipulation: spin, melt, toast, pixelate, globe, killcam.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="8"/></svg>
         <h3>Economy & Games</h3>
         <p>Merits, XP, duels, dungeons, mining, farm, gamble, pets. Grind forever.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-6M22 20H2"/></svg>
         <h3>XP & Levels</h3>
         <p>Level roles, prestige, leaderboards. Feed the addiction.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
         <h3>Embeds</h3>
         <p>Interactive embed builder with buttons, colors, live preview.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
         <h3>Utility</h3>
         <p>Birthdays, reminders, weather, QR, translate, search. Life admin.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <h3>Join to Create</h3>
         <p>Temp voice channels with full owner control. VC without clutter.</p>
       </div>
-      <div class="glass feature-card">
+      <div class="glass feature-card reveal">
         <svg viewBox="0 0 24 24"><path d="M3 18h18M5 6h14v12H5z"/><circle cx="10" cy="10" r="2"/><circle cx="14" cy="10" r="2"/><path d="M7 14c1 1 2 1 3 0M14 14c1 1 2 1 3 0"/></svg>
         <h3>Fun</h3>
         <p>8ball, roasts, ships, wouldyourather, trivia. Never bored.</p>
@@ -389,13 +644,13 @@
     </div>
   </section>
 
-  <!-- PREVIEW 1 -->
-  <section id="preview1" class="preview-section container">
+  <!-- Preview 1 -->
+  <section id="preview1" class="preview-section container reveal">
     <div class="inner">
       <div class="text">
         <h2>just ask. anything.</h2>
         <p>a honest preview of the chat, ask chromed for any weird bullshit, even buying a car.</p>
-        <p class="muted">yes, he will find you a dealership and roast your budget at the same time.</p>
+        <p>yes, he will find you a dealership and roast your budget at the same time.</p>
       </div>
       <div class="image">
         <img src="preview1.png" alt="chat preview">
@@ -403,26 +658,66 @@
     </div>
   </section>
 
-  <!-- PREVIEW 2 -->
-  <section id="preview2" class="preview-section container">
+  <!-- Preview 2 -->
+  <section id="preview2" class="preview-section container reveal">
     <div class="inner">
       <div class="image">
-        <img src="preview2.jpeg" alt="custom command preview">
+        <img src="preview2.png" alt="custom command preview">
       </div>
       <div class="text">
         <h2>customization at your hands</h2>
         <p>make a simplified or advanced custom cmd, or even customize the bot’s appearance in your server.</p>
-        <p class="muted">your server, your rules. chromed just enforces them.</p>
+        <p>your server, your rules. chromed just enforces them.</p>
       </div>
     </div>
   </section>
 
-  <!-- GUILD MARQUEE -->
+  <!-- Command showcase -->
+  <section class="command-showcase container reveal">
+    <h2 style="text-align:center;">try it yourself</h2>
+    <div class="terminal">
+      <div><span class="prompt">$</span> <span class="cmd">!ask what's the meaning of life</span></div>
+      <div class="comment">// chromed says: 42, but with more sarcasm</div>
+      <div><span class="prompt">$</span> <span class="cmd">!customcmd create name:bot response:ok here's the bot site lil bro</span></div>
+      <div class="comment">// now type !bot and watch it flex</div>
+    </div>
+  </section>
+
+  <!-- Guild marquee -->
   <section id="guilds" class="guild-section container">
     <h2>trusted by these servers</h2>
     <div class="marquee" id="marquee">
       <div class="marquee-track" id="guild-track"></div>
     </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="faq container reveal">
+    <h2>questions people ask</h2>
+    <div class="glass faq-item">
+      <div class="question">is chromed actually free? <span>+</span></div>
+      <div class="answer">yes. free forever. no premium paywall, but we do have merits you can grind for fun stuff.</div>
+    </div>
+    <div class="glass faq-item">
+      <div class="question">can i customize it to look different in my server? <span>+</span></div>
+      <div class="answer">absolutely. change pfp, banner, bio, nickname — even schedule auto-rotation.</div>
+    </div>
+    <div class="glass faq-item">
+      <div class="question">what AI models does it use? <span>+</span></div>
+      <div class="answer">hybrid. Groq for speed, Navy for quality. if one fails, the other takes over.</div>
+    </div>
+    <div class="glass faq-item">
+      <div class="question">is my data safe? <span>+</span></div>
+      <div class="answer">we don't store chat history unless you explicitly use /personalinfo. your secrets are yours.</div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta container">
+    <h2>what are you waiting for?</h2>
+    <a class="cta" href="https://discord.com/oauth2/authorize?client_id=1540000638661042326&scope=bot+applications.commands&permissions=544357739767" target="_blank">
+      add chromed →
+    </a>
   </section>
 
   <footer>
@@ -433,6 +728,75 @@
   </footer>
 
   <script>
+    // Intersection Observer for reveal animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = parseInt(entry.target.getAttribute('data-target'));
+          let current = 0;
+          const increment = target / 50;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              entry.target.textContent = target + '+';
+              clearInterval(timer);
+            } else {
+              entry.target.textContent = Math.floor(current) + '+';
+            }
+          }, 20);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(counter => counterObserver.observe(counter));
+
+    // Typing effect
+    const phrases = [
+      "chromed, better than 60% of its competition.",
+      "built different. literally.",
+      "the AI that actually roasts you back.",
+      "your server's new best friend (or worst enemy)."
+    ];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    const typingElement = document.getElementById('typing');
+
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIndex];
+      if (!deleting) {
+        typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentPhrase.length) {
+          deleting = true;
+          setTimeout(typeEffect, 2000);
+          return;
+        }
+      } else {
+        typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+      setTimeout(typeEffect, deleting ? 50 : 100);
+    }
+    typeEffect();
+
+    // Guild marquee
     async function loadGuilds() {
       const track = document.getElementById('guild-track');
       if (!track) return;
@@ -459,6 +823,13 @@
       }
     }
     loadGuilds();
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
   </script>
 </body>
 </html>
