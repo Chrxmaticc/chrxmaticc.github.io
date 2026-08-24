@@ -1,835 +1,873 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chromed — A machine designed to do all the hard work for you.</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chromed — underground official</title>
+
+  <!-- OGL for gradient waves -->
+  <script src="https://cdn.jsdelivr.net/npm/ogl@0.0.88/dist/ogl.umd.js"></script>
+
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;700&display=swap');
+
+    :root {
+      --primary: #111111;
+      --secondary: #a6a6a6;
+      --accent: #d2b48c;
+      --black: #050505;
+      --surface: #111111;
+      --muted-grey: #3d3d3d;
+      --silver: #a6a6a6;
+      --tan: #d2b48c;
+      --offwhite: #e8e8e8;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    :root {
-      --bg: #000000;
-      --surface: rgba(255, 255, 255, 0.04);
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #ffffff;
-      --muted: rgba(255, 255, 255, 0.55);
-      --accent: #ffffff;
-      --radius: 20px;
-      --glow: 0 0 80px rgba(255,255,255,0.03);
-    }
-
     body {
-      background: #000;
-      color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
+      background: var(--black);
+      color: var(--offwhite);
+      font-family: 'Inter', sans-serif;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      scroll-behavior: smooth;
+      cursor: default;
       position: relative;
+      min-height: 100vh;
     }
 
-    /* Background GIF */
-    body::before {
-      content: "";
+    /* ---------- background.png + gradient waves ---------- */
+    #gradient-waves {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: url('background.gif') center/cover no-repeat;
-      opacity: 0.2;
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    .bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('background.png') center/cover no-repeat;
       z-index: -2;
-      animation: bgPulse 10s ease-in-out infinite;
+      pointer-events: none;
+      opacity: 0.25;
+      mix-blend-mode: screen;
     }
 
-    body::after {
-      content: "";
+    .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.95) 100%);
+      background: radial-gradient(circle at 20% 30%, rgba(210,180,140,0.05), transparent 40%),
+                  radial-gradient(circle at 80% 70%, rgba(166,166,166,0.05), transparent 40%);
       z-index: -1;
-    }
-
-    @keyframes bgPulse {
-      0%, 100% { opacity: 0.15; }
-      50% { opacity: 0.3; }
+      pointer-events: none;
     }
 
     .container {
-      max-width: 1100px;
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 1.5rem;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* Glass card */
-    .glass {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: var(--glow);
-      transition: transform 0.4s ease, background 0.3s, border-color 0.3s;
-    }
-
-    .glass:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    /* Reveal animations */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Floating orbs */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
-      z-index: -1;
-      animation: floatOrb 20s infinite alternate;
-    }
-
-    .orb1 { width: 400px; height: 400px; background: #fff; top: -100px; left: -100px; }
-    .orb2 { width: 300px; height: 300px; background: #fff; bottom: -50px; right: -50px; animation-delay: 5s; }
-    .orb3 { width: 200px; height: 200px; background: #fff; top: 40%; left: 60%; animation-delay: 10s; }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(40px, 60px) scale(1.3); }
-    }
-
-    /* Nav */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      padding: 18px 0;
+    /* ---------- header ---------- */
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      animation: slideDown 0.6s ease;
-    }
-
-    @keyframes slideDown {
-      from { transform: translateY(-100%); }
-      to { transform: translateY(0); }
+      padding: 2rem 0;
     }
 
     .logo {
-      font-weight: 700;
-      font-size: 1.3rem;
-      letter-spacing: -0.02em;
-      animation: pulseText 2s infinite;
-    }
-
-    .logo span {
-      color: var(--muted);
-    }
-
-    @keyframes pulseText {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-
-    .nav-links {
       display: flex;
-      gap: 24px;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    .nav-links a {
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--secondary);
+    }
+
+    .invite-btn {
+      background: var(--primary);
+      border: 1px solid var(--secondary);
+      color: var(--offwhite);
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.25s ease;
       font-size: 0.95rem;
-      color: var(--muted);
-      transition: color 0.2s, transform 0.2s;
     }
 
-    .nav-links a:hover {
-      color: var(--text);
+    .invite-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 30px rgba(210,180,140,0.15);
       transform: translateY(-2px);
     }
 
-    /* Hero */
+    /* ---------- hero ---------- */
     .hero {
-      padding: 120px 0 80px;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       text-align: center;
       position: relative;
+      padding: 4rem 0 2rem;
     }
 
     .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
       line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: fadeInUp 1s ease;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
     }
 
-    .hero .sub {
+    .hero h1 .word-rotate {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+    }
+
+    .hero h1 .word-rotate.is-out {
+      opacity: 0;
+      transform: translateY(8px);
+      filter: blur(4px);
+    }
+
+    .hero p {
+      color: var(--silver);
       font-size: 1.2rem;
-      color: var(--muted);
-      max-width: 560px;
-      margin: 0 auto 30px;
-      animation: fadeInUp 1s ease 0.2s both;
-    }
-
-    .hero .cta {
-      display: inline-block;
-      padding: 12px 28px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      animation: fadeInUp 1s ease 0.4s both;
-    }
-
-    .hero .cta:hover {
-      background: rgba(255,255,255,0.12);
-      transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(255,255,255,0.1);
-    }
-
-    .typing {
-      display: inline-block;
-      border-right: 2px solid #fff;
-      padding-right: 5px;
-      animation: blink 0.8s step-end infinite;
-      font-size: 1.3rem;
-      color: var(--muted);
-    }
-
-    @keyframes blink {
-      0%, 100% { border-color: #fff; }
-      50% { border-color: transparent; }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Stats */
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      padding: 40px 0 60px;
-    }
-
-    .stat {
-      text-align: center;
-      padding: 20px 30px;
-      min-width: 140px;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .stat:nth-child(2) { animation-delay: 1s; }
-    .stat:nth-child(3) { animation-delay: 2s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .stat h3 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      background: linear-gradient(180deg, #fff, #888);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .stat p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Features */
-    .features {
-      padding: 40px 0 80px;
-    }
-
-    .features h2 {
-      text-align: center;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 40px;
-      animation: fadeInUp 0.8s ease;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      padding: 24px;
-      text-align: left;
-      transition: all 0.3s ease;
-      animation: fadeInUp 0.6s ease;
-    }
-
-    .feature-card svg {
-      width: 36px;
-      height: 36px;
-      stroke: #fff;
-      stroke-width: 1.5;
-      fill: none;
-      margin-bottom: 16px;
-      transition: transform 0.3s;
-    }
-
-    .feature-card:hover svg {
-      transform: rotate(8deg) scale(1.1);
-    }
-
-    .feature-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .feature-card p {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    /* Preview sections */
-    .preview-section {
-      padding: 40px 0;
-    }
-
-    .preview-section .inner {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-    }
-
-    .preview-section .text {
-      flex: 1;
-    }
-
-    .preview-section .image {
-      flex: 1;
-      text-align: center;
-    }
-
-    .preview-section .image img {
-      width: 100%;
-      max-width: 380px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      filter: grayscale(20%);
-      transition: transform 0.3s, filter 0.3s, box-shadow 0.3s;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .preview-section .image img:hover {
-      transform: scale(1.05);
-      filter: grayscale(0%);
-      box-shadow: 0 0 40px rgba(255,255,255,0.1);
-    }
-
-    .preview-section h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .preview-section p {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    /* Command showcase */
-    .command-showcase {
-      padding: 60px 0;
-    }
-
-    .terminal {
-      background: #0a0a0a;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 20px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      color: #ccc;
       max-width: 600px;
-      margin: 30px auto;
-      text-align: left;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      animation: fadeInUp 1s ease;
+      margin-bottom: 2rem;
+      line-height: 1.6;
     }
 
-    .terminal .prompt {
-      color: #fff;
-    }
-
-    .terminal .cmd {
-      color: #aaffaa;
-    }
-
-    .terminal .comment {
-      color: #666;
-    }
-
-    /* Guild marquee */
-    .guild-section {
-      padding: 40px 0 70px;
-    }
-
-    .guild-section h2 {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 28px;
-    }
-
+    /* ---------- marquee ---------- */
     .marquee {
-      overflow: hidden;
-      position: relative;
       width: 100%;
-      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    }
-
-    .marquee-track {
-      display: flex;
-      gap: 14px;
-      width: max-content;
-      animation: scroll 30s linear infinite;
-    }
-
-    .guild-chip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: var(--primary);
+      border-top: 1px solid var(--secondary);
+      border-bottom: 1px solid var(--secondary);
+      padding: 1.2rem 0;
+      overflow: hidden;
       white-space: nowrap;
-      font-size: 0.9rem;
-      color: var(--muted);
-      transition: color 0.2s, background 0.2s;
+      position: relative;
+      z-index: 2;
     }
 
-    .guild-chip:hover {
-      color: var(--text);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .guild-chip img {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
+    .marquee-content {
+      display: inline-block;
+      animation: scroll 25s linear infinite;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, var(--offwhite), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
 
-    /* FAQ */
-    .faq {
-      padding: 40px 0 80px;
+    /* ---------- sections ---------- */
+    .section {
+      padding: 5rem 0;
     }
 
-    .faq h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 40px;
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
     }
 
-    .faq-item {
-      padding: 20px;
-      margin-bottom: 12px;
-      cursor: pointer;
-    }
-
-    .faq-item .question {
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .faq-item .answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .faq-item.active .answer {
-      max-height: 200px;
-    }
-
-    /* Final CTA */
-    .final-cta {
-      text-align: center;
-      padding: 80px 0;
-    }
-
-    .final-cta h2 {
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 2.5rem;
-      margin-bottom: 20px;
-      animation: pulseText 3s infinite;
+      margin-bottom: 2rem;
+      letter-spacing: -0.03em;
     }
 
-    /* Footer */
-    footer {
-      padding: 30px 0;
-      border-top: 1px solid var(--border);
+    /* ---------- glass demo ---------- */
+    .glass-demo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .glass-box {
+      width: min(600px, 90%);
+      background: rgba(17,17,17,0.6);
+      border: 1px solid var(--secondary);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      text-align: left;
+      min-height: 120px;
+      transition: all 0.3s ease;
+    }
+
+    .glass-box .command-line {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 1.1rem;
+      color: var(--offwhite);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .glass-box .command-line .prompt {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .glass-box .command-line .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2rem;
+      background: var(--tan);
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .response-area {
+      width: min(600px, 90%);
+      margin-top: 1rem;
+      text-align: left;
+      color: var(--silver);
+      font-size: 1rem;
+      min-height: 40px;
+    }
+
+    /* ---------- support buttons ---------- */
+    .support-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .support-btns a {
+      background: var(--primary);
+      border: 1px solid var(--secondary);
+      color: var(--offwhite);
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+
+    .support-btns a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 25px rgba(210,180,140,0.15);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- smoke section ---------- */
+    .smoke-section {
       text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
+      padding: 5rem 0;
     }
 
-    footer a {
-      color: #fff;
-      text-decoration: underline;
+    .smoke-section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, var(--accent), var(--secondary), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
     }
 
-    /* Responsive */
-    @media (max-width: 700px) {
-      .preview-section .inner {
-        flex-direction: column;
-      }
-      .preview-section .image img {
-        max-width: 100%;
-      }
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
-      .stats {
-        gap: 20px;
-      }
+    .smoke-section p {
+      color: var(--silver);
+      font-size: 1.2rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ---------- reviews & previews ---------- */
+    .reviews-grid, .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .review-card, .preview-card {
+      background: var(--primary);
+      border: 1px solid var(--secondary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .review-card:hover, .preview-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(210,180,140,0.1);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .review-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--offwhite);
+    }
+
+    .review-title {
+      color: var(--accent);
+      font-size: 0.8rem;
+      margin-top: 0.1rem;
+    }
+
+    .review-text {
+      color: var(--silver);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-top: 0.5rem;
+    }
+
+    .preview-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--offwhite);
+    }
+
+    .preview-desc {
+      color: var(--silver);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      border-top: 1px solid var(--secondary);
+      margin-top: 3rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--secondary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3.5rem; }
+      .glass-box { width: 95%; }
     }
   </style>
 </head>
 <body>
-  <!-- Floating orbs -->
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
+  <div id="gradient-waves"></div>
+  <div class="bg-image"></div>
+  <div class="overlay"></div>
 
-  <nav>
-    <div class="logo">chromed<span>.ai</span></div>
-    <div class="nav-links">
-      <a href="#features">features</a>
-      <a href="#preview1">chat</a>
-      <a href="#preview2">customization</a>
-      <a href="#guilds">guilds</a>
-      <a href="#faq">faq</a>
-    </div>
-  </nav>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <img src="chromed.png" alt="chromed logo" />
+        chromed
+      </div>
+      <a class="invite-btn" href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">add to discord</a>
+    </header>
 
-  <header class="hero container">
-    <h1>A machine designed to do all the hard work for you.</h1>
-    <p class="sub"><span class="typing" id="typing"></span></p>
-    <a class="cta" href="https://discord.com/oauth2/authorize?client_id=1540000638661042326&scope=bot+applications.commands&permissions=544357739767" target="_blank">
-      add chromed to your server →
-    </a>
-  </header>
+    <div class="hero">
+      <h1>
+        Change <span class="word-rotate" data-words='["Vibes","Servers","Users"]' data-interval="3000">Vibes</span><br>
+        with Chromed
+      </h1>
+      <p>the free discord bot with personality. juul wars, honeypot traps, antinuke, ai chat, and more. no subscriptions. no elon bs.</p>
+    </div>
 
-  <!-- Stats -->
-  <section class="stats container">
-    <div class="glass stat">
-      <h3 class="counter" data-target="50">0</h3>
-      <p>servers</p>
+    <div class="marquee">
+      <div class="marquee-content" id="server-marquee">
+        Chromed is in 5 servers. Be one of them.
+      </div>
     </div>
-    <div class="glass stat">
-      <h3 class="counter" data-target="100">0</h3>
-      <p>commands</p>
-    </div>
-    <div class="glass stat">
-      <h3 class="counter" data-target="99">0</h3>
-      <p>uptime %</p>
-    </div>
-  </section>
 
-  <!-- Features -->
-  <section id="features" class="features container">
-    <h2>10 reasons chromed runs circles around other bots</h2>
-    <div class="feature-grid">
-      <!-- Same 10 feature cards from previous version but with reveal class -->
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="15" r="1.5"/><path d="M8 16h8M8 8h8"/></svg>
-        <h3>AI & Chat</h3>
-        <p>10 modes, 5 models, hybrid Groq + Navy. Smarter, faster, meaner.</p>
+    <section class="section">
+      <div class="section-label">live demo</div>
+      <h2>see chromed work</h2>
+      <div class="glass-demo-container">
+        <div class="glass-box">
+          <div class="command-line" id="command-line">
+            <span class="prompt">➜</span>
+            <span id="command-text"></span>
+            <span class="cursor"></span>
+          </div>
+        </div>
+        <div class="response-area" id="response-area"></div>
       </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-5.5 2.5L12 17l-2.5-5.5L4 9l5.5-2.5z"/></svg>
-        <h3>Customization</h3>
-        <p>Per-server pfp, banner, nickname, bio. Even auto-rotate them.</p>
+      <div class="support-btns">
+        <a href="https://discord.gg/rTrJyPyayg" target="_blank">Join Support Server</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">Invite Bot</a>
+        <a href="#" id="sign-in-btn">Sign in</a>
       </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3 4 5 1-3 4v5l-5-1-5 1v-5l-3-4 5-1z"/></svg>
-        <h3>Moderation</h3>
-        <p>Antinuke, blacklist/whitelist, command access. Actually works.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
-        <h3>Profile & Images</h3>
-        <p>Avatar manipulation: spin, melt, toast, pixelate, globe, killcam.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="8"/></svg>
-        <h3>Economy & Games</h3>
-        <p>Merits, XP, duels, dungeons, mining, farm, gamble, pets. Grind forever.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-6M22 20H2"/></svg>
-        <h3>XP & Levels</h3>
-        <p>Level roles, prestige, leaderboards. Feed the addiction.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
-        <h3>Embeds</h3>
-        <p>Interactive embed builder with buttons, colors, live preview.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
-        <h3>Utility</h3>
-        <p>Birthdays, reminders, weather, QR, translate, search. Life admin.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        <h3>Join to Create</h3>
-        <p>Temp voice channels with full owner control. VC without clutter.</p>
-      </div>
-      <div class="glass feature-card reveal">
-        <svg viewBox="0 0 24 24"><path d="M3 18h18M5 6h14v12H5z"/><circle cx="10" cy="10" r="2"/><circle cx="14" cy="10" r="2"/><path d="M7 14c1 1 2 1 3 0M14 14c1 1 2 1 3 0"/></svg>
-        <h3>Fun</h3>
-        <p>8ball, roasts, ships, wouldyourather, trivia. Never bored.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Preview 1 -->
-  <section id="preview1" class="preview-section container reveal">
-    <div class="inner">
-      <div class="text">
-        <h2>just ask. anything.</h2>
-        <p>a honest preview of the chat, ask chromed for any weird bullshit, even buying a car.</p>
-        <p>yes, he will find you a dealership and roast your budget at the same time.</p>
+    <section class="smoke-section">
+      <h2>wanna smoke sm on discord?</h2>
+      <p>go ahead. juul wars, gremlin chaos, and medical bills. all fictional, all fun.</p>
+    </section>
+
+    <section class="section">
+      <div class="section-label">reviews</div>
+      <h2>what people say</h2>
+      <div class="reviews-grid">
+        <!-- official review from ! coner -->
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">C</div>
+            <div>
+              <div class="review-name">! coner</div>
+              <div class="review-title">Owner of Defixion with 200+ members</div>
+            </div>
+          </div>
+          <div class="review-text">cool ass site and tuff bot for everything</div>
+        </div>
+
+        <!-- 4 placeholders -->
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">?</div>
+            <div>
+              <div class="review-name">placeholder user</div>
+              <div class="review-title">pending review</div>
+            </div>
+          </div>
+          <div class="review-text">coming soon</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">?</div>
+            <div>
+              <div class="review-name">placeholder user</div>
+              <div class="review-title">pending review</div>
+            </div>
+          </div>
+          <div class="review-text">coming soon</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">?</div>
+            <div>
+              <div class="review-name">placeholder user</div>
+              <div class="review-title">pending review</div>
+            </div>
+          </div>
+          <div class="review-text">coming soon</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">?</div>
+            <div>
+              <div class="review-name">placeholder user</div>
+              <div class="review-title">pending review</div>
+            </div>
+          </div>
+          <div class="review-text">coming soon</div>
+        </div>
       </div>
-      <div class="image">
-        <img src="preview1.png" alt="chat preview">
+    </section>
+
+    <section class="section">
+      <div class="section-label">previews</div>
+      <h2>what chromed offers</h2>
+      <div class="preview-grid">
+        <div class="preview-card">
+          <div class="preview-title">juul 2.0</div>
+          <div class="preview-desc">hits currency, flavors, chargers, gremlin, and medical bills.</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-title">honeypot</div>
+          <div class="preview-desc">channel traps with custom punishments and thresholds.</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-title">antinuke</div>
+          <div class="preview-desc">raid protection, backups, and punishment automations.</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-title">ai chat</div>
+          <div class="preview-desc">custom personalities, fonts, and hybrid ai models.</div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Preview 2 -->
-  <section id="preview2" class="preview-section container reveal">
-    <div class="inner">
-      <div class="image">
-        <img src="preview2.png" alt="custom command preview">
+    <footer>
+      <div class="footer-brand">
+        <img src="chromed.png" alt="chromed" />
+        chromed.
       </div>
-      <div class="text">
-        <h2>customization at your hands</h2>
-        <p>make a simplified or advanced custom cmd, or even customize the bot’s appearance in your server.</p>
-        <p>your server, your rules. chromed just enforces them.</p>
+      <div class="footer-links">
+        <a href="#">home</a>
+        <a href="#">commands</a>
+        <a href="#">dashboard</a>
+        <a href="#">support</a>
+        <a href="#">invite</a>
       </div>
-    </div>
-  </section>
-
-  <!-- Command showcase -->
-  <section class="command-showcase container reveal">
-    <h2 style="text-align:center;">try it yourself</h2>
-    <div class="terminal">
-      <div><span class="prompt">$</span> <span class="cmd">!ask what's the meaning of life</span></div>
-      <div class="comment">// chromed says: 42, but with more sarcasm</div>
-      <div><span class="prompt">$</span> <span class="cmd">!customcmd create name:bot response:ok here's the bot site lil bro</span></div>
-      <div class="comment">// now type !bot and watch it flex</div>
-    </div>
-  </section>
-
-  <!-- Guild marquee -->
-  <section id="guilds" class="guild-section container">
-    <h2>trusted by these servers</h2>
-    <div class="marquee" id="marquee">
-      <div class="marquee-track" id="guild-track"></div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="faq container reveal">
-    <h2>questions people ask</h2>
-    <div class="glass faq-item">
-      <div class="question">is chromed actually free? <span>+</span></div>
-      <div class="answer">yes. free forever. no premium paywall, but we do have merits you can grind for fun stuff.</div>
-    </div>
-    <div class="glass faq-item">
-      <div class="question">can i customize it to look different in my server? <span>+</span></div>
-      <div class="answer">absolutely. change pfp, banner, bio, nickname — even schedule auto-rotation.</div>
-    </div>
-    <div class="glass faq-item">
-      <div class="question">what AI models does it use? <span>+</span></div>
-      <div class="answer">hybrid. Groq for speed, Navy for quality. if one fails, the other takes over.</div>
-    </div>
-    <div class="glass faq-item">
-      <div class="question">is my data safe? <span>+</span></div>
-      <div class="answer">we don't store chat history unless you explicitly use /personalinfo. your secrets are yours.</div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
-  <section class="final-cta container">
-    <h2>what are you waiting for?</h2>
-    <a class="cta" href="https://discord.com/oauth2/authorize?client_id=1540000638661042326&scope=bot+applications.commands&permissions=544357739767" target="_blank">
-      add chromed →
-    </a>
-  </section>
-
-  <footer>
-    <div class="container">
-      <p>© 2026 Chromed. All rights reserved. Made with ♥ and a little too much caffeine.</p>
-      <p><a href="https://discord.gg/rTrJyPyayg" target="_blank">support server</a> · <a href="https://github.com/Chrxmaticc" target="_blank">github</a></p>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <script>
-    // Intersection Observer for reveal animations
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
+    // ---------- word rotation ----------
+    document.querySelectorAll(".word-rotate").forEach((el) => {
+      const words = JSON.parse(el.dataset.words || "[]");
+      const interval = parseInt(el.dataset.interval || "3000", 10);
+      let index = 0;
+      let currentWord = el.textContent.trim() || words[0];
+      if (!words.length) return;
+      el.textContent = currentWord;
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      setInterval(() => {
+        el.classList.add("is-out");
+        setTimeout(() => {
+          index = (index + 1) % words.length;
+          currentWord = words[index];
+          el.textContent = currentWord;
+          el.classList.remove("is-out");
+        }, 400);
+      }, interval);
+    });
 
-    // Counter animation
-    const counters = document.querySelectorAll('.counter');
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const target = parseInt(entry.target.getAttribute('data-target'));
-          let current = 0;
-          const increment = target / 50;
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-              entry.target.textContent = target + '+';
-              clearInterval(timer);
-            } else {
-              entry.target.textContent = Math.floor(current) + '+';
-            }
-          }, 20);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(counter => counterObserver.observe(counter));
-
-    // Typing effect
-    const phrases = [
-      "chromed, better than 60% of its competition.",
-      "built different. literally.",
-      "the AI that actually roasts you back.",
-      "your server's new best friend (or worst enemy)."
+    // ---------- glass demo command typing ----------
+    const commandText = document.getElementById("command-text");
+    const responseArea = document.getElementById("response-area");
+    const commands = [
+      { cmd: "!juul hit", resp: "ight u took a hit of the <:juul> juul, battery: 80%" },
+      { cmd: "!juul steal", resp: "you stole the juul from @opp!" },
+      { cmd: "/honeypot setup #trap", resp: "honeypot activated in #trap" },
+      { cmd: "/ask hello", resp: "yo twin, what's good?" },
     ];
-    let phraseIndex = 0;
+    let cmdIndex = 0;
     let charIndex = 0;
-    let deleting = false;
-    const typingElement = document.getElementById('typing');
+    let isDeleting = false;
 
-    function typeEffect() {
-      const currentPhrase = phrases[phraseIndex];
-      if (!deleting) {
-        typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+    function typeLoop() {
+      const current = commands[cmdIndex].cmd;
+      if (!isDeleting) {
+        commandText.textContent = current.slice(0, charIndex);
         charIndex++;
-        if (charIndex === currentPhrase.length) {
-          deleting = true;
-          setTimeout(typeEffect, 2000);
+        if (charIndex > current.length) {
+          isDeleting = true;
+          responseArea.textContent = commands[cmdIndex].resp;
+          setTimeout(typeLoop, 2000);
           return;
         }
       } else {
-        typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        commandText.textContent = current.slice(0, charIndex);
         charIndex--;
         if (charIndex === 0) {
-          deleting = false;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
+          isDeleting = false;
+          responseArea.textContent = "";
+          cmdIndex = (cmdIndex + 1) % commands.length;
         }
       }
-      setTimeout(typeEffect, deleting ? 50 : 100);
+      setTimeout(typeLoop, isDeleting ? 30 : 60);
     }
-    typeEffect();
+    typeLoop();
 
-    // Guild marquee
-    async function loadGuilds() {
-      const track = document.getElementById('guild-track');
-      if (!track) return;
+    // ---------- fetch server count ----------
+    async function loadServerCount() {
+      const marquee = document.getElementById("server-marquee");
       try {
-        const res = await fetch('https://chrxmee-ai-discord-bot.onrender.com/guilds');
-        const guilds = await res.json();
-        const validGuilds = guilds.filter(g => g.icon).slice(0, 20);
-        if (!validGuilds.length) {
-          track.innerHTML = '<div class="guild-chip">no servers found yet — be the first 😉</div>';
-          return;
-        }
-        const chips = [...validGuilds, ...validGuilds].map(g => {
-          const iconUrl = `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64`;
-          return `
-            <div class="guild-chip">
-              <img src="${iconUrl}" alt="${g.name}">
-              <span>${g.name}</span>
-            </div>
-          `;
-        }).join('');
-        track.innerHTML = chips;
-      } catch (err) {
-        track.innerHTML = '<div class="guild-chip">failed to load servers — blame Render</div>';
+        const res = await fetch("https://chrxmee-ai-discord-bot.onrender.com/guilds");
+        const data = await res.json();
+        const serverCount = data?.serverCount ?? data?.guildCount ?? data?.guilds?.length ?? 5;
+        marquee.textContent = `Chromed is in ${serverCount} servers. Be one of them.`;
+      } catch (e) {
+        console.warn("server count failed:", e.message);
       }
     }
-    loadGuilds();
+    loadServerCount();
 
-    // FAQ accordion
-    document.querySelectorAll('.faq-item').forEach(item => {
-      item.addEventListener('click', () => {
-        item.classList.toggle('active');
-      });
+    // ---------- sign in (dashboard later) ----------
+    document.getElementById("sign-in-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      alert("dashboard coming soon");
     });
+
+    // ---------- gradient waves ----------
+    (function initGradientWaves() {
+      const container = document.getElementById("gradient-waves");
+      if (!container || !window.OGL) return;
+
+      const renderer = new OGL.Renderer({
+        webgl: 2,
+        alpha: true,
+        premultipliedAlpha: true,
+        antialias: false,
+        dpr: Math.min(window.devicePixelRatio || 1, 2),
+      });
+      const gl = renderer.gl;
+      gl.clearColor(0, 0, 0, 0);
+      container.appendChild(gl.canvas);
+
+      const geometry = new OGL.Triangle(gl);
+      const program = new OGL.Program(gl, {
+        vertex: `#version 300 es
+          in vec2 position;
+          void main() { gl_Position = vec4(position, 0.0, 1.0); }
+        `,
+        fragment: `#version 300 es
+          precision highp float;
+          uniform vec2 iResolution;
+          uniform float iTime;
+          uniform float uSpeed;
+          uniform float uAmplitude;
+          uniform float uWaveScale;
+          uniform float uWaveRatio;
+          uniform float uSwell;
+          uniform float uTurbulence;
+          uniform float uTilt;
+          uniform float uZoom;
+          uniform float uHeight;
+          uniform float uFogDepth;
+          uniform float uSteps;
+          uniform float uBrightness;
+          uniform float uOpacity;
+          uniform float uGrain;
+          uniform float uGrainIntensity;
+          uniform vec2 uMouse;
+          uniform float uParallax;
+          uniform bool uEnableMouse;
+          uniform vec3 uHorizonColor;
+          uniform vec3 uWaveColor;
+          uniform vec3 uCrestColor;
+          out vec4 fragColor;
+
+          const float MAX_DIST = 20000.0;
+
+          float hash21(vec2 p) {
+            vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+            p3 += dot(p3, p3.yzx + 33.33);
+            return fract((p3.x + p3.y) * p3.z);
+          }
+
+          float plasma(vec3 r, vec2 freq, vec4 tc) {
+            float mx = r.x + tc.x;
+            mx += uSwell * sin((r.y + mx) / 20.0 + tc.y);
+            float my = r.y - tc.z;
+            my += uTurbulence * cos(r.x / 23.0 + tc.w);
+            return r.z - (sin(mx * freq.x) * uAmplitude + sin(my * freq.y) * uAmplitude + uHeight);
+          }
+
+          float raymarch(vec3 pos, vec3 dir, vec2 freq, vec4 tc) {
+            float dist = 0.0;
+            for (int i = 0; i < 128; i++) {
+              if (float(i) >= uSteps) break;
+              float dscene = plasma(pos + dist * dir, freq, tc);
+              if (abs(dscene) < 0.1) break;
+              dist += 0.9 * dscene;
+              if (!(abs(dist) < MAX_DIST)) return MAX_DIST;
+            }
+            return dist;
+          }
+
+          void main() {
+            float T = iTime * uSpeed;
+            vec2 freq = vec2(uWaveScale / 7.0, (uWaveScale * uWaveRatio) / 3.0);
+            vec4 tc = vec4(T / 0.130, T / 0.810, T / 0.200, T / 0.710);
+            float c, s;
+            float vfov = (3.14159 / 2.3) / max(uZoom, 0.05);
+            vec3 cam = vec3(0.0, 0.0, 30.0);
+            vec2 uv = (gl_FragCoord.xy / iResolution.xy) - 0.5;
+            uv.x *= iResolution.x / iResolution.y;
+            uv.y *= -1.0;
+
+            vec3 dir = vec3(0.0, 0.0, -1.0);
+            float ulen = length(uv);
+            float xrot = vfov * ulen;
+            c = cos(xrot); s = sin(xrot);
+            dir = mat3(1.0, 0.0, 0.0, 0.0, c, -s, 0.0, s, c) * dir;
+            vec2 nuv = ulen > 1e-5 ? uv / ulen : vec2(1.0, 0.0);
+            c = nuv.x; s = nuv.y;
+            dir = mat3(c, -s, 0.0, s, c, 0.0, 0.0, 0.0, 1.0) * dir;
+            c = cos(uTilt); s = sin(uTilt);
+            dir = mat3(c, 0.0, s, 0.0, 1.0, 0.0, -s, 0.0, c) * dir;
+
+            if (uEnableMouse) {
+              float yaw = (uMouse.x - 0.5) * uParallax * 0.4;
+              float pitch = (uMouse.y - 0.5) * uParallax * 0.4;
+              c = cos(yaw); s = sin(yaw);
+              dir = mat3(c, 0.0, s, 0.0, 1.0, 0.0, -s, 0.0, c) * dir;
+              c = cos(pitch); s = sin(pitch);
+              dir = mat3(1.0, 0.0, 0.0, 0.0, c, -s, 0.0, s, c) * dir;
+            }
+
+            float dist = raymarch(cam, dir, freq, tc);
+            vec3 pos = cam + dist * dir;
+
+            float t = clamp(uFogDepth / max(dist, 0.001), 0.0, 1.0);
+            vec3 body = mix(uWaveColor, uCrestColor, clamp(pos.z * 0.08 + 0.5, 0.0, 1.0));
+            vec3 col = mix(uHorizonColor, body, t);
+            col *= uBrightness;
+            col = clamp(col, 0.0, 1.0);
+
+            float alpha = clamp(t, 0.0, 1.0) * uOpacity;
+            if (uGrain > 0.5) {
+              float g = hash21(gl_FragCoord.xy + mod(iTime, 64.0) * 11.0);
+              alpha += (g - 0.5) * uGrainIntensity;
+            }
+            alpha = clamp(alpha, 0.0, 1.0);
+            fragColor = vec4(col * alpha, alpha);
+          }
+        `,
+        uniforms: {
+          iTime: { value: 0 },
+          iResolution: { value: new Float32Array([1, 1]) },
+          uSpeed: { value: 0.4 },
+          uAmplitude: { value: 2.5 },
+          uWaveScale: { value: 0.6 },
+          uWaveRatio: { value: 0.9 },
+          uSwell: { value: 35 },
+          uTurbulence: { value: 20 },
+          uTilt: { value: 1.11 },
+          uZoom: { value: 1.0 },
+          uHeight: { value: 5.5 },
+          uFogDepth: { value: 15 },
+          uSteps: { value: 70.0 },
+          uBrightness: { value: 1.0 },
+          uOpacity: { value: 0.6 },
+          uGrain: { value: 1.0 },
+          uGrainIntensity: { value: 0.05 },
+          uMouse: { value: new Float32Array([0.5, 0.5]) },
+          uParallax: { value: 0.5 },
+          uEnableMouse: { value: true },
+          uHorizonColor: { value: new Float32Array([0.0667, 0.0667, 0.0667]) },
+          uWaveColor: { value: new Float32Array([0.6510, 0.6510, 0.6510]) },
+          uCrestColor: { value: new Float32Array([0.8235, 0.7059, 0.5490]) },
+        },
+      });
+
+      const mesh = new OGL.Mesh(gl, { geometry, program });
+
+      function resize() {
+        renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
+        program.uniforms.iResolution.value[0] = gl.drawingBufferWidth;
+        program.uniforms.iResolution.value[1] = gl.drawingBufferHeight;
+        renderer.render({ scene: mesh });
+      }
+
+      window.addEventListener("resize", resize);
+      resize();
+
+      let raf;
+      const t0 = performance.now();
+      function loop(t) {
+        program.uniforms.iTime.value = (t - t0) * 0.001;
+        renderer.render({ scene: mesh });
+        raf = requestAnimationFrame(loop);
+      }
+      loop(t0);
+
+      window.addEventListener("beforeunload", () => cancelAnimationFrame(raf));
+    })();
   </script>
 </body>
 </html>
