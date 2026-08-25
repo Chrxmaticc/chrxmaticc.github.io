@@ -18,6 +18,10 @@
       --silver: #a6a6a6;
       --tan: #d2b48c;
       --offwhite: #e8e8e8;
+      --glass-bg: rgba(210, 180, 140, 0.08);
+      --glass-border: rgba(210, 180, 140, 0.25);
+      --glass-blur: blur(18px);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     * {
@@ -57,20 +61,22 @@
       height: 40px;
       border: 2px solid var(--secondary);
       transform: translate(-50%, -50%);
-      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s;
     }
     .cursor-ring.hovering {
       width: 60px;
       height: 60px;
       border-color: var(--accent);
+      background: rgba(210,180,140,0.1);
+      backdrop-filter: blur(4px);
     }
 
-    /* ========== BACKGROUND LAYERS (all blurred) ========== */
+    /* ========== BACKGROUND LAYERS (blurred + glass tint) ========== */
     .bg-blur {
       position: fixed;
       inset: 0;
-      z-index: -4;
-      filter: blur(8px);
+      z-index: -5;
+      filter: blur(10px);
       background: linear-gradient(270deg, #111111, #a6a6a6, #d2b48c, #111111);
       background-size: 600% 600%;
       animation: gradientShift 18s ease infinite;
@@ -79,9 +85,9 @@
     .bg-image-blur {
       position: fixed;
       inset: 0;
-      z-index: -3;
+      z-index: -4;
       background: url('background.png') center/cover no-repeat;
-      filter: blur(12px);
+      filter: blur(15px);
       opacity: 0.25;
       mix-blend-mode: screen;
       animation: slowFloat 30s ease-in-out infinite;
@@ -90,10 +96,19 @@
     .bg-overlay {
       position: fixed;
       inset: 0;
-      z-index: -2;
-      background: radial-gradient(circle at 20% 30%, rgba(210,180,140,0.08), transparent 40%),
+      z-index: -3;
+      background: radial-gradient(circle at 20% 30%, rgba(210,180,140,0.1), transparent 40%),
                   radial-gradient(circle at 80% 70%, rgba(166,166,166,0.08), transparent 40%);
       filter: blur(5px);
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
     .floating-orbs {
@@ -107,12 +122,12 @@
       position: absolute;
       border-radius: 50%;
       filter: blur(60px);
-      opacity: 0.4;
+      opacity: 0.35;
       animation: orbFloat 12s ease-in-out infinite;
     }
     .orb1 { width: 400px; height: 400px; background: var(--secondary); top: -100px; left: -100px; }
     .orb2 { width: 300px; height: 300px; background: var(--accent); bottom: -50px; right: -50px; animation-delay: -3s; }
-    .orb3 { width: 250px; height: 250px; background: var(--primary); top: 40%; left: 60%; animation-delay: -6s; opacity: 0.3; }
+    .orb3 { width: 250px; height: 250px; background: var(--primary); top: 40%; left: 60%; animation-delay: -6s; opacity: 0.25; }
 
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
@@ -130,6 +145,23 @@
       0% { transform: translate(0,0) scale(1); }
       50% { transform: translate(30px, -40px) scale(1.1); }
       100% { transform: translate(0,0) scale(1); }
+    }
+
+    /* ========== GLASS UTILITY ========== */
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .glass-tan {
+      background: rgba(210,180,140,0.08);
+      border: 1px solid rgba(210,180,140,0.3);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 10px rgba(210,180,140,0.1) inset;
     }
 
     /* ========== CONTAINER ========== */
@@ -163,9 +195,12 @@
       color: transparent;
       transition: text-shadow 0.3s ease;
       position: relative;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
     }
-    .logo:hover {
-      text-shadow: 0 0 20px rgba(210,180,140,0.5);
+    .logo.glass-tan:hover {
+      text-shadow: 0 0 25px rgba(210,180,140,0.6);
+      border-color: var(--accent);
     }
     .logo img {
       width: 40px;
@@ -177,12 +212,12 @@
     }
     .logo:hover img {
       transform: rotate(10deg) scale(1.1);
-      box-shadow: 0 0 30px rgba(210,180,140,0.4);
+      box-shadow: 0 0 30px rgba(210,180,140,0.5);
     }
 
     .invite-btn {
-      background: var(--primary);
-      border: 1px solid var(--secondary);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       color: var(--offwhite);
       padding: 0.7rem 1.4rem;
       border-radius: 999px;
@@ -192,6 +227,8 @@
       font-size: 0.95rem;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .invite-btn::before {
       content: '';
@@ -200,7 +237,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(210,180,140,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(210,180,140,0.3), transparent);
       transition: left 0.5s ease;
     }
     .invite-btn:hover::before {
@@ -209,13 +246,13 @@
     .invite-btn:hover {
       border-color: var(--accent);
       color: var(--accent);
-      box-shadow: 0 0 30px rgba(210,180,140,0.2);
+      box-shadow: 0 0 30px rgba(210,180,140,0.3);
       transform: translateY(-2px);
     }
 
     /* ========== HERO ========== */
     .hero {
-      min-height: 60vh;
+      min-height: 55vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -236,7 +273,7 @@
     }
     @keyframes textGlow {
       0%, 100% { text-shadow: 0 0 20px rgba(166,166,166,0.3); }
-      50% { text-shadow: 0 0 40px rgba(210,180,140,0.5); }
+      50% { text-shadow: 0 0 40px rgba(210,180,140,0.6); }
     }
 
     .hero h1 .word-rotate {
@@ -292,8 +329,8 @@
     }
 
     .feature-pill {
-      background: var(--primary);
-      border: 1px solid var(--secondary);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       color: var(--offwhite);
       padding: 0.5rem 1.2rem;
       border-radius: 999px;
@@ -302,6 +339,8 @@
       transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .feature-pill::after {
       content: '';
@@ -310,7 +349,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(210,180,140,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(210,180,140,0.3), transparent);
       transition: left 0.5s ease;
     }
     .feature-pill:hover::after {
@@ -320,15 +359,17 @@
       border-color: var(--accent);
       color: var(--accent);
       transform: translateY(-3px);
-      box-shadow: 0 0 30px rgba(210,180,140,0.3);
+      box-shadow: 0 0 30px rgba(210,180,140,0.4);
     }
 
-    /* ========== MARQUEE ========== */
+    /* ========== SERVER COUNT MARQUEE ========== */
     .marquee {
       width: 100%;
-      background: var(--primary);
-      border-top: 1px solid var(--secondary);
-      border-bottom: 1px solid var(--secondary);
+      background: var(--glass-bg);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       padding: 1.2rem 0;
       overflow: hidden;
       white-space: nowrap;
@@ -352,6 +393,69 @@
     @keyframes scroll {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
+    }
+
+    /* ========== GLASS SERVER CARDS MARQUEE (new) ========== */
+    .server-cards-marquee {
+      padding: 2rem 0;
+      overflow: hidden;
+      position: relative;
+      background: transparent;
+    }
+    .server-cards-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: serverScroll 30s linear infinite;
+    }
+    .server-cards-marquee:hover .server-cards-track {
+      animation-play-state: paused;
+    }
+    @keyframes serverScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 0.75rem)); }
+    }
+    .server-card {
+      flex: 0 0 auto;
+      width: 240px;
+      padding: 1.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .server-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(210,180,140,0.15), transparent 60%);
+      animation: cardGlow 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes cardGlow {
+      0%, 100% { transform: translate(0,0); }
+      50% { transform: translate(50%, 50%); }
+    }
+    .server-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(210,180,140,0.3);
+    }
+    .server-card .server-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--offwhite);
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+    .server-card .server-id {
+      color: var(--accent);
+      font-size: 0.8rem;
+      opacity: 0.8;
     }
 
     /* ========== SECTION COMMON ========== */
@@ -382,8 +486,8 @@
     }
     .glass-box {
       width: min(600px, 90%);
-      background: rgba(17,17,17,0.6);
-      border: 1px solid var(--secondary);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: 24px;
@@ -454,19 +558,21 @@
       margin-top: 1rem;
     }
     .support-btns a {
-      background: var(--primary);
-      border: 1px solid var(--secondary);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       color: var(--offwhite);
       padding: 0.7rem 1.5rem;
       border-radius: 999px;
       text-decoration: none;
       font-weight: 500;
       transition: all 0.25s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .support-btns a:hover {
       border-color: var(--accent);
       color: var(--accent);
-      box-shadow: 0 0 25px rgba(210,180,140,0.2);
+      box-shadow: 0 0 25px rgba(210,180,140,0.3);
       transform: translateY(-2px);
     }
 
@@ -498,18 +604,20 @@
       gap: 1.5rem;
     }
     .review-card, .preview-card {
-      background: var(--primary);
-      border: 1px solid var(--secondary);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       border-radius: 16px;
       padding: 1.5rem;
       transition: all 0.3s ease;
       transform-style: preserve-3d;
       transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
     }
     .review-card:hover, .preview-card:hover {
       border-color: var(--accent);
       transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px);
-      box-shadow: 0 10px 30px rgba(210,180,140,0.1);
+      box-shadow: 0 10px 30px rgba(210,180,140,0.2);
     }
     .review-header {
       display: flex;
@@ -560,8 +668,10 @@
     footer {
       text-align: center;
       padding: 3rem 0;
-      border-top: 1px solid var(--secondary);
+      border-top: 1px solid var(--glass-border);
       margin-top: 3rem;
+      background: rgba(17,17,17,0.5);
+      backdrop-filter: blur(10px);
     }
     .footer-brand {
       display: flex;
@@ -617,14 +727,16 @@
       .glass-box { width: 95%; }
       .cursor-dot, .cursor-ring { display: none; }
       * { cursor: auto; }
+      .server-card { width: 180px; padding: 1rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Background layers (all blurred) -->
+  <!-- Background layers -->
   <div class="bg-blur"></div>
   <div class="bg-image-blur"></div>
   <div class="bg-overlay"></div>
+  <div class="noise"></div>
   <div class="floating-orbs">
     <div class="orb orb1"></div>
     <div class="orb orb2"></div>
@@ -637,7 +749,7 @@
 
   <div class="container">
     <header>
-      <div class="logo">
+      <div class="logo glass-tan">
         <img src="chromed.png" alt="chromed logo" />
         chromed
       </div>
@@ -669,9 +781,17 @@
       </div>
     </section>
 
+    <!-- Server count marquee -->
     <div class="marquee">
       <div class="marquee-content" id="server-marquee">
         Chromed is in 5 servers, join one of em.
+      </div>
+    </div>
+
+    <!-- Glass server cards marquee (new) -->
+    <div class="server-cards-marquee">
+      <div class="server-cards-track" id="server-cards-track">
+        <!-- populated by JS -->
       </div>
     </div>
 
@@ -705,7 +825,7 @@
       <h2>what people say</h2>
       <div class="reviews-grid">
         <!-- official review from ! coner -->
-        <div class="review-card">
+        <div class="review-card glass-tan">
           <div class="review-header">
             <div class="review-avatar">C</div>
             <div>
@@ -717,7 +837,7 @@
         </div>
 
         <!-- 4 placeholders -->
-        <div class="review-card">
+        <div class="review-card glass">
           <div class="review-header">
             <div class="review-avatar">?</div>
             <div>
@@ -727,7 +847,7 @@
           </div>
           <div class="review-text">coming soon</div>
         </div>
-        <div class="review-card">
+        <div class="review-card glass">
           <div class="review-header">
             <div class="review-avatar">?</div>
             <div>
@@ -737,7 +857,7 @@
           </div>
           <div class="review-text">coming soon</div>
         </div>
-        <div class="review-card">
+        <div class="review-card glass">
           <div class="review-header">
             <div class="review-avatar">?</div>
             <div>
@@ -747,7 +867,7 @@
           </div>
           <div class="review-text">coming soon</div>
         </div>
-        <div class="review-card">
+        <div class="review-card glass">
           <div class="review-header">
             <div class="review-avatar">?</div>
             <div>
@@ -764,19 +884,19 @@
       <div class="section-label">previews</div>
       <h2>what chromed offers</h2>
       <div class="preview-grid">
-        <div class="preview-card">
+        <div class="preview-card glass-tan">
           <div class="preview-title">juul 2.0</div>
           <div class="preview-desc">hits currency, flavors, chargers, gremlin, and medical bills.</div>
         </div>
-        <div class="preview-card">
+        <div class="preview-card glass">
           <div class="preview-title">honeypot</div>
           <div class="preview-desc">channel traps with custom punishments and thresholds.</div>
         </div>
-        <div class="preview-card">
+        <div class="preview-card glass">
           <div class="preview-title">antinuke</div>
           <div class="preview-desc">raid protection, backups, and punishment automations.</div>
         </div>
-        <div class="preview-card">
+        <div class="preview-card glass">
           <div class="preview-title">ai chat</div>
           <div class="preview-desc">custom personalities, fonts, and hybrid ai models.</div>
         </div>
@@ -813,7 +933,7 @@
       cursorRing.style.top = mouseY + 'px';
     });
 
-    document.querySelectorAll('a, button, .feature-pill, .review-card, .preview-card').forEach(el => {
+    document.querySelectorAll('a, button, .feature-pill, .review-card, .preview-card, .server-card').forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
     });
@@ -888,6 +1008,53 @@
       }
     }
     loadServerCount();
+
+    // ========== LOAD SERVER CARDS MARQUEE ==========
+    async function loadServerCards() {
+      const track = document.getElementById("server-cards-track");
+      if (!track) return;
+      let guilds = [];
+      try {
+        const res = await fetch("https://chrxmee-ai-discord-bot.onrender.com/guilds");
+        const data = await res.json();
+        // handle different shapes: array of guild objects or object with guilds array
+        if (Array.isArray(data)) {
+          guilds = data;
+        } else if (Array.isArray(data?.guilds)) {
+          guilds = data.guilds;
+        } else if (Array.isArray(data?.servers)) {
+          guilds = data.servers;
+        } else if (typeof data === 'object' && data !== null) {
+          // maybe object mapping id -> name
+          guilds = Object.entries(data).map(([id, name]) => ({ id, name }));
+        }
+        if (!guilds.length) {
+          // fallback
+          guilds = [
+            { id: "1", name: "Sample Server" },
+            { id: "2", name: "Chromed Lounge" },
+            { id: "3", name: "Juul Warriors" }
+          ];
+        }
+      } catch (e) {
+        console.warn("guild fetch failed, using placeholders:", e.message);
+        guilds = [
+          { id: "1", name: "Sample Server" },
+          { id: "2", name: "Chromed Lounge" },
+          { id: "3", name: "Juul Warriors" }
+        ];
+      }
+
+      // duplicate the guilds to make loop seamless
+      const duplicated = [...guilds, ...guilds];
+      track.innerHTML = duplicated.map(guild => `
+        <div class="server-card glass-tan">
+          <div class="server-name">${guild.name || 'Unnamed'}</div>
+          <div class="server-id">${guild.id || 'unknown'}</div>
+        </div>
+      `).join('');
+    }
+    loadServerCards();
 
     // ========== SIGN IN ==========
     document.getElementById("sign-in-btn").addEventListener("click", (e) => {
