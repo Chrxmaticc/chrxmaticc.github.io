@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chromed — the ultimate discord experience</title>
 
-  <!-- SEO -->
   <meta name="description" content="chromed is the free discord bot with juul wars, honeypot traps, antinuke, ai chat, and more. no subscriptions." />
   <meta property="og:title" content="chromed — the ultimate discord experience" />
   <meta property="og:description" content="free bot with personality. juul wars, ai chat, moderation, and more." />
@@ -13,14 +12,7 @@
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#d2b48c" />
 
-  <!-- Font Awesome Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha512-..."
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;700&display=swap');
@@ -57,7 +49,6 @@
       position: relative;
     }
 
-    /* Scroll progress */
     #scroll-progress {
       position: fixed;
       top: 0;
@@ -76,7 +67,6 @@
       transition: width 0.1s;
     }
 
-    /* Custom cursor */
     .cursor-dot,
     .cursor-ring {
       position: fixed;
@@ -107,7 +97,6 @@
       backdrop-filter: blur(4px);
     }
 
-    /* Background layers */
     .bg-blur {
       position: fixed;
       inset: 0;
@@ -177,7 +166,6 @@
       100% { transform: translate(0,0) scale(1); }
     }
 
-    /* Glass utility */
     .glass {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
@@ -193,7 +181,6 @@
       box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 10px rgba(210,180,140,0.1) inset;
     }
 
-    /* Container */
     .container {
       position: relative;
       z-index: 1;
@@ -202,7 +189,6 @@
       padding: 0 1.5rem;
     }
 
-    /* Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -273,7 +259,6 @@
       transform: translateY(-2px);
     }
 
-    /* Hero */
     .hero {
       min-height: 70vh;
       display: flex;
@@ -360,60 +345,116 @@
       transform: translateY(-2px);
     }
 
-    /* Features section */
-    .features-section {
-      padding: 4rem 0;
-      text-align: center;
+    .marquee {
+      width: 100%;
+      background: var(--glass-bg);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 1.2rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      z-index: 2;
     }
-    .features-section h2 {
+    .marquee-content {
+      display: inline-block;
+      animation: scroll 25s linear infinite;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
-      letter-spacing: -0.03em;
+      font-size: 1.5rem;
+      font-weight: 600;
       background: linear-gradient(90deg, #a6a6a6, #d2b48c, #a6a6a6);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-    .feature-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: center;
-    }
-    .feature-pill {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--offwhite);
-      padding: 0.5rem 1.2rem;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-    .feature-pill::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(210,180,140,0.3), transparent);
-      transition: left 0.5s ease;
-    }
-    .feature-pill:hover::after { left: 100%; }
-    .feature-pill:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: 0 0 30px rgba(210,180,140,0.4);
+    .marquee:hover .marquee-content { animation-play-state: paused; }
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
 
-    /* Cards grid */
+    .server-cards-marquee {
+      padding: 2rem 0;
+      overflow: hidden;
+      position: relative;
+      background: transparent;
+    }
+    .server-cards-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: serverScroll 30s linear infinite;
+    }
+    .server-cards-marquee:hover .server-cards-track { animation-play-state: paused; }
+    @keyframes serverScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 0.75rem)); }
+    }
+    .server-card {
+      flex: 0 0 auto;
+      width: 240px;
+      padding: 1.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    }
+    .server-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(210,180,140,0.15), transparent 60%);
+      animation: cardGlow 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes cardGlow {
+      0%, 100% { transform: translate(0,0); }
+      50% { transform: translate(50%, 50%); }
+    }
+    .server-card:hover {
+      border-color: var(--accent);
+      transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px);
+      box-shadow: 0 15px 40px rgba(210,180,140,0.3);
+    }
+    .server-card .server-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--offwhite);
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+    .server-card .server-id {
+      color: var(--accent);
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .section {
+      padding: 5rem 0;
+    }
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      letter-spacing: -0.03em;
+    }
+
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -453,7 +494,6 @@
       line-height: 1.5;
     }
 
-    /* Stats section */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -532,20 +572,17 @@
     }
     .footer-links a:hover { color: var(--accent); }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .hero h1 { font-size: 3.5rem; }
-      .glass-box { width: 95%; }
       .cursor-dot, .cursor-ring { display: none; }
       * { cursor: auto; }
+      .server-card { width: 180px; padding: 1rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Scroll progress -->
   <div id="scroll-progress"><span></span></div>
 
-  <!-- Background layers -->
   <div class="bg-blur"></div>
   <div class="bg-image-blur"></div>
   <div class="bg-overlay"></div>
@@ -556,7 +593,6 @@
     <div class="orb orb3"></div>
   </div>
 
-  <!-- Custom cursor -->
   <div class="cursor-dot"></div>
   <div class="cursor-ring"></div>
 
@@ -569,7 +605,6 @@
       <a class="invite-btn" href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">add to discord</a>
     </header>
 
-    <!-- Hero -->
     <div class="hero">
       <h1>
         Change <span class="word-rotate" data-words='["Vibes","Servers","Users"]' data-interval="3000">Vibes</span><br>
@@ -582,7 +617,6 @@
       </div>
     </div>
 
-    <!-- Features pills -->
     <section class="features-section">
       <h2>we offer</h2>
       <div class="feature-pills">
@@ -599,45 +633,132 @@
       </div>
     </section>
 
-    <!-- Cards grid (main features) -->
-    <div class="cards-grid">
-      <div class="card">
-        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
-        <div class="card-title">advanced moderation</div>
-        <div class="card-desc">keep your server safe with auto-mod, anti-raid, warning system, and detailed logging.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon"><i class="fas fa-gamepad"></i></div>
-        <div class="card-title">minigames</div>
-        <div class="card-desc">juul wars, package bomb, gambling, image effects, and more for endless chaos.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon"><i class="fas fa-robot"></i></div>
-        <div class="card-title">ai chat</div>
-        <div class="card-desc">hybrid ai models, custom personalities, fonts, and natural conversations.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon"><i class="fas fa-bug"></i></div>
-        <div class="card-title">honeypot & antinuke</div>
-        <div class="card-desc">catch rule breakers with custom traps and protect against raids.</div>
+    <div class="marquee">
+      <div class="marquee-content" id="server-marquee">
+        Chromed is in 389 servers, join one of em.
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value" id="server-count">—</div>
-        <div class="stat-label">servers</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="user-count">—</div>
-        <div class="stat-label">users</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="command-count">—</div>
-        <div class="stat-label">commands</div>
+    <div class="server-cards-marquee">
+      <div class="server-cards-track" id="server-cards-track">
+        <!-- populated by JS -->
       </div>
     </div>
+
+    <section class="section">
+      <div class="section-label">live demo</div>
+      <h2>see chromed work</h2>
+      <div class="glass-demo-container">
+        <div class="glass-box">
+          <div class="command-line" id="command-line">
+            <span class="prompt">➜</span>
+            <span id="command-text"></span>
+            <span class="cursor"></span>
+          </div>
+        </div>
+        <div class="response-area" id="response-area"></div>
+      </div>
+      <div class="support-btns">
+        <a href="https://discord.gg/rTrJyPyayg" target="_blank">Join Support Server</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">Invite Bot</a>
+        <a href="#" id="sign-in-btn">Sign in</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">advanced moderation</div>
+      <h2>keep your server safe</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="card-title">auto-moderation filters</div>
+          <div class="card-desc">automatically detect and remove unwanted content with custom words, links, and spam protection.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="card-title">warning system</div>
+          <div class="card-desc">track user infractions and take action automatically when thresholds are reached.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-user-slash"></i></div>
+          <div class="card-title">anti-raid protection</div>
+          <div class="card-desc">prevent mass joins and spam attacks with automatic lockdown and user monitoring.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-list-alt"></i></div>
+          <div class="card-title">detailed logging</div>
+          <div class="card-desc">track all moderation actions, user changes, and server events in a dedicated channel.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">minigames & chaos</div>
+      <h2>unforgettable fun</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-smoking"></i></div>
+          <div class="card-title">juul wars</div>
+          <div class="card-desc">pass, steal, break, and charge the virtual juul with a full economy and gremlin events.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-bomb"></i></div>
+          <div class="card-title">package bomb</div>
+          <div class="card-desc">hot potato with a 50% explosion chance. betrayal and rage included.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-honey-pot"></i></div>
+          <div class="card-title">honeypot</div>
+          <div class="card-desc">create a trap channel that punishes users who fall for it with custom thresholds.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-ghost"></i></div>
+          <div class="card-title">quietlock & curselock</div>
+          <div class="card-desc">silence or curse users with webhook impersonation and zalgo text.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">web app</div>
+      <h2>chat with chromed anywhere</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-globe"></i></div>
+          <div class="card-title">web chat interface</div>
+          <div class="card-desc">talk to chromed directly from your browser. no discord needed.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-cogs"></i></div>
+          <div class="card-title">dashboard (coming soon)</div>
+          <div class="card-desc">manage server settings, premium, and juul config from a beautiful web panel.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-code"></i></div>
+          <div class="card-title">api access</div>
+          <div class="card-desc">developers can use the public API to integrate chromed's AI into their own apps.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">stats</div>
+      <h2>by the numbers</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="server-count">—</div>
+          <div class="stat-label">servers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="user-count">—</div>
+          <div class="stat-label">users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="command-count">—</div>
+          <div class="stat-label">commands</div>
+        </div>
+      </div>
+    </section>
 
     <footer>
       <div class="footer-brand">
@@ -676,7 +797,7 @@
       cursorRing.style.left = mouseX + 'px';
       cursorRing.style.top = mouseY + 'px';
     });
-    document.querySelectorAll('a, button, .feature-pill, .card, .stat-card').forEach(el => {
+    document.querySelectorAll('a, button, .feature-pill, .card, .stat-card, .server-card').forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
     });
@@ -701,10 +822,46 @@
       }, interval);
     });
 
-    // ========== FETCH STATS ==========
+    // ========== GLASS DEMO TYPING ==========
+    const commandText = document.getElementById("command-text");
+    const responseArea = document.getElementById("response-area");
+    const commands = [
+      { cmd: "!juul hit", resp: "ight u took a hit of the <:juul> juul, battery: 80%" },
+      { cmd: "!juul steal", resp: "you stole the juul from @opp!" },
+      { cmd: "/honeypot setup #trap", resp: "honeypot activated in #trap" },
+      { cmd: "/ask hello", resp: "yo twin, what's good?" },
+    ];
+    let cmdIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function typeLoop() {
+      const current = commands[cmdIndex].cmd;
+      if (!isDeleting) {
+        commandText.textContent = current.slice(0, charIndex);
+        charIndex++;
+        if (charIndex > current.length) {
+          isDeleting = true;
+          responseArea.textContent = commands[cmdIndex].resp;
+          setTimeout(typeLoop, 2000);
+          return;
+        }
+      } else {
+        commandText.textContent = current.slice(0, charIndex);
+        charIndex--;
+        if (charIndex === 0) {
+          isDeleting = false;
+          responseArea.textContent = "";
+          cmdIndex = (cmdIndex + 1) % commands.length;
+        }
+      }
+      setTimeout(typeLoop, isDeleting ? 30 : 60);
+    }
+    typeLoop();
+
+    // ========== SERVER COUNT & MARQUEE ==========
     async function loadStats() {
       try {
-        // Fetch server count from /guilds, sum member counts for users
         const [guildsRes, statsRes] = await Promise.all([
           fetch("https://chrxmee-ai-discord-bot.onrender.com/guilds"),
           fetch("https://chrxmee-ai-discord-bot.onrender.com/stats")
@@ -722,6 +879,22 @@
         document.getElementById('server-count').textContent = serverCount.toLocaleString();
         document.getElementById('user-count').textContent = userCount.toLocaleString();
         document.getElementById('command-count').textContent = commandCount.toLocaleString();
+
+        // Update server count marquee
+        const marquee = document.getElementById('server-marquee');
+        marquee.textContent = `Chromed is in ${serverCount} servers, join one of em.`;
+
+        // Populate server cards
+        const track = document.getElementById('server-cards-track');
+        if (track && Array.isArray(guilds) && guilds.length > 0) {
+          const duplicated = [...guilds, ...guilds];
+          track.innerHTML = duplicated.map(guild => `
+            <div class="server-card glass-tan">
+              <div class="server-name">${guild.name || 'Unnamed'}</div>
+              <div class="server-id">${guild.id || 'unknown'}</div>
+            </div>
+          `).join('');
+        }
       } catch (err) {
         console.warn("Failed to fetch stats:", err);
         // fallbacks
@@ -731,6 +904,12 @@
       }
     }
     loadStats();
+
+    // ========== SIGN IN ==========
+    document.getElementById("sign-in-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      alert("dashboard coming soon");
+    });
   </script>
 </body>
 </html>
