@@ -1,6 +1,6 @@
 "use client";
 
-import { MeshGradient } from "@/components/(global)/GradientMesh";
+import { MeshGradient } from "../components/(global)/GradientMesh";
 import { motion } from "framer-motion";
 import {
     ChevronDown,
