@@ -6,7 +6,7 @@
   <title>chromed — the ultimate discord experience</title>
   <meta name="description" content="chromed is the free discord bot with juul wars, honeypot traps, antinuke, ai chat, and more." />
 
-  <!-- Font Awesome (SVG icons) -->
+  <!-- Font Awesome SVG Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
@@ -17,10 +17,6 @@
       --secondary: #a6a6a6;
       --accent: #d2b48c;
       --black: #050505;
-      --surface: #111111;
-      --silver: #a6a6a6;
-      --tan: #d2b48c;
-      --offwhite: #e8e8e8;
       --glass-bg: rgba(210, 180, 140, 0.08);
       --glass-border: rgba(210, 180, 140, 0.25);
     }
@@ -32,67 +28,23 @@
     }
 
     body {
-      background: var(--black);
-      color: var(--offwhite);
+      background: #050505;
+      color: #e8e8e8;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
       min-height: 100vh;
-      position: relative;
     }
 
-    /* Stronger top gradient fading to pure black */
-    .bg-gradient {
+    /* Top gradient strip */
+    .top-gradient {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      z-index: -2;
-      background: linear-gradient(180deg, 
-        rgba(210,180,140,0.4) 0%,
-        rgba(210,180,140,0.1) 25%,
-        rgba(5,5,5,0) 50%,
-        rgba(5,5,5,1) 100%);
-      pointer-events: none;
-    }
-
-    .bg-animated {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      height: 280px;
+      background: linear-gradient(180deg, rgba(210,180,140,0.5) 0%, rgba(210,180,140,0.2) 30%, rgba(5,5,5,0) 100%);
       z-index: -1;
-      background: linear-gradient(270deg, #111111, #a6a6a6, #d2b48c, #111111);
-      background-size: 600% 600%;
-      animation: gradientShift 18s ease infinite;
-      opacity: 0.15;
       pointer-events: none;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Floating orbs */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(60px);
-      pointer-events: none;
-      z-index: -1;
-      animation: orbFloat 12s ease-in-out infinite;
-    }
-    .orb1 { width: 400px; height: 400px; background: rgba(166,166,166,0.3); top: -100px; left: -100px; }
-    .orb2 { width: 300px; height: 300px; background: rgba(210,180,140,0.3); bottom: -50px; right: -50px; animation-delay: -3s; }
-    .orb3 { width: 250px; height: 250px; background: rgba(17,17,17,0.4); top: 40%; left: 60%; animation-delay: -6s; }
-
-    @keyframes orbFloat {
-      0% { transform: translate(0,0) scale(1); }
-      50% { transform: translate(30px, -40px) scale(1.1); }
-      100% { transform: translate(0,0) scale(1); }
     }
 
     .container {
@@ -108,6 +60,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 1.5rem 0;
+      animation: fadeInDown 0.8s ease;
     }
 
     .logo {
@@ -117,18 +70,17 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.8rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--offwhite), var(--tan));
+      background: linear-gradient(135deg, #e8e8e8, #d2b48c);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      animation: fadeInDown 0.8s ease;
     }
     .logo img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--tan);
+      border: 2px solid #d2b48c;
       transition: transform 0.3s;
     }
     .logo:hover img {
@@ -136,28 +88,25 @@
     }
 
     .invite-btn {
-      background: var(--tan);
-      color: var(--black);
+      background: #d2b48c;
+      color: #111;
       padding: 0.6rem 1.4rem;
       border-radius: 999px;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.3s;
-      animation: fadeInDown 0.8s ease 0.1s both;
     }
     .invite-btn:hover {
       background: transparent;
-      color: var(--tan);
+      color: #d2b48c;
       box-shadow: 0 0 20px rgba(210,180,140,0.4);
       transform: translateY(-2px);
     }
 
-    /* Hero left-aligned */
     .hero {
       padding: 2rem 0 4rem;
       display: flex;
       align-items: center;
-      text-align: left;
     }
     .hero-content {
       display: flex;
@@ -186,13 +135,13 @@
       margin-bottom: 1rem;
     }
     .hero h1 span {
-      background: linear-gradient(135deg, var(--tan), var(--offwhite));
+      background: linear-gradient(135deg, #d2b48c, #e8e8e8);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
     .hero p {
-      color: var(--silver);
+      color: #a6a6a6;
       font-size: 1.2rem;
       max-width: 500px;
       margin-bottom: 1.5rem;
@@ -210,31 +159,30 @@
       transition: all 0.3s;
     }
     .cta-primary {
-      background: var(--tan);
-      color: var(--black);
+      background: #d2b48c;
+      color: #111;
     }
     .cta-primary:hover {
       background: transparent;
-      color: var(--tan);
+      color: #d2b48c;
       box-shadow: 0 0 30px rgba(210,180,140,0.4);
       transform: translateY(-2px);
     }
     .cta-secondary {
       background: rgba(255,255,255,0.1);
-      color: var(--offwhite);
-      border: 1px solid var(--glass-border);
+      color: #e8e8e8;
+      border: 1px solid rgba(210,180,140,0.25);
     }
     .cta-secondary:hover {
-      border-color: var(--tan);
-      color: var(--tan);
-      box-shadow: 0 0 20px rgba(232,232,232,0.2);
+      border-color: #d2b48c;
+      color: #d2b48c;
       transform: translateY(-2px);
     }
 
     .marquee {
-      background: var(--glass-bg);
-      border-top: 1px solid var(--glass-border);
-      border-bottom: 1px solid var(--glass-border);
+      background: rgba(210,180,140,0.08);
+      border-top: 1px solid rgba(210,180,140,0.25);
+      border-bottom: 1px solid rgba(210,180,140,0.25);
       padding: 1.2rem 0;
       overflow: hidden;
       white-space: nowrap;
@@ -247,7 +195,7 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.5rem;
       font-weight: 600;
-      background: linear-gradient(90deg, var(--tan), var(--offwhite));
+      background: linear-gradient(90deg, #d2b48c, #e8e8e8);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -267,16 +215,15 @@
       font-family: 'Space Grotesk', sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--tan);
+      color: #d2b48c;
       font-size: 0.8rem;
       margin-bottom: 1rem;
-      animation: fadeInUp 0.8s ease;
     }
     h2 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 2.5rem;
       margin-bottom: 2rem;
-      background: linear-gradient(135deg, var(--offwhite), var(--tan));
+      background: linear-gradient(135deg, #e8e8e8, #d2b48c);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -288,23 +235,24 @@
       gap: 1.5rem;
     }
     .card {
-      background: linear-gradient(145deg, rgba(210,180,140,0.12), rgba(210,180,140,0.04));
-      border: 1px solid var(--glass-border);
+      background: rgba(210,180,140,0.05);
+      border: 1px solid rgba(210,180,140,0.25);
       border-radius: 16px;
       padding: 1.5rem;
       transition: all 0.3s;
       backdrop-filter: blur(15px);
       animation: fadeInUp 0.8s ease both;
+      cursor: pointer;
     }
     .card:hover {
-      border-color: var(--tan);
+      border-color: #d2b48c;
       transform: translateY(-5px);
       box-shadow: 0 10px 30px rgba(210,180,140,0.2);
     }
     .card-icon {
       font-size: 2rem;
       margin-bottom: 1rem;
-      color: var(--tan);
+      color: #d2b48c;
     }
     .card-title {
       font-family: 'Space Grotesk', sans-serif;
@@ -313,9 +261,62 @@
       margin-bottom: 0.5rem;
     }
     .card-desc {
-      color: var(--silver);
+      color: #a6a6a6;
       font-size: 0.9rem;
       line-height: 1.5;
+    }
+
+    /* Animated previews */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .preview-card {
+      background: rgba(210,180,140,0.05);
+      border: 1px solid rgba(210,180,140,0.25);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+      animation: fadeInUp 1s ease both;
+      backdrop-filter: blur(15px);
+      overflow: hidden;
+      position: relative;
+    }
+    .preview-card:hover {
+      border-color: #d2b48c;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(210,180,140,0.2);
+    }
+    .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .preview-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .preview-demo {
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #e8e8e8;
+      animation: pulse 2s infinite;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
     }
 
     .stats-grid {
@@ -325,8 +326,8 @@
       margin: 4rem 0;
     }
     .stat-card {
-      background: linear-gradient(145deg, rgba(210,180,140,0.12), rgba(210,180,140,0.04));
-      border: 1px solid var(--glass-border);
+      background: rgba(210,180,140,0.05);
+      border: 1px solid rgba(210,180,140,0.25);
       border-radius: 16px;
       padding: 2rem;
       text-align: center;
@@ -334,27 +335,26 @@
       animation: fadeInUp 0.8s ease both;
     }
     .stat-card:hover {
-      border-color: var(--tan);
+      border-color: #d2b48c;
       transform: translateY(-5px);
     }
     .stat-value {
       font-size: 2.5rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--offwhite), var(--tan));
+      background: linear-gradient(135deg, #e8e8e8, #d2b48c);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
     .stat-label {
-      color: var(--silver);
+      color: #a6a6a6;
       margin-top: 0.5rem;
-      font-size: 0.9rem;
     }
 
     footer {
       text-align: center;
       padding: 3rem 0;
-      border-top: 1px solid var(--glass-border);
+      border-top: 1px solid rgba(210,180,140,0.25);
       margin-top: 4rem;
       background: rgba(17,17,17,0.5);
     }
@@ -366,11 +366,11 @@
       margin-top: 1rem;
     }
     .footer-links a {
-      color: var(--silver);
+      color: #a6a6a6;
       text-decoration: none;
       transition: color 0.3s;
     }
-    .footer-links a:hover { color: var(--tan); }
+    .footer-links a:hover { color: #d2b48c; }
 
     /* Animations */
     @keyframes fadeInUp {
@@ -421,11 +421,7 @@
   </style>
 </head>
 <body>
-  <div class="bg-gradient"></div>
-  <div class="bg-animated"></div>
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
+  <div class="top-gradient"></div>
 
   <div class="container">
     <header>
@@ -456,7 +452,7 @@
       <div class="marquee-content" id="server-marquee">chromed is in 389 servers, join one of em.</div>
     </div>
 
-    <!-- Why Choose Chromed -->
+    <!-- Main Features with Animated Previews -->
     <section class="section">
       <div class="section-label">why choose chromed?</div>
       <h2>experience the next generation of discord bots</h2>
@@ -480,6 +476,34 @@
           <div class="card-icon"><i class="fas fa-robot"></i></div>
           <div class="card-title">ai chat</div>
           <div class="card-desc">hybrid models, custom personalities, and natural conversation.</div>
+        </div>
+      </div>
+
+      <!-- Animated previews for commands -->
+      <div class="preview-grid">
+        <div class="preview-card reveal">
+          <div class="preview-header"><i class="fas fa-smoking"></i><span class="preview-title">/juul hit</span></div>
+          <div class="preview-demo">
+            <span id="juul-preview">taking a hit...</span>
+          </div>
+        </div>
+        <div class="preview-card reveal">
+          <div class="preview-header"><i class="fas fa-shield-alt"></i><span class="preview-title">/mod ban @user</span></div>
+          <div class="preview-demo">
+            <span id="mod-preview">processing ban...</span>
+          </div>
+        </div>
+        <div class="preview-card reveal">
+          <div class="preview-header"><i class="fas fa-image"></i><span class="preview-title">/image deepfry</span></div>
+          <div class="preview-demo">
+            <span id="image-preview">deepfrying image...</span>
+          </div>
+        </div>
+        <div class="preview-card reveal">
+          <div class="preview-header"><i class="fas fa-robot"></i><span class="preview-title">/ask</span></div>
+          <div class="preview-demo">
+            <span id="ai-preview">thinking...</span>
+          </div>
         </div>
       </div>
     </section>
@@ -536,10 +560,10 @@
     </div>
 
     <!-- CTA -->
-    <div style="text-align:center; padding:4rem 0; border-top:1px solid var(--glass-border);">
+    <div style="text-align:center; padding:4rem 0; border-top:1px solid rgba(210,180,140,0.25);">
       <h2 style="font-size:2.5rem; margin-bottom:1rem;">ready to enhance your server?</h2>
       <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" style="background:var(--tan); color:#111; padding:0.9rem 2rem; border-radius:999px; text-decoration:none; font-weight:600;">add to discord</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" style="background:#d2b48c; color:#111; padding:0.9rem 2rem; border-radius:999px; text-decoration:none; font-weight:600;">add to discord</a>
         <a href="https://discord.gg/chrxmaticc" style="background:#5865F2; color:white; padding:0.9rem 2rem; border-radius:999px; text-decoration:none; font-weight:600;">join our discord</a>
       </div>
     </div>
@@ -554,12 +578,30 @@
     const revealElements = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.1 });
     revealElements.forEach(el => observer.observe(el));
+
+    // Animated previews
+    const juulPreviews = ["taking a hit...", "battery 80%", "gremlin stole it!", "you're on cooldown"];
+    const modPreviews = ["processing ban...", "user banned", "no permission", "action logged"];
+    const imagePreviews = ["deepfrying image...", "deepfry complete", "pixelating...", "flash applied"];
+    const aiPreviews = ["thinking...", "generating response", "using hybrid model", "custom personality applied"];
+
+    function animatePreview(elementId, texts, interval) {
+      const el = document.getElementById(elementId);
+      let index = 0;
+      setInterval(() => {
+        el.textContent = texts[index];
+        index = (index + 1) % texts.length;
+      }, interval);
+    }
+
+    animatePreview('juul-preview', juulPreviews, 3000);
+    animatePreview('mod-preview', modPreviews, 3000);
+    animatePreview('image-preview', imagePreviews, 3000);
+    animatePreview('ai-preview', aiPreviews, 3000);
 
     // Fetch stats
     async function loadStats() {
