@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chromed — the ultimate discord experience</title>
+  <meta name="description" content="chromed is the free discord bot with juul wars, honeypot traps, antinuke, ai chat, and more." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;700&display=swap');
+
+    :root {
+      --primary: #111111;
+      --secondary: #a6a6a6;
+      --accent: #d2b48c;
+      --black: #050505;
+      --glass-bg: rgba(210, 180, 140, 0.08);
+      --glass-border: rgba(210, 180, 140, 0.25);
+      --glass-blur: blur(18px);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none;
+    }
+
+    body {
+      background: var(--black);
+      color: #e8e8e8;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 100%;
+      background: transparent;
+      z-index: 9998;
+      pointer-events: none;
+    }
+    #scroll-progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      transition: width 0.1s;
+    }
+
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      mix-blend-mode: difference;
+      transition: transform 0.1s ease-out;
+    }
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--offwhite);
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--secondary);
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s;
+    }
+    .cursor-ring.hovering {
+      width: 60px;
+      height: 60px;
+      border-color: var(--accent);
+      background: rgba(210,180,140,0.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(270deg, #111111, #a6a6a6, #d2b48c, #111111);
+      background-size: 600% 600%;
+      animation: gradientShift 18s ease infinite;
+      opacity: 0.7;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .bg-image {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: url('background.png') center/cover no-repeat;
+      filter: blur(12px);
+      opacity: 0.2;
+      mix-blend-mode: screen;
+      animation: slowFloat 30s ease-in-out infinite;
+    }
+    @keyframes slowFloat {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #111111, #a6a6a6, #d2b48c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+    .logo.glass-tan:hover {
+      text-shadow: 0 0 25px rgba(210,180,140,0.6);
+      border-color: var(--accent);
+    }
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--secondary);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .logo:hover img {
+      transform: rotate(10deg) scale(1.1);
+      box-shadow: 0 0 30px rgba(210,180,140,0.5);
+    }
+    .invite-btn {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: #e8e8e8;
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      font-size: 0.95rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .invite-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(210,180,140,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    .invite-btn:hover::before { left: 100%; }
+    .invite-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 30px rgba(210,180,140,0.3);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      position: relative;
+      padding: 4rem 0 2rem;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      animation: textGlow 3s ease-in-out infinite;
+    }
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 0 0 20px rgba(166,166,166,0.3); }
+      50% { text-shadow: 0 0 40px rgba(210,180,140,0.6); }
+    }
+    .hero h1 .word-rotate {
+      display: inline-block;
+      background: linear-gradient(135deg, #111111, #a6a6a6, #d2b48c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+      background-size: 200% 200%;
+      animation: gradientMove 4s ease infinite;
+    }
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .hero h1 .word-rotate.is-out {
+      opacity: 0;
+      transform: translateY(8px);
+      filter: blur(4px);
+    }
+    .hero p {
+      color: var(--secondary);
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cta-primary, .cta-secondary {
+      padding: 0.9rem 2rem;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+    .cta-primary {
+      background: var(--accent);
+      color: var(--black);
+      border-color: var(--accent);
+    }
+    .cta-primary:hover {
+      background: transparent;
+      color: var(--accent);
+      box-shadow: 0 0 30px rgba(210,180,140,0.3);
+      transform: translateY(-2px);
+    }
+    .cta-secondary {
+      background: var(--glass-bg);
+      color: #e8e8e8;
+      border: 1px solid var(--glass-border);
+    }
+    .cta-secondary:hover {
+      border-color: #e8e8e8;
+      box-shadow: 0 0 20px rgba(232,232,232,0.2);
+      transform: translateY(-2px);
+    }
+
+    .marquee {
+      width: 100%;
+      background: var(--glass-bg);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 1.2rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+    .marquee-content {
+      display: inline-block;
+      animation: scroll 25s linear infinite;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, #a6a6a6, #d2b48c, #a6a6a6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .marquee:hover .marquee-content { animation-play-state: paused; }
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .server-cards-marquee {
+      padding: 2rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .server-cards-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: serverScroll 30s linear infinite;
+    }
+    .server-cards-marquee:hover .server-cards-track { animation-play-state: paused; }
+    @keyframes serverScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 0.75rem)); }
+    }
+    .server-card {
+      flex: 0 0 auto;
+      width: 240px;
+      padding: 1.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+    }
+    .server-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(210,180,140,0.3);
+    }
+    .server-card .server-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: #e8e8e8;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+    .server-card .server-id {
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    .section {
+      padding: 5rem 0;
+    }
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      letter-spacing: -0.03em;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+      backdrop-filter: blur(15px);
+    }
+    .card:hover {
+      border-color: var(--accent);
+      transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px);
+      box-shadow: 0 10px 30px rgba(210,180,140,0.2);
+    }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .card-desc {
+      color: var(--secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 4rem 0;
+    }
+    .stat-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(210,180,140,0.2);
+    }
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #e8e8e8, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .stat-label {
+      color: var(--secondary);
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      border-top: 1px solid var(--glass-border);
+      margin-top: 4rem;
+      background: rgba(17,17,17,0.5);
+      backdrop-filter: blur(10px);
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #111111, #a6a6a6, #d2b48c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--secondary);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .footer-links a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3.5rem; }
+      .cursor-dot, .cursor-ring { display: none; }
+      * { cursor: auto; }
+      .server-card { width: 180px; padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="scroll-progress"><span></span></div>
+
+  <div class="bg-gradient"></div>
+  <div class="bg-image"></div>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <div class="container">
+    <header>
+      <div class="logo glass-tan">
+        <img src="chromed.png" alt="chromed logo" />
+        chromed
+      </div>
+      <a class="invite-btn" href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">add to discord</a>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <img src="chromed.png" alt="chromed" style="width:160px;height:160px;border-radius:50%;margin-bottom:30px;box-shadow:0 0 40px rgba(210,180,140,0.4);" />
+      <h1>
+        Change <span class="word-rotate" data-words='["Vibes","Servers","Users"]' data-interval="3000">Vibes</span><br>
+        with Chromed
+      </h1>
+      <p>the free discord bot with personality. juul wars, honeypot traps, antinuke, ai chat, and more. no subscriptions. no elon bs.</p>
+      <div class="cta-row">
+        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" class="cta-primary">add to discord</a>
+        <a href="https://discord.gg/rTrJyPyayg" class="cta-secondary">join support server</a>
+      </div>
+    </div>
+
+    <!-- Features pills -->
+    <div style="text-align:center; padding:2rem 0 3rem;">
+      <h2 style="font-size:2rem; margin-bottom:1.5rem; background: linear-gradient(90deg, #a6a6a6, #d2b48c, #a6a6a6); -webkit-background-clip: text; color: transparent;">we offer</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem; justify-content:center;">
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">embeds</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">custom personalities</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">customization</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">antiraid</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">minigames</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">utility</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">moderation</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">xp</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">voicemaster</span>
+        <span style="background:var(--glass-bg);border:1px solid var(--glass-border);padding:0.5rem 1.2rem;border-radius:999px;font-size:0.9rem;">fun</span>
+      </div>
+    </div>
+
+    <!-- Server count marquee -->
+    <div class="marquee">
+      <div class="marquee-content" id="server-marquee">chromed is in 389 servers, join one of em.</div>
+    </div>
+
+    <!-- Server cards marquee with icons -->
+    <div class="server-cards-marquee">
+      <div class="server-cards-track" id="server-cards-track">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- Why Choose Chromed section -->
+    <section class="section">
+      <div class="section-label">why choose chromed?</div>
+      <h2>experience the next generation of discord bots</h2>
+      <div class="cards-grid">
+        <!-- Moderation card -->
+        <div class="card" style="grid-column: span 2;">
+          <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+            <i class="fas fa-shield-alt" style="font-size:2.5rem; color:var(--accent);"></i>
+            <h3 style="font-size:1.8rem; font-weight:600;">advanced moderation</h3>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+            <div>
+              <p style="color:var(--secondary); margin-bottom:1.5rem;">keep your server safe with powerful moderation tools and auto-moderation features.</p>
+              <div style="display:grid; gap:1rem;">
+                <div style="background: rgba(255,255,255,0.02); padding:1rem; border-radius:8px;">
+                  <div style="font-weight:600;">auto-moderation filters</div>
+                  <div style="color:var(--secondary); font-size:0.9rem;">automatically detect and remove unwanted content</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding:1rem; border-radius:8px;">
+                  <div style="font-weight:600;">warning system</div>
+                  <div style="color:var(--secondary); font-size:0.9rem;">track and manage user infractions</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding:1rem; border-radius:8px;">
+                  <div style="font-weight:600;">anti-raid protection</div>
+                  <div style="color:var(--secondary); font-size:0.9rem;">prevent mass joins and spam attacks</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding:1rem; border-radius:8px;">
+                  <div style="font-weight:600;">detailed logging</div>
+                  <div style="color:var(--secondary); font-size:0.9rem;">track all moderation actions</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                  <span style="width:8px; height:8px; border-radius:50%; background:#ef4444;"></span>
+                  <span style="color:var(--secondary); font-size:0.9rem;">live moderation feed</span>
+                </div>
+                <div style="display:grid; gap:0.5rem;">
+                  <div style="display:flex; justify-content:space-between;"><span style="color:#e8e8e8;">spam detected</span><span style="color:var(--secondary); font-size:0.8rem;">2m ago</span></div>
+                  <div style="display:flex; justify-content:space-between;"><span style="color:#e8e8e8;">message filtered</span><span style="color:var(--secondary); font-size:0.8rem;">5m ago</span></div>
+                  <div style="display:flex; justify-content:space-between;"><span style="color:#e8e8e8;">raid prevented</span><span style="color:var(--secondary); font-size:0.8rem;">15m ago</span></div>
+                  <div style="display:flex; justify-content:space-between;"><span style="color:#e8e8e8;">warning issued</span><span style="color:var(--secondary); font-size:0.8rem;">20m ago</span></div>
+                </div>
+              </div>
+              <div style="background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px;">
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                  <span style="width:8px; height:8px; border-radius:50%; background:#22c55e;"></span>
+                  <span style="color:var(--secondary); font-size:0.9rem;">server stats</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                  <div style="background: rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px;"><div style="color:var(--secondary); font-size:0.8rem;">messages filtered</div><div style="font-weight:600;">1,234</div></div>
+                  <div style="background: rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px;"><div style="color:var(--secondary); font-size:0.8rem;">raids prevented</div><div style="font-weight:600;">56</div></div>
+                  <div style="background: rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px;"><div style="color:var(--secondary); font-size:0.8rem;">warnings issued</div><div style="font-weight:600;">789</div></div>
+                  <div style="background: rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px;"><div style="color:var(--secondary); font-size:0.8rem;">actions logged</div><div style="font-weight:600;">2,345</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Juul card -->
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+            <i class="fas fa-smoking" style="font-size:2.5rem; color:var(--accent);"></i>
+            <h3 style="font-size:1.8rem; font-weight:600;">juul wars</h3>
+          </div>
+          <p style="color:var(--secondary); margin-bottom:1.5rem;">the infamous virtual juul minigame. pass it, steal it, break it, and watch the chaos unfold. includes full economy with hits currency, flavors, chargers, and medical bills.</p>
+          <div style="display:grid; gap:1rem;">
+            <div style="background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px;">
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                <span style="width:8px; height:8px; border-radius:50%; background:#eab308;"></span>
+                <span style="color:var(--secondary); font-size:0.9rem;">gremlin spotted</span>
+              </div>
+              <div style="color:#e8e8e8;">stealing your juul since 2024</div>
+            </div>
+            <div style="display:grid; gap:0.5rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.02); padding:0.5rem 1rem; border-radius:6px;"><span style="color:#e8e8e8;">hits</span><span style="color:var(--accent);">∞</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.02); padding:0.5rem 1rem; border-radius:6px;"><span style="color:#e8e8e8;">flavors</span><span style="color:var(--accent);">12</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.02); padding:0.5rem 1rem; border-radius:6px;"><span style="color:#e8e8e8;">gremlin</span><span style="color:var(--accent);">10 min</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Advanced Features -->
+    <section class="section">
+      <div class="section-label">advanced features</div>
+      <h2>powerful tools to enhance your discord experience</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">🎁</div>
+          <h3 style="font-size:1.8rem; font-weight:600;">advanced giveaway system</h3>
+          <p style="color:var(--secondary); margin-bottom:1rem;">create engaging giveaways with custom requirements, multiple winners, and bonus entries.</p>
+          <div style="background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px; font-family:monospace;">
+            ;giveaway start <span style="color:#60a5fa;">#announcements</span> <span style="color:#34d399;">Nitro</span> <span style="color:#a78bfa;">--winners 3</span> <span style="color:#fbbf24;">--bonus @Booster:2</span>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">👻</div>
+          <h3 style="font-size:1.8rem; font-weight:600;">curselock & quietlock</h3>
+          <p style="color:var(--secondary); margin-bottom:1rem;">silence or curse users with webhook impersonation and zalgo text.</p>
+          <div style="background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px;">
+            <div style="color:#c084fc;">#cursed</div>
+            <div style="color:#e8e8e8;">h̷e̷l̷l̷o̷ w̷o̷r̷l̷d̷</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">🖼️</div>
+          <h3 style="font-size:1.8rem; font-weight:600;">image effects</h3>
+          <p style="color:var(--secondary); margin-bottom:1rem;">16+ effects including deepfry, pixelate, flash, and more.</p>
+          <div style="display:grid; gap:0.5rem;">
+            <div style="background: rgba(0,0,0,0.3); padding:0.5rem; border-radius:4px; color:var(--secondary); font-size:0.9rem;">/image deepfry</div>
+            <div style="background: rgba(0,0,0,0.3); padding:0.5rem; border-radius:4px; color:var(--secondary); font-size:0.9rem;">/image pixelate</div>
+            <div style="background: rgba(0,0,0,0.3); padding:0.5rem; border-radius:4px; color:var(--secondary); font-size:0.9rem;">/image flash</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">💬</div>
+          <h3 style="font-size:1.8rem; font-weight:600;">web chat interface</h3>
+          <p style="color:var(--secondary); margin-bottom:1rem;">talk to chromed ai directly from your browser, no discord needed.</p>
+          <div style="background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <img src="chromed.png" style="width:32px;height:32px;border-radius:50%;" alt="chromed" />
+              <div><span style="color:#e8e8e8;">chromed ai</span><span style="color:var(--secondary); font-size:0.8rem;"> online</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations -->
+    <section class="section">
+      <div class="section-label">seamless integrations</div>
+      <h2>connect your favorite services with chromed</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+            <img src="chromed.png" style="width:24px;height:24px;border-radius:50%;" alt="chromed" />
+            <span style="color:#e8e8e8; font-size:0.9rem;">chromed</span>
+            <span style="background:#5865F2; color:white; padding:2px 6px; border-radius:4px; font-size:0.7rem;">APP</span>
+            <span style="color:var(--secondary); font-size:0.8rem;">used</span>
+            <span style="color:#1e9cea;">image generation</span>
+          </div>
+          <div style="background:#18191c; padding:1rem; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <div><div style="color:#1e9cea;">now generating</div><div style="color:#e8e8e8;">cyberpunk city in rain</div></div>
+              <div style="color:var(--secondary);">⏳</div>
+            </div>
+            <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:2px;"><div style="width:33%; height:100%; background:white; border-radius:2px;"></div></div>
+            <div style="color:var(--secondary); font-size:0.8rem; margin-top:0.5rem;">0:01 / 0:05</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+            <i class="fas fa-globe" style="color:var(--accent);"></i>
+            <h3 style="font-size:1.3rem;">web dashboard</h3>
+          </div>
+          <p style="color:var(--secondary); font-size:0.9rem;">manage your server, premium, and settings from a beautiful web interface.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+            <i class="fas fa-code" style="color:var(--accent);"></i>
+            <h3 style="font-size:1.3rem;">api access</h3>
+          </div>
+          <p style="color:var(--secondary); font-size:0.9rem;">integrate chromed's ai into your own apps with simple rest api.</p>
+          <div style="background: rgba(0,0,0,0.3); padding:0.5rem; border-radius:4px; color:var(--secondary); font-size:0.8rem;">POST /api/chat</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="section">
+      <div class="section-label">core features</div>
+      <h2>everything you need in one bot</h2>
+      <div class="cards-grid">
+        <div class="card"><div class="card-icon"><i class="fas fa-shield-alt"></i></div><div class="card-title">moderation</div><div class="card-desc">ban, timeout, purge, warn</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-cogs"></i></div><div class="card-title">utility</div><div class="card-desc">userinfo, role, embed, poll</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-image"></i></div><div class="card-title">image effects</div><div class="card-desc">deepfry, pixelate, flash, invert</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-comments"></i></div><div class="card-title">social</div><div class="card-desc">profile, rep, marry, daily</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-gamepad"></i></div><div class="card-title">fun</div><div class="card-desc">juul, 8ball, bomb, slots</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-heart"></i></div><div class="card-title">roleplay</div><div class="card-desc">hug, pat, kiss, slap</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-ghost"></i></div><div class="card-title">curselock</div><div class="card-desc">curse, quiet, lock, unlock</div></div>
+        <div class="card"><div class="card-icon"><i class="fas fa-coins"></i></div><div class="card-title">economy</div><div class="card-desc">balance, work, shop, inv</div></div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" id="server-count">—</div><div class="stat-label">servers</div></div>
+      <div class="stat-card"><div class="stat-value" id="user-count">—</div><div class="stat-label">users</div></div>
+      <div class="stat-card"><div class="stat-value" id="command-count">—</div><div class="stat-label">commands</div></div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center; padding:4rem 0; border-top:1px solid var(--glass-border);">
+      <h2 style="font-size:2.5rem; margin-bottom:1rem;">ready to enhance your discord server?</h2>
+      <p style="color:var(--secondary); margin-bottom:2rem;">join thousands of servers already using chromed</p>
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" style="background:var(--accent); color:#111; padding:0.9rem 2rem; border-radius:999px; text-decoration:none; font-weight:600;">add to discord</a>
+        <a href="https://discord.gg/chrxmaticc" style="background:#5865F2; color:white; padding:0.9rem 2rem; border-radius:999px; text-decoration:none; font-weight:600;">join our discord</a>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-brand"><img src="chromed.png" alt="chromed" /> chromed.</div>
+      <div class="footer-links"><a href="#">home</a><a href="#">commands</a><a href="#">dashboard</a><a href="#">support</a><a href="#">invite</a></div>
+    </footer>
+  </div>
+
+  <script>
+    // Scroll progress
+    const progressBar = document.querySelector('#scroll-progress span');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressBar.style.width = progress + '%';
+    });
+
+    // Custom cursor
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
+      cursorRing.style.left = mouseX + 'px';
+      cursorRing.style.top = mouseY + 'px';
+    });
+    document.querySelectorAll('a, button, .card, .stat-card, .server-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+    });
+
+    // Word rotation
+    document.querySelectorAll(".word-rotate").forEach((el) => {
+      const words = JSON.parse(el.dataset.words || "[]");
+      const interval = parseInt(el.dataset.interval || "3000", 10);
+      let index = 0;
+      let currentWord = el.textContent.trim() || words[0];
+      if (!words.length) return;
+      el.textContent = currentWord;
+
+      setInterval(() => {
+        el.classList.add("is-out");
+        setTimeout(() => {
+          index = (index + 1) % words.length;
+          currentWord = words[index];
+          el.textContent = currentWord;
+          el.classList.remove("is-out");
+        }, 400);
+      }, interval);
+    });
+
+    // Fetch stats & server cards
+    async function loadStats() {
+      try {
+        const [guildsRes, commandsRes] = await Promise.all([
+          fetch("https://chrxmee-ai-discord-bot.onrender.com/guilds"),
+          fetch("https://chrxmee-ai-discord-bot.onrender.com/commands")
+        ]);
+        const guilds = await guildsRes.json();
+        const commands = await commandsRes.json();
+        const serverCount = guilds.length;
+        const userCount = guilds.reduce((sum, g) => sum + (g.memberCount || 0), 0);
+        document.getElementById('server-count').textContent = serverCount.toLocaleString();
+        document.getElementById('user-count').textContent = userCount.toLocaleString();
+        document.getElementById('command-count').textContent = commands.length.toLocaleString();
+        document.getElementById('server-marquee').textContent = `chromed is in ${serverCount} servers, join one of em.`;
+
+        const track = document.getElementById('server-cards-track');
+        if (track && Array.isArray(guilds) && guilds.length > 0) {
+          const duplicated = [...guilds, ...guilds];
+          track.innerHTML = duplicated.map(guild => `
+            <div class="server-card">
+              <i class="fas fa-server" style="color:#d2b48c;"></i>
+              <div class="server-name">${guild.name || 'Unnamed'}</div>
+              <div class="server-id">${guild.id || 'unknown'}</div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.warn("Failed to fetch stats:", err);
+        document.getElementById('server-count').textContent = "389";
+        document.getElementById('user-count').textContent = "—";
+        document.getElementById('command-count').textContent = "—";
+      }
+    }
+    loadStats();
+  </script>
+</body>
+</html>
