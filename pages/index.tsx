@@ -65,7 +65,7 @@ import {
     FaGhost,
     FaLock,
     FaUserSecret,
-    FaWeb,
+    FaGlobe,
     FaMobileAlt,
     FaComments,
     FaChartBar,
