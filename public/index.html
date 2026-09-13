@@ -5,32 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>chromed — switch to the vibe</title>
 <meta name="description" content="chromed is the free discord bot with moderation, minigames, ai, tickets, and automation. no subscriptions." />
-<meta name="theme-color" content="#f5c34a" />
+<meta name="theme-color" content="#5b7fd4" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --theme: #f5c34a;
-    --theme-hot: #ffe9a8;
-    --theme-deep: #c9922e;
-    --theme-soft: #fff5d6;
-    --theme-glow: rgba(245,195,74,0.28);
-    --theme-glow-hot: rgba(255,233,168,0.45);
+    /* primary blue */
+    --blue: #5b7fd4;
+    --blue-hot: #8faef0;
+    --blue-deep: #3d5fb8;
+    --blue-soft: #c8d8f5;
+    --blue-glow: rgba(91,127,212,0.32);
+    --blue-glow-hot: rgba(143,174,240,0.5);
 
-    --tan: #d4a574;
-    --bg: #050505;
-    --bg-2: #0a0a0a;
+    /* secondary silver (the "tan") */
+    --silver: #b8b3ad;
+    --silver-hot: #e8e5e0;
+    --silver-deep: #8a8580;
+    --silver-soft: #d4d0ca;
+
+    --bg: #050506;
     --surface: rgba(255,255,255,0.028);
     --surface-2: rgba(255,255,255,0.05);
     --border: rgba(255,255,255,0.08);
     --border-2: rgba(255,255,255,0.13);
-    --text: #f4ede0;
-    --text-2: #b8af9d;
-    --text-3: #6b6455;
+    --text: #f0ede6;
+    --text-2: #b6b1a8;
+    --text-3: #6b6760;
 
-    --grad-gold: linear-gradient(135deg, #fff5d6 0%, #f5c34a 45%, #c9922e 100%);
-    --grad-gold-soft: linear-gradient(135deg, #ffe9a8 0%, #f5c34a 100%);
+    --grad-blue: linear-gradient(135deg, #c8d8f5 0%, #5b7fd4 45%, #3d5fb8 100%);
+    --grad-blue-soft: linear-gradient(135deg, #8faef0 0%, #5b7fd4 100%);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,61 +48,59 @@
     overflow-x: hidden;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-    transition: background 0.8s ease;
   }
 
   h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
-  ::selection { background: var(--theme-glow); color: #0a0a0a; }
+  ::selection { background: var(--blue-glow); color: #0a0a0a; }
   a { color: inherit; }
 
   /* ─── SCROLL PROGRESS ─── */
   .scroll-progress {
     position: fixed; top: 0; left: 0;
     height: 2px; width: 0%;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     z-index: 10000;
-    transition: width 0.1s linear, background 0.8s;
-    box-shadow: 0 0 12px var(--theme-glow);
+    transition: width 0.1s linear;
+    box-shadow: 0 0 12px var(--blue-glow);
   }
 
-  /* ─── CURSOR SPOTLIGHT ─── */
+  /* ─── CURSOR ─── */
   .cursor-spotlight {
     position: fixed;
     width: 480px; height: 480px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(circle, var(--theme-glow), transparent 65%);
+    background: radial-gradient(circle, var(--blue-glow), transparent 65%);
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s, background 0.8s;
+    transition: opacity 0.3s;
     opacity: 0;
     mix-blend-mode: screen;
     filter: blur(30px);
   }
 
-  /* ─── GOLD FLOW ORBS ─── */
-  .gold-flow {
+  /* ─── BLUE FLOW ORBS ─── */
+  .blue-flow {
     position: fixed; inset: 0;
     z-index: -4;
     overflow: hidden;
     pointer-events: none;
   }
-  .gold-orb {
+  .blue-orb {
     position: absolute;
     width: 620px; height: 620px;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--theme-glow-hot), var(--theme-glow) 32%, transparent 72%);
+    background: radial-gradient(circle, var(--blue-glow-hot), var(--blue-glow) 32%, transparent 72%);
     filter: blur(100px);
     mix-blend-mode: screen;
     opacity: 0;
-    transition: background 0.8s;
     will-change: transform, opacity;
   }
-  .gold-orb.o1 { animation: goldJump1 28s ease-in-out infinite; }
-  .gold-orb.o2 { animation: goldJump2 28s ease-in-out infinite 9.3s; }
-  .gold-orb.o3 { animation: goldJump3 28s ease-in-out infinite 18.6s; }
+  .blue-orb.o1 { animation: orbJump1 28s ease-in-out infinite; }
+  .blue-orb.o2 { animation: orbJump2 28s ease-in-out infinite 9.3s; }
+  .blue-orb.o3 { animation: orbJump3 28s ease-in-out infinite 18.6s; }
 
-  @keyframes goldJump1 {
+  @keyframes orbJump1 {
     0%   { transform: translate(-15%, -15%) scale(0.5); opacity: 0; }
     10%  { transform: translate(-5%, -5%) scale(1.25); opacity: 1; }
     32%  { transform: translate(-5%, -5%) scale(1.25); opacity: 1; }
@@ -107,7 +110,7 @@
     90%  { transform: translate(65%, 45%) scale(1.15); opacity: 1; }
     100% { transform: translate(65%, 45%) scale(0.35); opacity: 0; }
   }
-  @keyframes goldJump2 {
+  @keyframes orbJump2 {
     0%   { transform: translate(70%, 8%) scale(0.45); opacity: 0; }
     14%  { transform: translate(58%, 18%) scale(1.1); opacity: 1; }
     38%  { transform: translate(58%, 18%) scale(1.1); opacity: 1; }
@@ -117,7 +120,7 @@
     96%  { transform: translate(8%, 62%) scale(1.3); opacity: 1; }
     100% { transform: translate(8%, 62%) scale(0.3); opacity: 0; }
   }
-  @keyframes goldJump3 {
+  @keyframes orbJump3 {
     0%   { transform: translate(28%, 58%) scale(0.5); opacity: 0; }
     18%  { transform: translate(40%, 68%) scale(1.15); opacity: 1; }
     42%  { transform: translate(40%, 68%) scale(1.15); opacity: 1; }
@@ -129,26 +132,19 @@
   }
 
   /* ─── DOT GRID ─── */
-  .dot-grid {
-    position: fixed; inset: 0;
-    z-index: -3;
-    pointer-events: none;
-    opacity: 0.55;
-  }
+  .dot-grid { position: fixed; inset: 0; z-index: -3; pointer-events: none; opacity: 0.55; }
   .noise {
-    position: fixed; inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.035;
+    position: fixed; inset: 0; z-index: -1;
+    pointer-events: none; opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* ─── CLICK RIPPLE ─── */
+  /* ─── RIPPLE ─── */
   .click-ripple {
     position: fixed;
     width: 8px; height: 8px;
     border-radius: 50%;
-    border: 1px solid var(--theme);
+    border: 1px solid var(--blue);
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
@@ -160,13 +156,13 @@
 
   .container { max-width: 1240px; margin: 0 auto; padding: 0 1.25rem; position: relative; z-index: 1; }
 
-  /* ─── AUDIO TOGGLE ─── */
+  /* ─── AUDIO ─── */
   .audio-toggle {
     position: fixed; top: 1.6rem; right: 1.6rem;
     z-index: 1000;
     width: 44px; height: 44px;
     border-radius: 50%;
-    background: rgba(15,15,15,0.8);
+    background: rgba(15,15,18,0.8);
     border: 1px solid var(--border-2);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -177,18 +173,18 @@
     box-shadow: 0 8px 30px rgba(0,0,0,0.5);
   }
   .audio-toggle:hover {
-    border-color: var(--theme); color: var(--theme);
-    box-shadow: 0 0 24px var(--theme-glow);
+    border-color: var(--blue); color: var(--blue);
+    box-shadow: 0 0 24px var(--blue-glow);
     transform: scale(1.05);
   }
   .audio-toggle.playing {
-    border-color: var(--theme); color: var(--theme);
-    box-shadow: 0 0 30px var(--theme-glow);
+    border-color: var(--blue); color: var(--blue);
+    box-shadow: 0 0 30px var(--blue-glow);
     animation: audioPulse 2s ease-in-out infinite;
   }
   @keyframes audioPulse {
-    0%, 100% { box-shadow: 0 0 20px var(--theme-glow); }
-    50% { box-shadow: 0 0 40px var(--theme-glow-hot); }
+    0%, 100% { box-shadow: 0 0 20px var(--blue-glow); }
+    50% { box-shadow: 0 0 40px var(--blue-glow-hot); }
   }
   .audio-toggle svg { width: 18px; height: 18px; }
   .audio-toggle .icon-on { display: none; }
@@ -199,14 +195,13 @@
   header { position: sticky; top: 1rem; z-index: 100; padding: 1rem 0 0; }
   .nav-pill {
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(12,12,12,0.78);
+    background: rgba(12,12,15,0.78);
     border: 1px solid var(--border-2);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border-radius: 999px;
     padding: 0.55rem 0.55rem 0.55rem 1.2rem;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
-    transition: border-color 0.8s;
   }
   .brand {
     display: flex; align-items: center; gap: 0.65rem;
@@ -217,9 +212,8 @@
   .brand img {
     width: 34px; height: 34px; border-radius: 50%;
     object-fit: cover;
-    border: 1.5px solid var(--theme);
-    box-shadow: 0 0 22px var(--theme-glow);
-    transition: border-color 0.8s, box-shadow 0.8s;
+    border: 1.5px solid var(--blue);
+    box-shadow: 0 0 22px var(--blue-glow);
   }
   .nav-links { display: flex; gap: 0.35rem; align-items: center; }
   .nav-links a {
@@ -229,12 +223,12 @@
   }
   .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
   .nav-cta {
-    background: var(--theme); color: #111 !important;
+    background: var(--blue); color: #fff !important;
     font-weight: 600; padding: 0.6rem 1.15rem !important;
-    box-shadow: 0 4px 20px var(--theme-glow);
+    box-shadow: 0 4px 20px var(--blue-glow);
     transition: all 0.3s;
   }
-  .nav-cta:hover { filter: brightness(1.1); color: #111 !important; }
+  .nav-cta:hover { filter: brightness(1.1); color: #fff !important; }
   .hamburger {
     display: none;
     background: rgba(255,255,255,0.05);
@@ -262,8 +256,8 @@
   .hero-eyebrow .pulse-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: var(--theme);
-    box-shadow: 0 0 12px var(--theme);
+    background: var(--blue);
+    box-shadow: 0 0 12px var(--blue);
     animation: pulseDot 1.6s ease-in-out infinite;
   }
   @keyframes pulseDot {
@@ -281,7 +275,7 @@
   .hero h1 .accent {
     font-style: italic;
     font-weight: 500;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -293,14 +287,10 @@
     100% { background-position: 200% 50%; }
   }
 
-  .rotate-word {
-    display: inline-block; position: relative;
-    vertical-align: baseline;
-    min-width: 1ch;
-  }
+  .rotate-word { display: inline-block; position: relative; vertical-align: baseline; min-width: 1ch; }
   .rotate-word .word {
     display: inline-block;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -338,12 +328,12 @@
     will-change: transform;
   }
   .btn-primary {
-    background: var(--grad-gold);
-    color: #111;
+    background: var(--grad-blue);
+    color: #fff;
     font-weight: 600;
-    box-shadow: 0 6px 30px var(--theme-glow);
+    box-shadow: 0 6px 30px var(--blue-glow);
   }
-  .btn-primary:hover { box-shadow: 0 10px 44px var(--theme-glow-hot); }
+  .btn-primary:hover { box-shadow: 0 10px 44px var(--blue-glow-hot); }
   .btn-ghost {
     background: rgba(255,255,255,0.04);
     color: var(--text);
@@ -352,7 +342,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
-  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: var(--theme); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: var(--blue); }
   .btn-ghost .arrow { transition: transform 0.25s; }
   .btn-ghost:hover .arrow { transform: translateX(4px); }
 
@@ -360,7 +350,7 @@
   .demo-card {
     max-width: 720px;
     margin: 0 auto 3rem;
-    background: rgba(15,15,15,0.7);
+    background: rgba(15,15,20,0.7);
     border: 1px solid var(--border-2);
     border-radius: 24px;
     padding: 1.35rem 1.6rem;
@@ -368,7 +358,6 @@
     -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
     text-align: left;
-    transition: border-color 0.8s, box-shadow 0.4s;
     position: relative;
     overflow: hidden;
   }
@@ -377,7 +366,7 @@
     position: absolute;
     top: 0; left: -100%;
     width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, var(--theme-glow), transparent);
+    background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
     animation: cardScan 7s linear infinite;
     pointer-events: none;
     opacity: 0.5;
@@ -395,13 +384,12 @@
   .prefix-badge {
     width: 34px; height: 34px;
     border-radius: 10px;
-    background: var(--theme-glow);
-    border: 1px solid var(--theme);
-    color: var(--theme);
+    background: var(--blue-glow);
+    border: 1px solid var(--blue);
+    color: var(--blue-hot);
     display: flex; align-items: center; justify-content: center;
     font-weight: 600; font-size: 1rem;
     flex-shrink: 0;
-    transition: all 0.8s;
   }
   .demo-response {
     display: flex; align-items: center; gap: 0.6rem;
@@ -424,10 +412,10 @@
   /* ─── STATS ROW ─── */
   .stats-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     padding: 2.5rem 0 1rem;
-    max-width: 820px;
+    max-width: 1000px;
     margin: 0 auto;
   }
   .stat-block {
@@ -445,12 +433,11 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--theme), transparent);
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
     opacity: 0.6;
-    transition: background 0.8s;
   }
   .stat-block:hover {
-    border-color: var(--theme);
+    border-color: var(--blue);
     background: var(--surface-2);
     transform: translateY(-2px);
   }
@@ -459,12 +446,11 @@
     font-size: clamp(1.8rem, 4vw, 2.6rem);
     font-weight: 600;
     letter-spacing: -0.04em;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     line-height: 1;
-    transition: background 0.8s;
   }
   .stat-block .label {
     margin-top: 0.7rem;
@@ -483,8 +469,7 @@
     border-bottom: 1px solid var(--border);
     mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 1;
     background: rgba(0,0,0,0.3);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -505,10 +490,9 @@
   .marquee-track .sep {
     width: 5px; height: 5px;
     border-radius: 50%;
-    background: var(--theme);
-    box-shadow: 0 0 10px var(--theme-glow);
+    background: var(--blue);
+    box-shadow: 0 0 10px var(--blue-glow);
     flex-shrink: 0;
-    transition: background 0.8s;
   }
   @keyframes marqueeScroll {
     0% { transform: translateX(0); }
@@ -538,11 +522,10 @@
   .section-title .accent {
     font-style: italic;
     font-weight: 500;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    transition: background 0.8s;
   }
   .section-sub {
     text-align: center;
@@ -553,11 +536,11 @@
     line-height: 1.7;
   }
 
-  /* ─── BENTO GRID ─── */
+  /* ─── BENTO ─── */
   .bento {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 96px;
+    grid-auto-rows: 100px;
     gap: 1rem;
     max-width: 1180px;
     margin: 0 auto;
@@ -579,38 +562,37 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--theme), transparent);
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
     opacity: 0.35;
-    transition: background 0.8s;
   }
   .bento-card::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 22px;
-    background: radial-gradient(500px circle at var(--mx,50%) var(--my,50%), var(--theme-glow), transparent 40%);
+    background: radial-gradient(500px circle at var(--mx,50%) var(--my,50%), var(--blue-glow), transparent 40%);
     opacity: 0;
     transition: opacity 0.4s;
     pointer-events: none;
   }
   .bento-card:hover::after { opacity: 0.5; }
-  .bento-card:hover { border-color: var(--theme); }
+  .bento-card:hover { border-color: var(--blue); }
 
   .bento-card.wide { grid-column: span 3; grid-row: span 3; }
   .bento-card.tall { grid-column: span 3; grid-row: span 2; }
   .bento-card.small { grid-column: span 2; grid-row: span 2; }
   .bento-card.med { grid-column: span 2; grid-row: span 3; }
   .bento-card.full { grid-column: span 6; grid-row: span 2; }
+  .bento-card.half { grid-column: span 4; grid-row: span 3; }
 
   .bento-icon {
     width: 40px; height: 40px;
     border-radius: 12px;
-    background: var(--theme-glow);
-    border: 1px solid var(--theme);
-    color: var(--theme);
+    background: var(--blue-glow);
+    border: 1px solid var(--blue);
+    color: var(--blue-hot);
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 1rem;
-    transition: all 0.8s;
     flex-shrink: 0;
   }
   .bento-icon svg { width: 20px; height: 20px; }
@@ -635,21 +617,10 @@
     color: var(--text-3);
     letter-spacing: 0.05em;
   }
+  .bento-visual { margin-top: 1rem; flex-grow: 1; position: relative; min-height: 0; }
 
-  /* bento visuals */
-  .bento-visual {
-    margin-top: 1rem;
-    flex-grow: 1;
-    position: relative;
-    min-height: 0;
-  }
-
-  /* mini chat bubble inside AI card */
-  .mini-chat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
+  /* mini chat */
+  .mini-chat { display: flex; flex-direction: column; gap: 0.55rem; }
   .mini-bubble {
     padding: 0.6rem 0.9rem;
     border-radius: 14px;
@@ -664,20 +635,21 @@
     border-bottom-right-radius: 4px;
   }
   .mini-bubble.bot {
-    background: var(--theme-glow);
+    background: var(--blue-glow);
     color: var(--text);
     align-self: flex-start;
-    border: 1px solid var(--theme);
+    border: 1px solid var(--blue);
     border-bottom-left-radius: 4px;
   }
 
-  /* mini stat blocks inside cards */
+  /* mini stats */
   .mini-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
     margin-top: 0.75rem;
   }
+  .mini-stats.s3 { grid-template-columns: repeat(3, 1fr); }
   .mini-stat {
     padding: 0.7rem 0.85rem;
     background: rgba(255,255,255,0.03);
@@ -699,13 +671,18 @@
     margin-top: 0.15rem;
   }
 
-  /* bars inside cards */
+  /* bars */
   .bar-row {
     display: flex; align-items: center; gap: 0.6rem;
     font-size: 0.78rem;
     margin-bottom: 0.5rem;
   }
-  .bar-row .label { width: 60px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
+  .bar-row .label {
+    width: 70px;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+  }
   .bar-row .bar-track {
     flex: 1; height: 6px;
     background: rgba(255,255,255,0.05);
@@ -714,12 +691,17 @@
   }
   .bar-row .bar-fill {
     height: 100%;
-    background: var(--grad-gold-soft);
+    background: var(--grad-blue-soft);
     border-radius: 3px;
     width: 0%;
-    transition: width 1.2s cubic-bezier(0.2,0.8,0.2,1), background 0.8s;
+    transition: width 1.2s cubic-bezier(0.2,0.8,0.2,1);
   }
-  .bar-row .val { color: var(--text-2); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; min-width: 26px; text-align: right; }
+  .bar-row .val {
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    min-width: 26px; text-align: right;
+  }
 
   /* ─── DASHBOARD ─── */
   .dashboard {
@@ -743,11 +725,10 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--theme), transparent);
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
     opacity: 0.35;
-    transition: background 0.8s;
   }
-  .dash-card:hover { border-color: var(--theme); background: var(--surface-2); }
+  .dash-card:hover { border-color: var(--blue); background: var(--surface-2); }
 
   .dash-card.s-6 { grid-column: span 6; }
   .dash-card.s-4 { grid-column: span 4; }
@@ -762,32 +743,34 @@
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text);
-    letter-spacing: -0.01em;
     display: flex; align-items: center; gap: 0.5rem;
   }
   .dash-head .icon-mini {
     width: 22px; height: 22px;
     border-radius: 7px;
-    background: var(--theme-glow);
-    color: var(--theme);
+    background: var(--blue-glow);
+    color: var(--blue-hot);
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.8s;
   }
   .dash-head .icon-mini svg { width: 12px; height: 12px; }
   .dash-head .pill {
     font-size: 0.68rem;
     padding: 0.28rem 0.6rem;
     border-radius: 999px;
-    background: var(--theme-glow);
-    color: var(--theme-soft);
-    border: 1px solid var(--theme);
+    background: var(--blue-glow);
+    color: var(--blue-hot);
+    border: 1px solid var(--blue);
     font-weight: 500;
-    transition: all 0.8s;
+  }
+  .dash-head .pill.warn {
+    background: rgba(245,165,192,0.18);
+    color: #f5a5c0;
+    border-color: #f5a5c0;
   }
   .dash-head .live-dot {
     display: inline-flex; align-items: center; gap: 0.35rem;
     font-size: 0.68rem;
-    color: var(--theme-soft);
+    color: var(--blue-hot);
     font-family: 'JetBrains Mono', monospace;
     letter-spacing: 0.1em;
   }
@@ -795,8 +778,8 @@
     content: '';
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: var(--theme);
-    box-shadow: 0 0 10px var(--theme);
+    background: var(--blue);
+    box-shadow: 0 0 10px var(--blue);
     animation: pulseDot 1.6s ease-in-out infinite;
   }
 
@@ -805,12 +788,11 @@
     font-size: 2.6rem;
     font-weight: 600;
     letter-spacing: -0.04em;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     line-height: 1;
-    transition: background 0.8s;
   }
   .dash-sub {
     font-size: 0.78rem;
@@ -830,24 +812,20 @@
   }
   .bar-col {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex; flex-direction: column; align-items: center;
     gap: 0.5rem;
     height: 100%;
   }
   .bar-col .bar {
-    flex: 1;
-    width: 100%;
-    background: var(--grad-gold-soft);
+    flex: 1; width: 100%;
+    background: var(--grad-blue-soft);
     border-radius: 6px 6px 2px 2px;
     align-self: flex-end;
     height: 0%;
-    transition: height 1.4s cubic-bezier(0.2,0.8,0.2,1), background 0.8s;
+    transition: height 1.4s cubic-bezier(0.2,0.8,0.2,1);
     opacity: 0.85;
-    position: relative;
   }
-  .bar-col .bar:hover { opacity: 1; box-shadow: 0 0 20px var(--theme-glow); }
+  .bar-col .bar:hover { opacity: 1; box-shadow: 0 0 20px var(--blue-glow); }
   .bar-col .day {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.68rem;
@@ -855,22 +833,10 @@
   }
 
   /* ring chart */
-  .ring-wrap {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .ring {
-    width: 96px; height: 96px;
-    position: relative;
-    flex-shrink: 0;
-  }
+  .ring-wrap { display: flex; align-items: center; gap: 1rem; }
+  .ring { width: 96px; height: 96px; position: relative; flex-shrink: 0; }
   .ring svg { transform: rotate(-90deg); }
-  .ring circle {
-    fill: none;
-    stroke-width: 8;
-    stroke-linecap: round;
-  }
+  .ring circle { fill: none; stroke-width: 8; stroke-linecap: round; }
   .ring .bg { stroke: rgba(255,255,255,0.06); }
   .ring .fg {
     stroke: url(#ringGrad);
@@ -879,12 +845,10 @@
     transition: stroke-dashoffset 1.6s cubic-bezier(0.2,0.8,0.2,1);
   }
   .ring .center {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: 1.15rem; font-weight: 600;
     color: var(--text);
   }
   .ring-legend .row {
@@ -896,12 +860,11 @@
   .ring-legend .dot-l {
     width: 8px; height: 8px;
     border-radius: 2px;
-    background: var(--theme);
-    transition: background 0.8s;
+    background: var(--blue);
   }
   .ring-legend .dot-l.muted { background: rgba(255,255,255,0.15); }
 
-  /* activity heatmap */
+  /* heatmap */
   .heatmap {
     display: grid;
     grid-template-columns: repeat(28, 1fr);
@@ -913,19 +876,16 @@
     border-radius: 2px;
     background: rgba(255,255,255,0.05);
     transition: background 0.4s, transform 0.2s;
-    cursor: default;
   }
   .heat-cell:hover { transform: scale(1.4); }
-  .heat-cell.l1 { background: color-mix(in srgb, var(--theme) 25%, transparent); }
-  .heat-cell.l2 { background: color-mix(in srgb, var(--theme) 50%, transparent); }
-  .heat-cell.l3 { background: color-mix(in srgb, var(--theme) 75%, transparent); }
-  .heat-cell.l4 { background: var(--theme); box-shadow: 0 0 6px var(--theme-glow); }
+  .heat-cell.l1 { background: rgba(91,127,212,0.25); }
+  .heat-cell.l2 { background: rgba(91,127,212,0.5); }
+  .heat-cell.l3 { background: rgba(91,127,212,0.75); }
+  .heat-cell.l4 { background: var(--blue); box-shadow: 0 0 6px var(--blue-glow); }
 
-  /* live feed */
+  /* feed rows */
   .feed-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
     padding: 0.6rem 0;
     border-bottom: 1px dashed rgba(255,255,255,0.06);
     font-size: 0.82rem;
@@ -942,46 +902,42 @@
   .feed-row .icon-s {
     width: 16px; height: 16px;
     border-radius: 4px;
-    background: var(--theme-glow);
-    color: var(--theme);
+    background: var(--blue-glow);
+    color: var(--blue-hot);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: all 0.8s;
   }
   .feed-row .icon-s svg { width: 9px; height: 9px; }
 
-  /* notification stack */
-  .notif-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
+  /* notifications */
+  .notif-stack { display: flex; flex-direction: column; gap: 0.65rem; }
   .notif {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
     padding: 0.85rem 1rem;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 14px;
     font-size: 0.85rem;
     transition: all 0.3s;
-    cursor: default;
     position: relative;
     overflow: hidden;
   }
-  .notif:hover { border-color: var(--theme); transform: translateX(4px); }
+  .notif:hover { border-color: var(--blue); transform: translateX(4px); }
   .notif .n-icon {
     width: 32px; height: 32px;
     border-radius: 10px;
-    background: var(--theme-glow);
-    border: 1px solid var(--theme);
-    color: var(--theme);
+    background: var(--blue-glow);
+    border: 1px solid var(--blue);
+    color: var(--blue-hot);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: all 0.8s;
   }
   .notif .n-icon svg { width: 15px; height: 15px; }
+  .notif .n-icon.warn {
+    background: rgba(245,165,192,0.15);
+    border-color: #f5a5c0;
+    color: #f5a5c0;
+  }
   .notif .n-body { flex: 1; }
   .notif .n-title { color: var(--text); font-weight: 500; font-size: 0.85rem; }
   .notif .n-sub { color: var(--text-3); font-size: 0.72rem; margin-top: 0.15rem; }
@@ -992,16 +948,423 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     transition: all 0.2s;
+    cursor: pointer;
   }
   .notif:hover .n-close { color: var(--text); background: rgba(255,255,255,0.06); }
   .notif .n-close svg { width: 11px; height: 11px; }
+
+  /* profile hero (dash) */
+  .profile-hero {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .profile-avatar {
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    background: var(--grad-blue);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 1.4rem;
+    color: #fff;
+    border: 2px solid var(--blue-hot);
+    box-shadow: 0 0 26px var(--blue-glow);
+    flex-shrink: 0;
+  }
+  .profile-info h4 { font-size: 1.05rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+  .profile-info .role-tag {
+    font-size: 0.62rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: var(--blue-glow);
+    border: 1px solid var(--blue);
+    color: var(--blue-hot);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .profile-info p { color: var(--text-3); font-size: 0.78rem; margin-top: 0.2rem; }
+
+  /* badge grid */
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+  }
+  .badge {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: var(--blue-glow);
+    border: 1px solid var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue-hot);
+    transition: all 0.3s;
+  }
+  .badge svg { width: 20px; height: 20px; }
+  .badge:hover { transform: translateY(-3px); box-shadow: 0 0 20px var(--blue-glow); }
+  .badge.locked {
+    background: rgba(255,255,255,0.03);
+    border-color: var(--border);
+    color: var(--text-3);
+  }
+
+  /* comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .compare-table th {
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    color: var(--text-3);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table th.hl { color: var(--blue-hot); }
+  .compare-table td {
+    padding: 0.85rem 0.5rem;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+    color: var(--text-2);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td.hl { color: var(--text); font-weight: 500; }
+  .compare-table .yes { color: #6ee7a0; }
+  .compare-table .no  { color: #f5a5c0; }
+  .compare-table .meh { color: var(--text-3); }
+  .compare-table .ic {
+    display: inline-flex;
+    width: 16px; height: 16px;
+    align-items: center; justify-content: center;
+  }
+  .compare-table .ic svg { width: 14px; height: 14px; }
+
+  /* ─── FAQ ACCORDION ─── */
+  .faq-list {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .faq-item.open { border-color: var(--blue); background: var(--surface-2); }
+  .faq-q {
+    padding: 1.15rem 1.4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text);
+    gap: 1rem;
+  }
+  .faq-q .chev {
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    background: var(--blue-glow);
+    color: var(--blue-hot);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .faq-item.open .faq-q .chev { transform: rotate(180deg); }
+  .faq-q .chev svg { width: 12px; height: 12px; }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a-inner {
+    padding: 0 1.4rem 1.15rem;
+    color: var(--text-2);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  /* ─── PRICING COMPARISON ─── */
+  .pricing-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2rem 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  }
+
+  /* ─── COMMAND BROWSER ─── */
+  .cmd-browser {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .cmd-search {
+    padding: 1.2rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-input {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    padding: 0.7rem 1rem;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.25s;
+  }
+  .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-glow); }
+  .search-input::placeholder { color: var(--text-3); }
+
+  .cmd-cats {
+    display: flex; gap: 0.4rem; flex-wrap: wrap;
+  }
+  .cat-chip {
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .cat-chip:hover { border-color: var(--blue); color: var(--blue-hot); }
+  .cat-chip.active {
+    background: var(--blue-glow);
+    border-color: var(--blue);
+    color: var(--blue-hot);
+    font-weight: 500;
+  }
+
+  .cmd-list {
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .cmd-list::-webkit-scrollbar { width: 6px; }
+  .cmd-list::-webkit-scrollbar-track { background: transparent; }
+  .cmd-list::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+  .cmd-list::-webkit-scrollbar-thumb:hover { background: var(--blue); }
+
+  .cmd-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .cmd-row:hover { background: rgba(255,255,255,0.02); }
+  .cmd-row:last-child { border-bottom: none; }
+  .cmd-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--blue-hot);
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+  .cmd-desc {
+    color: var(--text-2);
+    font-size: 0.85rem;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cmd-cat {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .cmd-empty {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: var(--text-3);
+    font-size: 0.9rem;
+  }
+
+  /* ─── STATUS PAGE ─── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .status-card {
+    padding: 1.3rem 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    transition: all 0.3s;
+  }
+  .status-card:hover { border-color: var(--blue); }
+  .status-card .head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.85rem;
+  }
+  .status-card .name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .status-card .ind {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.72rem;
+    color: #6ee7a0;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .status-card .ind::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #6ee7a0;
+    box-shadow: 0 0 10px #6ee7a0;
+    animation: pulseDot 1.6s ease-in-out infinite;
+  }
+  .status-card .uptime {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    background: var(--grad-blue);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+  }
+  .status-card .sub {
+    font-size: 0.72rem;
+    color: var(--text-3);
+    margin-top: 0.4rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .status-bars {
+    display: flex; gap: 2px; margin-top: 0.9rem;
+  }
+  .status-bars .b {
+    height: 20px;
+    flex: 1;
+    border-radius: 2px;
+    background: #6ee7a0;
+    opacity: 0.75;
+  }
+  .status-bars .b.warn { background: #f5c34a; }
+  .status-bars .b.down { background: #f5a5c0; }
+
+  /* ─── CHANGELOG TIMELINE ─── */
+  .changelog {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 2rem;
+  }
+  .changelog::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--blue), transparent);
+    opacity: 0.4;
+  }
+  .log-entry {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+  .log-entry:last-child { padding-bottom: 0; }
+  .log-entry::before {
+    content: '';
+    position: absolute;
+    left: -2rem; top: 6px;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--blue);
+    box-shadow: 0 0 12px var(--blue-glow);
+  }
+  .log-head {
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+  }
+  .log-version {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .log-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+  }
+  .log-tag {
+    font-size: 0.62rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--blue-glow);
+    border: 1px solid var(--blue);
+    color: var(--blue-hot);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .log-list {
+    list-style: none;
+    color: var(--text-2);
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+  .log-list li::before {
+    content: '—';
+    color: var(--blue);
+    margin-right: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
 
   /* ─── TESTIMONIALS ─── */
   .testimonials {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 1.25rem;
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
   }
   .testimonial {
@@ -1019,22 +1382,21 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--theme), transparent);
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
     opacity: 0.5;
-    transition: background 0.8s;
   }
   .testimonial::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 22px;
-    background: radial-gradient(400px circle at var(--mx,50%) var(--my,50%), var(--theme-glow), transparent 45%);
+    background: radial-gradient(400px circle at var(--mx,50%) var(--my,50%), var(--blue-glow), transparent 45%);
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
   }
   .testimonial:hover::after { opacity: 0.5; }
-  .testimonial:hover { border-color: var(--theme); }
+  .testimonial:hover { border-color: var(--blue); }
   .testimonial-head {
     display: flex; align-items: center; gap: 0.85rem;
     margin-bottom: 1.1rem;
@@ -1043,18 +1405,23 @@
   .testimonial-avatar {
     width: 48px; height: 48px;
     border-radius: 50%;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     display: flex; align-items: center; justify-content: center;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 600; font-size: 1.1rem;
-    color: #111;
-    border: 1px solid var(--theme);
+    color: #fff;
+    border: 1px solid var(--blue-hot);
     flex-shrink: 0;
-    box-shadow: 0 0 20px var(--theme-glow);
-    transition: all 0.8s;
+    box-shadow: 0 0 20px var(--blue-glow);
   }
   .testimonial-name { font-weight: 600; font-size: 0.95rem; color: var(--text); }
-  .testimonial-server { color: var(--text-3); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.2rem; }
+  .testimonial-server {
+    color: var(--text-3);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
   .testimonial-quote {
     color: var(--text-2);
     font-size: 0.94rem;
@@ -1069,16 +1436,21 @@
     position: relative; z-index: 1;
   }
   .testimonial-footer .role { font-size: 0.82rem; font-weight: 500; color: var(--text); }
-  .testimonial-footer .sub-role { font-size: 0.68rem; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.15rem; }
+  .testimonial-footer .sub-role {
+    font-size: 0.68rem;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
   .pill-tag {
-    background: var(--theme-glow);
-    color: var(--theme-soft);
-    border: 1px solid var(--theme);
+    background: var(--blue-glow);
+    color: var(--blue-hot);
+    border: 1px solid var(--blue);
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
     font-size: 0.7rem;
     font-weight: 500;
-    transition: all 0.8s;
   }
 
   /* ─── SERVER BUBBLES ─── */
@@ -1103,24 +1475,22 @@
     opacity: 0;
     animation: floatIn 0.9s ease forwards, floatBob 8s ease-in-out infinite;
     transition: border-color 0.3s, background 0.3s;
-    cursor: default;
   }
   .server-bubble:hover {
-    border-color: var(--theme);
+    border-color: var(--blue);
     background: var(--surface-2);
-    box-shadow: 0 0 30px var(--theme-glow);
+    box-shadow: 0 0 30px var(--blue-glow);
   }
   .server-bubble .icon {
     width: 36px; height: 36px;
     border-radius: 50%;
-    background: var(--grad-gold-soft);
+    background: var(--grad-blue-soft);
     display: flex; align-items: center; justify-content: center;
     font-family: 'Space Grotesk', sans-serif;
     font-size: 0.9rem; font-weight: 600;
-    color: #111;
+    color: #fff;
     flex-shrink: 0;
-    border: 1px solid var(--theme);
-    transition: all 0.8s;
+    border: 1px solid var(--blue-hot);
   }
   .server-bubble .info .name { font-size: 0.85rem; font-weight: 500; color: var(--text); }
   .server-bubble .info .count {
@@ -1160,7 +1530,7 @@
     text-transform: uppercase;
     margin-bottom: 1.5rem;
   }
-  .slide-number .num { color: var(--theme); font-weight: 600; transition: color 0.8s; }
+  .slide-number .num { color: var(--blue-hot); font-weight: 600; }
   .slide-number .divider { width: 40px; height: 1px; background: var(--border-2); }
   .slide h3 {
     font-weight: 600;
@@ -1172,11 +1542,10 @@
   .slide h3 .accent {
     font-style: italic;
     font-weight: 500;
-    background: var(--grad-gold);
+    background: var(--grad-blue);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    transition: background 0.8s;
   }
   .slide p {
     color: var(--text-2);
@@ -1199,13 +1568,11 @@
     font-size: 0.85rem;
     transition: all 0.25s;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
   }
   .chip:hover {
-    border-color: var(--theme);
-    color: var(--theme-soft);
-    background: var(--theme-glow);
+    border-color: var(--blue);
+    color: var(--blue-hot);
+    background: var(--blue-glow);
     transform: translateY(-2px);
   }
   .carousel-nav {
@@ -1222,7 +1589,7 @@
     transition: all 0.3s;
     padding: 0;
   }
-  .dot.active { background: var(--theme); width: 46px; box-shadow: 0 0 12px var(--theme-glow); }
+  .dot.active { background: var(--blue); width: 46px; box-shadow: 0 0 12px var(--blue-glow); }
   .dot:hover:not(.active) { background: rgba(255,255,255,0.25); }
 
   /* ─── FOOTER ─── */
@@ -1231,8 +1598,7 @@
     border-top: 1px solid var(--border);
     margin-top: 3rem;
     text-align: center;
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 1;
   }
   .footer-brand {
     display: flex; align-items: center; justify-content: center;
@@ -1241,11 +1607,7 @@
     font-weight: 600; font-size: 1.1rem;
     margin-bottom: 1rem;
   }
-  .footer-brand img {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 1px solid var(--theme);
-  }
+  .footer-brand img { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--blue); }
   .footer-links {
     display: flex; justify-content: center; gap: 1.5rem;
     flex-wrap: wrap;
@@ -1257,21 +1619,23 @@
     font-size: 0.85rem;
     transition: color 0.2s;
   }
-  .footer-links a:hover { color: var(--theme); }
+  .footer-links a:hover { color: var(--blue-hot); }
   .footer-copy { color: var(--text-3); font-size: 0.78rem; }
 
   /* ─── RESPONSIVE ─── */
   @media (max-width: 960px) {
     .bento { grid-template-columns: repeat(4, 1fr); }
-    .bento-card.wide, .bento-card.tall, .bento-card.med, .bento-card.small, .bento-card.full { grid-column: span 4; grid-row: span auto; min-height: 190px; }
+    .bento-card.wide, .bento-card.tall, .bento-card.med, .bento-card.small,
+    .bento-card.full, .bento-card.half { grid-column: span 4; grid-row: auto; min-height: 190px; }
     .dashboard { grid-template-columns: repeat(6, 1fr); }
     .dash-card.s-3, .dash-card.s-4, .dash-card.s-6, .dash-card.s-8 { grid-column: span 6; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 720px) {
     .nav-links { display: none; }
     .hamburger { display: flex; }
     .nav-pill { padding: 0.5rem 0.5rem 0.5rem 1rem; }
-    .stats-row { grid-template-columns: 1fr; gap: 0.6rem; padding: 2rem 0 1rem; }
+    .stats-row { grid-template-columns: 1fr; gap: 0.6rem; }
     .stat-block { padding: 1.1rem 0.9rem; }
     .floating-servers { height: 340px; }
     .hero { padding: 3.5rem 0 2rem; }
@@ -1283,12 +1647,21 @@
     .dash-card { padding: 1.15rem; border-radius: 18px; }
     .dash-big { font-size: 2rem; }
     .heatmap { grid-template-columns: repeat(20, 1fr); }
+    .pricing-wrap { padding: 1.5rem 1.1rem 1rem; }
+    .compare-table { font-size: 0.8rem; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.35rem; }
+    .cmd-row { padding: 0.8rem 1rem; gap: 0.6rem; }
+    .cmd-name { min-width: 100px; font-size: 0.8rem; }
+    .cmd-desc { font-size: 0.78rem; }
+    .changelog { padding-left: 1.5rem; }
+    .log-entry::before { left: -1.5rem; width: 11px; height: 11px; }
+    .badge-grid { grid-template-columns: repeat(4, 1fr); }
   }
 
   /* ─── MOBILE MENU ─── */
   .mobile-menu {
     position: fixed; inset: 0;
-    background: rgba(5,5,5,0.97);
+    background: rgba(5,5,6,0.97);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
     z-index: 999;
@@ -1296,19 +1669,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.25rem;
+    gap: 1.1rem;
   }
   .mobile-menu.open { display: flex; }
   .mobile-menu a {
     color: var(--text);
     text-decoration: none;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    padding: 0.6rem 1.5rem;
+    padding: 0.5rem 1.5rem;
     transition: color 0.2s, transform 0.2s;
   }
-  .mobile-menu a:hover { color: var(--theme); transform: translateX(4px); }
+  .mobile-menu a:hover { color: var(--blue-hot); transform: translateX(4px); }
   .mobile-menu .close {
     position: absolute; top: 1.5rem; right: 1.5rem;
     width: 44px; height: 44px;
@@ -1333,10 +1706,10 @@
 
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-spotlight" id="cursorSpotlight"></div>
-<div class="gold-flow">
-  <div class="gold-orb o1"></div>
-  <div class="gold-orb o2"></div>
-  <div class="gold-orb o3"></div>
+<div class="blue-flow">
+  <div class="blue-orb o1"></div>
+  <div class="blue-orb o2"></div>
+  <div class="blue-orb o3"></div>
 </div>
 <canvas class="dot-grid" id="dotGrid"></canvas>
 <div class="noise"></div>
@@ -1362,8 +1735,9 @@
   </button>
   <a href="#features">features</a>
   <a href="#dashboard">dashboard</a>
-  <a href="#testimonials">testimonials</a>
   <a href="#commands">commands</a>
+  <a href="#faq">faq</a>
+  <a href="#status">status</a>
   <a href="https://discord.gg/rTrJyPyayg" target="_blank">support</a>
   <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">invite</a>
 </div>
@@ -1378,8 +1752,9 @@
       <nav class="nav-links">
         <a href="#features">features</a>
         <a href="#dashboard">dashboard</a>
-        <a href="#testimonials">testimonials</a>
         <a href="#commands">commands</a>
+        <a href="#faq">faq</a>
+        <a href="#status">status</a>
         <a href="https://discord.gg/rTrJyPyayg" target="_blank">support</a>
         <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank" class="nav-cta">invite</a>
       </nav>
@@ -1395,7 +1770,7 @@
 </header>
 
 <!-- HERO -->
-<section class="hero" data-theme="gold" data-audio="hero">
+<section class="hero" data-audio="hero">
   <div class="container">
     <div class="hero-eyebrow">
       <span class="pulse-dot"></span>
@@ -1430,27 +1805,17 @@
       </div>
       <div class="demo-response">
         <div class="status-check">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <span id="rotatingResp">ight you took a hit of the juul, battery: 80%</span>
       </div>
     </div>
 
     <div class="stats-row">
-      <div class="stat-block">
-        <div class="value" id="statMembers">0</div>
-        <div class="label">members</div>
-      </div>
-      <div class="stat-block">
-        <div class="value" id="statServers">0</div>
-        <div class="label">servers</div>
-      </div>
-      <div class="stat-block">
-        <div class="value" id="statCommands">0</div>
-        <div class="label">commands</div>
-      </div>
+      <div class="stat-block"><div class="value" id="statMembers">0</div><div class="label">members</div></div>
+      <div class="stat-block"><div class="value" id="statServers">0</div><div class="label">servers</div></div>
+      <div class="stat-block"><div class="value" id="statCommands">0</div><div class="label">commands</div></div>
+      <div class="stat-block"><div class="value" id="statUptime">0</div><div class="label">uptime %</div></div>
     </div>
   </div>
 </section>
@@ -1473,19 +1838,15 @@
   </div>
 </div>
 
-<!-- BENTO GRID -->
-<section id="features" data-theme="cyan" data-audio="stats">
+<!-- BENTO -->
+<section id="features" data-audio="stats">
   <div class="container">
     <div class="section-eyebrow">everything in one bot</div>
-    <h2 class="section-title">
-      built for <span class="accent">every</span> kind of server
-    </h2>
-    <p class="section-sub">
-      one bot replaces six. moderation, minigames, ai, tickets, economy, and automation — all native, all free.
-    </p>
+    <h2 class="section-title">built for <span class="accent">every</span> kind of server</h2>
+    <p class="section-sub">one bot replaces six. moderation, minigames, ai, tickets, economy, automation — all native, all free.</p>
 
     <div class="bento">
-      <!-- AI card -->
+      <!-- AI wide -->
       <div class="bento-card wide tilt">
         <div class="bento-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1507,7 +1868,7 @@
         <div class="tag">/ask · /imagine · /memory · /persona</div>
       </div>
 
-      <!-- Antinuke card -->
+      <!-- Antinuke tall -->
       <div class="bento-card tall tilt">
         <div class="bento-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1515,7 +1876,7 @@
           </svg>
         </div>
         <h3>antinuke + honeypots</h3>
-        <p>real protection. audit trail, auto-lockdown, honeypot channels, and 4 lock types.</p>
+        <p>real protection. audit trail, auto-lockdown, honeypot channels, 4 lock types.</p>
         <div class="bento-visual">
           <div class="mini-stats">
             <div class="mini-stat"><div class="n">12</div><div class="l">raids blocked</div></div>
@@ -1535,7 +1896,7 @@
         <div class="tag">/antinuke · /honeypot · /lock</div>
       </div>
 
-      <!-- Juul card -->
+      <!-- Juul small -->
       <div class="bento-card small tilt">
         <div class="bento-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1549,7 +1910,7 @@
         <div class="tag">/juul</div>
       </div>
 
-      <!-- Tickets card -->
+      <!-- Tickets small -->
       <div class="bento-card small tilt">
         <div class="bento-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1562,7 +1923,7 @@
         <div class="tag">/ticket · /workflow</div>
       </div>
 
-      <!-- Economy card -->
+      <!-- Economy small -->
       <div class="bento-card small tilt">
         <div class="bento-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1575,7 +1936,47 @@
         <div class="tag">/work · /daily · /rob</div>
       </div>
 
-      <!-- Comparison wide card -->
+      <!-- Voice activity -->
+      <div class="bento-card med tilt">
+        <div class="bento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+          </svg>
+        </div>
+        <h3>voice activity</h3>
+        <p>track vc joins, top talkers, and session lengths per user.</p>
+        <div class="bento-visual">
+          <div class="mini-stats s3">
+            <div class="mini-stat"><div class="n">82h</div><div class="l">this week</div></div>
+            <div class="mini-stat"><div class="n">12</div><div class="l">channels</div></div>
+            <div class="mini-stat"><div class="n">48</div><div class="l">speakers</div></div>
+          </div>
+        </div>
+        <div class="tag">/vcstats</div>
+      </div>
+
+      <!-- Uptime -->
+      <div class="bento-card med tilt">
+        <div class="bento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <h3>always online</h3>
+        <p>99.9% uptime over 30 days. auto-failover, instant restart, global edge.</p>
+        <div class="bento-visual">
+          <div class="mini-stats s3">
+            <div class="mini-stat"><div class="n">99.9%</div><div class="l">uptime</div></div>
+            <div class="mini-stat"><div class="n">42ms</div><div class="l">avg ping</div></div>
+            <div class="mini-stat"><div class="n">0</div><div class="l">outages</div></div>
+          </div>
+        </div>
+        <div class="tag">live status →</div>
+      </div>
+
+      <!-- Comparison full -->
       <div class="bento-card full tilt">
         <div class="bento-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1612,58 +2013,89 @@
   </div>
 </section>
 
-<!-- DASHBOARD / STATS SHOWCASE -->
-<section id="dashboard" data-theme="violet" data-audio="stats">
+<!-- DASHBOARD -->
+<section id="dashboard" data-audio="stats">
   <div class="container">
     <div class="section-eyebrow">live dashboard preview</div>
-    <h2 class="section-title">
-      real numbers, <span class="accent">real time</span>
-    </h2>
-    <p class="section-sub">
-      this is what chromed tracks per server. activity, moderation, commands, growth — all live.
-    </p>
+    <h2 class="section-title">real numbers, <span class="accent">real time</span></h2>
+    <p class="section-sub">this is what chromed tracks per server. activity, moderation, commands, growth — all live.</p>
 
     <div class="dashboard">
-      <!-- big stat -->
-      <div class="dash-card s-3">
+      <!-- Profile hero -->
+      <div class="dash-card s-6">
         <div class="dash-head">
           <h4><span class="icon-mini">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </span>members</h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>owner</h4>
+          <div class="pill">verified</div>
         </div>
+        <div class="profile-hero">
+          <div class="profile-avatar">C</div>
+          <div class="profile-info">
+            <h4>chm4_ <span class="role-tag">owner</span></h4>
+            <p>joined 2 years ago · 48,201 messages · 1,204 commands</p>
+          </div>
+        </div>
+        <div class="mini-stats s3">
+          <div class="mini-stat"><div class="n">48.2K</div><div class="l">messages</div></div>
+          <div class="mini-stat"><div class="n">1,204</div><div class="l">commands</div></div>
+          <div class="mini-stat"><div class="n">82h</div><div class="l">voice time</div></div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="dash-card s-6">
+        <div class="dash-head">
+          <h4><span class="icon-mini">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+          </span>achievements</h4>
+          <div class="pill">12 / 48</div>
+        </div>
+        <div class="badge-grid">
+          <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 20h20M5 20V8l7-5 7 5v12M9 12h6M9 16h6"/></svg></div>
+          <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg></div>
+          <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+          <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.7 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></div>
+          <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg></div>
+          <div class="badge locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <div class="badge locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <div class="badge locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <div class="badge locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <div class="badge locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <div class="badge locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Big stats -->
+      <div class="dash-card s-3">
+        <div class="dash-head"><h4><span class="icon-mini">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </span>members</h4></div>
         <div class="dash-big">12,847</div>
         <div class="dash-sub">across 47 servers</div>
       </div>
 
-      <!-- big stat -->
       <div class="dash-card s-3">
-        <div class="dash-head">
-          <h4><span class="icon-mini">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </span>uptime</h4>
-        </div>
+        <div class="dash-head"><h4><span class="icon-mini">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </span>uptime</h4></div>
         <div class="dash-big">99.9%</div>
         <div class="dash-sub">last 30 days</div>
       </div>
 
-      <!-- big stat -->
       <div class="dash-card s-3">
-        <div class="dash-head">
-          <h4><span class="icon-mini">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-          </span>commands</h4>
-        </div>
-        <div class="dash-big" id="dashCmdCount">120+</div>
+        <div class="dash-head"><h4><span class="icon-mini">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        </span>commands</h4></div>
+        <div class="dash-big">120+</div>
         <div class="dash-sub">ready to use</div>
       </div>
 
-      <!-- big stat -->
       <div class="dash-card s-3">
-        <div class="dash-head">
-          <h4><span class="icon-mini">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
-          </span>rating</h4>
-        </div>
+        <div class="dash-head"><h4><span class="icon-mini">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
+        </span>rating</h4></div>
         <div class="dash-big">4.9</div>
         <div class="dash-sub">avg / 5.0</div>
       </div>
@@ -1676,7 +2108,7 @@
           </span>messages this week</h4>
           <div class="pill">+12.4%</div>
         </div>
-        <div class="bar-chart" id="barChart">
+        <div class="bar-chart">
           <div class="bar-col"><div class="bar" data-h="62"></div><div class="day">M</div></div>
           <div class="bar-col"><div class="bar" data-h="78"></div><div class="day">T</div></div>
           <div class="bar-col"><div class="bar" data-h="45"></div><div class="day">W</div></div>
@@ -1699,13 +2131,13 @@
             <svg viewBox="0 0 100 100">
               <defs>
                 <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fff5d6"/>
-                  <stop offset="50%" stop-color="var(--theme)"/>
-                  <stop offset="100%" stop-color="var(--theme-deep)"/>
+                  <stop offset="0%" stop-color="#c8d8f5"/>
+                  <stop offset="50%" stop-color="#5b7fd4"/>
+                  <stop offset="100%" stop-color="#3d5fb8"/>
                 </linearGradient>
               </defs>
               <circle class="bg" cx="50" cy="50" r="40"/>
-              <circle class="fg" id="ringFg" cx="50" cy="50" r="40"/>
+              <circle class="fg" cx="50" cy="50" r="40"/>
             </svg>
             <div class="center">72%</div>
           </div>
@@ -1786,7 +2218,7 @@
             <div class="n-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></div>
           </div>
           <div class="notif">
-            <div class="n-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="n-icon warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <div class="n-body">
               <div class="n-title">antinuke blocked 12 raid joins</div>
               <div class="n-sub">3 min ago · auto-lockdown active</div>
@@ -1795,34 +2227,116 @@
           </div>
         </div>
       </div>
+
+      <!-- Wallet -->
+      <div class="dash-card s-4">
+        <div class="dash-head">
+          <h4><span class="icon-mini">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 12h2"/></svg>
+          </span>wallet</h4>
+        </div>
+        <div class="mini-stats s3">
+          <div class="mini-stat"><div class="n">12.8K</div><div class="l">cash</div></div>
+          <div class="mini-stat"><div class="n">4.2K</div><div class="l">bank</div></div>
+          <div class="mini-stat"><div class="n">9d</div><div class="l">streak</div></div>
+        </div>
+      </div>
+
+      <!-- Ticket stats -->
+      <div class="dash-card s-4">
+        <div class="dash-head">
+          <h4><span class="icon-mini">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 9V7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a3 3 0 0 0 0 6v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a3 3 0 0 0 0-6z"/></svg>
+          </span>tickets · 7d</h4>
+        </div>
+        <div class="mini-stats s3">
+          <div class="mini-stat"><div class="n">42</div><div class="l">opened</div></div>
+          <div class="mini-stat"><div class="n">38</div><div class="l">closed</div></div>
+          <div class="mini-stat"><div class="n">4.7</div><div class="l">avg ★</div></div>
+        </div>
+      </div>
+
+      <!-- Boost -->
+      <div class="dash-card s-4">
+        <div class="dash-head">
+          <h4><span class="icon-mini">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+          </span>boosts</h4>
+          <div class="pill">tier 2</div>
+        </div>
+        <div class="mini-stats s3">
+          <div class="mini-stat"><div class="n">7</div><div class="l">boosts</div></div>
+          <div class="mini-stat"><div class="n">4</div><div class="l">boosters</div></div>
+          <div class="mini-stat"><div class="n">7</div><div class="l">to tier 3</div></div>
+        </div>
+      </div>
+
+      <!-- Comparison table card -->
+      <div class="dash-card s-6">
+        <div class="dash-head">
+          <h4><span class="icon-mini">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>chromed vs other bots</h4>
+        </div>
+        <table class="compare-table">
+          <thead>
+            <tr><th>feature</th><th class="hl">chromed</th><th>other 1</th><th>other 2</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>free forever</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span></td><td><span class="ic meh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></td></tr>
+            <tr><td>juul wars</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span></td></tr>
+            <tr><td>antinuke</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td><span class="ic meh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></td><td><span class="ic meh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></td></tr>
+            <tr><td>ai memory</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span></td></tr>
+            <tr><td>no subscription</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span></td><td><span class="ic meh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- SERVERS FLOATING -->
-<section data-theme="green">
+<!-- SERVER BUBBLES -->
+<section>
   <div class="container">
     <div class="section-eyebrow">used and trusted by</div>
-    <h2 class="section-title">
-      <span id="serverCountBig">—</span> servers<br>run on <span class="accent">chromed</span>
-    </h2>
-    <p class="section-sub">
-      reaching <span id="memberCountBig">—</span> members across art, social, gaming and creator communities.
-    </p>
+    <h2 class="section-title"><span id="serverCountBig">—</span> servers<br>run on <span class="accent">chromed</span></h2>
+    <p class="section-sub">reaching <span id="memberCountBig">—</span> members across art, social, gaming and creator communities.</p>
     <div class="floating-servers" id="floatingServers"></div>
   </div>
 </section>
 
+<!-- PRICING COMPARISON -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow">pricing</div>
+    <h2 class="section-title">chromed is <span class="accent">free.</span><br>forever.</h2>
+    <p class="section-sub">every feature, every server, every user. no paywalls, no "premium" tier, no upsells.</p>
+
+    <div class="pricing-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>feature</th><th class="hl">chromed</th><th>typical premium bots</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>moderation & antinuke</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> included</span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg> $9.99/mo</span></td></tr>
+          <tr><td>ai chat + memory</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> included</span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg> $14.99/mo</span></td></tr>
+          <tr><td>tickets + workflows</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> included</span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg> $4.99/mo</span></td></tr>
+          <tr><td>economy + minigames</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> included</span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg> $6.99/mo</span></td></tr>
+          <tr><td>custom commands + embeds</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> included</span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg> $3.99/mo</span></td></tr>
+          <tr><td>priority support</td><td class="hl"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> included</span></td><td><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg> extra</span></td></tr>
+          <tr><td style="color: var(--text); font-weight: 600;">total / month</td><td class="hl"><span style="color: var(--blue-hot); font-weight: 700; font-size: 1.1rem;">$0.00</span></td><td><span style="color: #f5a5c0; font-weight: 600;">~$40.95</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
-<section id="testimonials" data-theme="rose" data-audio="testimonials">
+<section id="testimonials" data-audio="testimonials">
   <div class="container">
     <div class="section-eyebrow">testimonials</div>
-    <h2 class="section-title">
-      loved and trusted by<br>the <span class="accent">largest servers</span>
-    </h2>
-    <p class="section-sub">
-      real reviews from owners who put chromed on the front lines of their community.
-    </p>
+    <h2 class="section-title">loved and trusted by<br>the <span class="accent">largest servers</span></h2>
+    <p class="section-sub">real reviews from owners who put chromed on the front lines of their community.</p>
 
     <div class="testimonials">
       <div class="testimonial tilt">
@@ -1833,14 +2347,9 @@
             <div class="testimonial-server">defixion · 200+ members</div>
           </div>
         </div>
-        <div class="testimonial-quote">
-          cool ass site and tuff bot for everything. chromed replaced like 4 other bots i had running. the juul minigame is peak.
-        </div>
+        <div class="testimonial-quote">cool ass site and tuff bot for everything. chromed replaced like 4 other bots i had running. the juul minigame is peak.</div>
         <div class="testimonial-footer">
-          <div>
-            <div class="role">! coner</div>
-            <div class="sub-role">server owner</div>
-          </div>
+          <div><div class="role">! coner</div><div class="sub-role">server owner</div></div>
           <div class="pill-tag">verified</div>
         </div>
       </div>
@@ -1853,14 +2362,9 @@
             <div class="testimonial-server">chaos lounge · 1.2k members</div>
           </div>
         </div>
-        <div class="testimonial-quote">
-          chromed is what got my whole server beefing over a virtual juul. the gremlin events alone are worth it. no subscriptions, just chaos.
-        </div>
+        <div class="testimonial-quote">chromed is what got my whole server beefing over a virtual juul. the gremlin events alone are worth it. no subscriptions, just chaos.</div>
         <div class="testimonial-footer">
-          <div>
-            <div class="role">juul warlord</div>
-            <div class="sub-role">server owner</div>
-          </div>
+          <div><div class="role">juul warlord</div><div class="sub-role">server owner</div></div>
           <div class="pill-tag">verified</div>
         </div>
       </div>
@@ -1873,14 +2377,24 @@
             <div class="testimonial-server">the abyss · 890 members</div>
           </div>
         </div>
-        <div class="testimonial-quote">
-          the antinuke has stopped every raid attempt on my server for 6 months straight. no log noise, no false positives. just works.
-        </div>
+        <div class="testimonial-quote">the antinuke has stopped every raid attempt on my server for 6 months straight. no log noise, no false positives. just works.</div>
         <div class="testimonial-footer">
+          <div><div class="role">gremlin</div><div class="sub-role">server owner</div></div>
+          <div class="pill-tag">verified</div>
+        </div>
+      </div>
+
+      <div class="testimonial tilt">
+        <div class="testimonial-head">
+          <div class="testimonial-avatar">N</div>
           <div>
-            <div class="role">gremlin</div>
-            <div class="sub-role">server owner</div>
+            <div class="testimonial-name">nightowl</div>
+            <div class="testimonial-server">night owls · 612 members</div>
           </div>
+        </div>
+        <div class="testimonial-quote">ran it for a month, zero issues. the ai memory is unreal — remembers every running joke from my server.</div>
+        <div class="testimonial-footer">
+          <div><div class="role">nightowl</div><div class="sub-role">server owner</div></div>
           <div class="pill-tag">verified</div>
         </div>
       </div>
@@ -1888,25 +2402,232 @@
   </div>
 </section>
 
+<!-- COMMAND BROWSER -->
+<section id="commands" data-audio="juul">
+  <div class="container">
+    <div class="section-eyebrow">all commands</div>
+    <h2 class="section-title">browse every <span class="accent">command</span></h2>
+    <p class="section-sub">search, filter by category, and find exactly what you need. updated live from the bot.</p>
+
+    <div class="cmd-browser">
+      <div class="cmd-search">
+        <input class="search-input" id="cmdSearch" placeholder="search commands..." />
+        <div class="cmd-cats" id="cmdCats">
+          <button class="cat-chip active" data-cat="all">all</button>
+          <button class="cat-chip" data-cat="ai">ai</button>
+          <button class="cat-chip" data-cat="mod">mod</button>
+          <button class="cat-chip" data-cat="fun">fun</button>
+          <button class="cat-chip" data-cat="econ">econ</button>
+          <button class="cat-chip" data-cat="util">util</button>
+        </div>
+      </div>
+      <div class="cmd-list" id="cmdList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATUS -->
+<section id="status">
+  <div class="container">
+    <div class="section-eyebrow">status</div>
+    <h2 class="section-title">everything <span class="accent">operational</span></h2>
+    <p class="section-sub">live uptime across every service chromed runs on. no fake green dots.</p>
+
+    <div class="status-grid">
+      <div class="status-card">
+        <div class="head"><div class="name">discord gateway</div><div class="ind">online</div></div>
+        <div class="uptime">99.98%</div>
+        <div class="sub">30 day uptime</div>
+        <div class="status-bars">
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b warn"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+        </div>
+      </div>
+      <div class="status-card">
+        <div class="head"><div class="name">rest api</div><div class="ind">online</div></div>
+        <div class="uptime">99.94%</div>
+        <div class="sub">42ms avg latency</div>
+        <div class="status-bars">
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+        </div>
+      </div>
+      <div class="status-card">
+        <div class="head"><div class="name">ai service</div><div class="ind">online</div></div>
+        <div class="uptime">99.99%</div>
+        <div class="sub">sub-second avg</div>
+        <div class="status-bars">
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+        </div>
+      </div>
+      <div class="status-card">
+        <div class="head"><div class="name">database</div><div class="ind">online</div></div>
+        <div class="uptime">100.0%</div>
+        <div class="sub">zero data loss</div>
+        <div class="status-bars">
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+          <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="section-eyebrow">faq</div>
+    <h2 class="section-title">questions, <span class="accent">answered</span></h2>
+    <p class="section-sub">everything you'd want to know before hitting invite.</p>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-q">
+          <span>is chromed really free?</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">yes. every feature on every server. no premium tier, no subscription, no locked commands. free forever.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>how do i set it up?</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">click invite, pick your server, and you're done. it takes about 30 seconds. the setup wizard runs on first join to help you configure everything.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>what makes the antinuke special?</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">most antinukes are just rate limiters. chromed tracks every destructive action with an audit trail, auto-locks during raids, uses honeypot channels to trap attackers, and can restore deleted channels and roles.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>how good is the ai?</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">chromed runs a hybrid model — gemini-tier reasoning with groq speed. it has long-term memory per user, remembers running jokes, and you can customize its personality per server.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>can i self-host it?</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">not right now — chromed runs on our infrastructure so you don't have to maintain anything. self-hosting may come later.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span>what happens to my data if i remove it?</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">when you remove chromed, all server config is wiped within 30 days. no backups kept, no shadow profiles.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANGELOG -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow">changelog</div>
+    <h2 class="section-title">updated <span class="accent">constantly</span></h2>
+    <p class="section-sub">every improvement, every fix. no stealth updates.</p>
+
+    <div class="changelog">
+      <div class="log-entry">
+        <div class="log-head">
+          <span class="log-version">v2.1.0</span>
+          <span class="log-date">2 days ago</span>
+          <span class="log-tag">new</span>
+        </div>
+        <ul class="log-list">
+          <li>added gif effects with deepfry, wiggle, and invert</li>
+          <li>added full stats system with per-user tracking</li>
+          <li>added activity heatmap to per-server dashboard</li>
+        </ul>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-head">
+          <span class="log-version">v2.0.4</span>
+          <span class="log-date">1 week ago</span>
+          <span class="log-tag">fix</span>
+        </div>
+        <ul class="log-list">
+          <li>fixed ticket timeout on inactive tickets (30 min auto-close)</li>
+          <li>fixed antinuke false positives on mass role updates</li>
+          <li>improved juul steal cooldown logic</li>
+        </ul>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-head">
+          <span class="log-version">v2.0.0</span>
+          <span class="log-date">3 weeks ago</span>
+          <span class="log-tag">major</span>
+        </div>
+        <ul class="log-list">
+          <li>full ai rewrite — hybrid gemini + groq pipeline</li>
+          <li>long-term memory per user with /memory commands</li>
+          <li>new antinuke with honeypot and auto-restore</li>
+          <li>complete economy rebalance</li>
+        </ul>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-head">
+          <span class="log-version">v1.8.0</span>
+          <span class="log-date">2 months ago</span>
+          <span class="log-tag">new</span>
+        </div>
+        <ul class="log-list">
+          <li>juul wars minigame with gremlin events</li>
+          <li>reaction roles with buttons and dropdowns</li>
+          <li>custom embed builder</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CAROUSEL -->
-<section id="commands" data-theme="lavender" data-audio="juul">
+<section data-audio="ai">
   <div class="container">
     <div class="section-eyebrow">a look inside</div>
-    <h2 class="section-title">
-      this is <span class="accent">chromed</span>, in your server.
-    </h2>
+    <h2 class="section-title">this is <span class="accent">chromed</span>, in your server.</h2>
 
     <div class="carousel-wrap">
-      <div class="slide active" data-slide="0" data-slide-theme="green" data-slide-audio="juul">
+      <div class="slide active" data-slide="0" data-slide-audio="juul">
         <div class="slide-number">
           <span class="num">01</span>
           <span class="divider"></span>
           <span>chaos</span>
         </div>
         <h3>juul wars, <span class="accent">betrayal</span>, and gremlins</h3>
-        <p>
-          pass, steal, charge, and break the virtual juul. full economy, medical bills, gremlin events, and hostage mode. pure server warfare.
-        </p>
+        <p>pass, steal, charge, and break the virtual juul. full economy, medical bills, gremlin events, and hostage mode. pure server warfare.</p>
         <div class="command-chips">
           <div class="chip" data-scramble>/juul hit</div>
           <div class="chip" data-scramble>/juul steal</div>
@@ -1914,16 +2635,14 @@
         </div>
       </div>
 
-      <div class="slide" data-slide="1" data-slide-theme="violet" data-slide-audio="serve">
+      <div class="slide" data-slide="1" data-slide-audio="serve">
         <div class="slide-number">
           <span class="num">02</span>
           <span class="divider"></span>
           <span>self-serve</span>
         </div>
         <h3>let members pick their <span class="accent">own lane</span></h3>
-        <p>
-          buttons, dropdowns, or reactions. members choose their own roles, tickets, and workflows. no admin micromanaging needed.
-        </p>
+        <p>buttons, dropdowns, or reactions. members choose their own roles, tickets, and workflows. no admin micromanaging needed.</p>
         <div class="command-chips">
           <div class="chip" data-scramble>/ticket open</div>
           <div class="chip" data-scramble>/workflow</div>
@@ -1931,16 +2650,14 @@
         </div>
       </div>
 
-      <div class="slide" data-slide="2" data-slide-theme="crimson" data-slide-audio="antinuke">
+      <div class="slide" data-slide="2" data-slide-audio="antinuke">
         <div class="slide-number">
           <span class="num">03</span>
           <span class="divider"></span>
           <span>moderation</span>
         </div>
         <h3>antinuke, <span class="accent">honeypots</span>, and locks</h3>
-        <p>
-          real protection against raids and nukes. honeypot traps, antinuke audits, and user locks like quietlock, curselock, and drunklock.
-        </p>
+        <p>real protection against raids and nukes. honeypot traps, antinuke audits, and user locks like quietlock, curselock, and drunklock.</p>
         <div class="command-chips">
           <div class="chip" data-scramble>/antinuke enable</div>
           <div class="chip" data-scramble>/honeypot setup</div>
@@ -1948,16 +2665,14 @@
         </div>
       </div>
 
-      <div class="slide" data-slide="3" data-slide-theme="blue" data-slide-audio="ai">
+      <div class="slide" data-slide="3" data-slide-audio="ai">
         <div class="slide-number">
           <span class="num">04</span>
           <span class="divider"></span>
           <span>ai</span>
         </div>
         <h3>hybrid ai with <span class="accent">real memory</span></h3>
-        <p>
-          gemini-tier answers with groq speed. long-term memory, custom personalities, workflows, imagine, and everything in between.
-        </p>
+        <p>gemini-tier answers with groq speed. long-term memory, custom personalities, workflows, imagine, and everything in between.</p>
         <div class="command-chips">
           <div class="chip" data-scramble>/ask</div>
           <div class="chip" data-scramble>/imagine</div>
@@ -1976,18 +2691,13 @@
 </section>
 
 <!-- FINAL CTA -->
-<section data-theme="gold" data-audio="cta">
+<section data-audio="cta">
   <div class="container">
     <h2 class="section-title">ready to switch to the <span class="accent">future</span>?</h2>
     <p class="section-sub">free forever. no subscription. no elon bs.</p>
     <div class="hero-ctas">
-      <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank" class="btn-primary magnetic">
-        add to discord
-      </a>
-      <a href="https://discord.gg/rTrJyPyayg" target="_blank" class="btn-ghost magnetic">
-        join support server
-        <span class="arrow">→</span>
-      </a>
+      <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank" class="btn-primary magnetic">add to discord</a>
+      <a href="https://discord.gg/rTrJyPyayg" target="_blank" class="btn-ghost magnetic">join support server <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -2001,8 +2711,9 @@
     <div class="footer-links">
       <a href="#features">features</a>
       <a href="#dashboard">dashboard</a>
-      <a href="#testimonials">testimonials</a>
       <a href="#commands">commands</a>
+      <a href="#faq">faq</a>
+      <a href="#status">status</a>
       <a href="https://discord.gg/rTrJyPyayg" target="_blank">support</a>
       <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">invite</a>
     </div>
@@ -2011,35 +2722,6 @@
 </footer>
 
 <script>
-/* ═══════════════════════════════════════════════
-   CALM PASTEL THEMES
-   ═══════════════════════════════════════════════ */
-const THEMES = {
-  gold:     { theme:'#f5c34a', hot:'#ffe9a8', deep:'#c9922e', soft:'#fff5d6', glow:'rgba(245,195,74,0.28)',  glowHot:'rgba(255,233,168,0.45)' },
-  cyan:     { theme:'#7cb8ff', hot:'#a5d0ff', deep:'#5b8fd9', soft:'#dbe9ff', glow:'rgba(124,184,255,0.25)', glowHot:'rgba(165,208,255,0.42)' },
-  green:    { theme:'#8ee4a8', hot:'#b8f0c8', deep:'#4db37a', soft:'#dff5e6', glow:'rgba(142,228,168,0.25)', glowHot:'rgba(184,240,200,0.42)' },
-  violet:   { theme:'#c4b0ff', hot:'#d8ccff', deep:'#8b7ce0', soft:'#ece6ff', glow:'rgba(196,176,255,0.25)', glowHot:'rgba(216,204,255,0.42)' },
-  crimson:  { theme:'#f5a5c0', hot:'#ffc4d8', deep:'#d97090', soft:'#ffe0ea', glow:'rgba(245,165,192,0.25)', glowHot:'rgba(255,196,216,0.42)' },
-  blue:     { theme:'#a5b8ff', hot:'#c4d0ff', deep:'#7385d9', soft:'#e0e6ff', glow:'rgba(165,184,255,0.25)', glowHot:'rgba(196,208,255,0.42)' },
-  rose:     { theme:'#f5a5c0', hot:'#ffc4d8', deep:'#d97090', soft:'#ffe0ea', glow:'rgba(245,165,192,0.25)', glowHot:'rgba(255,196,216,0.42)' },
-  lavender: { theme:'#c4b0ff', hot:'#d8ccff', deep:'#8b7ce0', soft:'#ece6ff', glow:'rgba(196,176,255,0.25)', glowHot:'rgba(216,204,255,0.42)' }
-};
-let currentTheme = 'gold';
-
-function setTheme(name) {
-  if (name === currentTheme) return;
-  const t = THEMES[name];
-  if (!t) return;
-  currentTheme = name;
-  const r = document.documentElement;
-  r.style.setProperty('--theme', t.theme);
-  r.style.setProperty('--theme-hot', t.hot);
-  r.style.setProperty('--theme-deep', t.deep);
-  r.style.setProperty('--theme-soft', t.soft);
-  r.style.setProperty('--theme-glow', t.glow);
-  r.style.setProperty('--theme-glow-hot', t.glowHot);
-}
-
 /* ═══ SCROLL PROGRESS + CURSOR ═══ */
 const scrollProgress = document.getElementById('scrollProgress');
 const cursorSpotlight = document.getElementById('cursorSpotlight');
@@ -2066,7 +2748,7 @@ window.addEventListener('scroll', () => {
   scrollProgress.style.width = (p * 100) + '%';
 }, { passive: true });
 
-/* ═══ DOT GRID CANVAS ═══ */
+/* ═══ DOT GRID ═══ */
 const canvas = document.getElementById('dotGrid');
 const ctx = canvas.getContext('2d');
 let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -2109,7 +2791,7 @@ function drawDotGrid(now) {
       const edgeFade = 1 - Math.abs(colT - 0.5) * 0.7;
       const size = (0.6 + depth * 1.6) * sizeFade * edgeFade;
       const alpha = (0.06 + depth * 0.22) * edgeFade * sizeFade;
-      ctx.fillStyle = `rgba(232,232,232,${alpha.toFixed(3)})`;
+      ctx.fillStyle = `rgba(200,216,245,${alpha.toFixed(3)})`;
       ctx.fillRect(x, y, size, size);
     }
   }
@@ -2119,7 +2801,7 @@ function drawDotGrid(now) {
     const flicker = 0.5 + Math.sin(s.tw) * 0.5;
     ctx.beginPath();
     ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,240,200,${(s.a * flicker).toFixed(3)})`;
+    ctx.fillStyle = `rgba(200,216,245,${(s.a * flicker).toFixed(3)})`;
     ctx.fill();
   }
   requestAnimationFrame(drawDotGrid);
@@ -2150,7 +2832,7 @@ function rotateWord() {
 }
 setInterval(rotateWord, 2800);
 
-/* ═══ ROTATING DEMO COMMAND ═══ */
+/* ═══ ROTATING DEMO ═══ */
 const commands = [
   { cmd: '/juul hit', resp: 'ight you took a hit of the juul, battery: 80%' },
   { cmd: '/ticket open', resp: 'select a category to open a ticket' },
@@ -2175,7 +2857,7 @@ function rotateCommand() {
 }
 setInterval(rotateCommand, 4000);
 
-/* ═══ NUMBER FORMAT + COUNTERS ═══ */
+/* ═══ COUNTERS ═══ */
 function formatNum(n) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
   if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
@@ -2210,6 +2892,7 @@ async function loadStats() {
     animateCounter(document.getElementById('statMembers'), memberCount);
     animateCounter(document.getElementById('statServers'), serverCount);
     animateCounter(document.getElementById('statCommands'), cmdCount, '+');
+    animateCounter(document.getElementById('statUptime'), 99, '%');
     document.getElementById('serverCountBig').textContent = serverCount || '—';
     document.getElementById('memberCountBig').textContent = formatNum(memberCount);
     spawnServerBubbles(guilds);
@@ -2217,6 +2900,7 @@ async function loadStats() {
     animateCounter(document.getElementById('statMembers'), 12847);
     animateCounter(document.getElementById('statServers'), 47);
     animateCounter(document.getElementById('statCommands'), 120, '+');
+    animateCounter(document.getElementById('statUptime'), 99, '%');
     document.getElementById('serverCountBig').textContent = '47';
     document.getElementById('memberCountBig').textContent = '12.8K';
     spawnServerBubbles([
@@ -2261,7 +2945,7 @@ function spawnServerBubbles(guilds) {
   });
 }
 
-/* ═══ BAR CHART (animate on scroll) ═══ */
+/* ═══ BAR + FILL ANIMATION ═══ */
 const barObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -2273,7 +2957,6 @@ const barObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 document.querySelectorAll('.bar-chart').forEach(el => barObs.observe(el));
 
-/* ═══ BENTO BAR FILLS ═══ */
 const fillObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -2285,12 +2968,12 @@ const fillObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 document.querySelectorAll('.bento-card, .dash-card').forEach(el => fillObs.observe(el));
 
-/* ═══ RING CHART ═══ */
+/* ═══ RING ═══ */
 const ringObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      const ring = entry.target.querySelector('.fg') || entry.target;
-      setTimeout(() => { ring.style.strokeDashoffset = '70'; }, 200);
+      const ring = entry.target.querySelector('.fg');
+      if (ring) setTimeout(() => { ring.style.strokeDashoffset = '70'; }, 200);
     }
   });
 }, { threshold: 0.4 });
@@ -2312,6 +2995,90 @@ if (heatmapEl) {
   }
 }
 
+/* ═══ COMMAND BROWSER ═══ */
+const CMD_DATA = [
+  { name: '/ask', desc: 'chat with chromed ai — remembers your history', cat: 'ai' },
+  { name: '/imagine', desc: 'generate images from a text prompt', cat: 'ai' },
+  { name: '/memory', desc: 'view or clear your ai memory', cat: 'ai' },
+  { name: '/persona', desc: 'set a custom personality for your server', cat: 'ai' },
+  { name: '/model', desc: 'switch between ai models (genius, speedster, thinker)', cat: 'ai' },
+  { name: '/antinuke', desc: 'enable/disable server protection', cat: 'mod' },
+  { name: '/honeypot', desc: 'set up a trap channel for attackers', cat: 'mod' },
+  { name: '/lock', desc: 'lock users with quiet, curse, drunk, or thread mode', cat: 'mod' },
+  { name: '/ban', desc: 'ban a user with optional reason', cat: 'mod' },
+  { name: '/kick', desc: 'kick a user from the server', cat: 'mod' },
+  { name: '/warn', desc: 'warn a user — logs to case history', cat: 'mod' },
+  { name: '/purge', desc: 'bulk delete messages', cat: 'mod' },
+  { name: '/juul', desc: 'juul wars — hit, steal, charge, hostage', cat: 'fun' },
+  { name: '/gif', desc: 'gif effects like deepfry, wiggle, invert', cat: 'fun' },
+  { name: '/duel', desc: 'challenge another user to a duel', cat: 'fun' },
+  { name: '/dungeon', desc: 'run a dungeon with your party', cat: 'fun' },
+  { name: '/work', desc: 'earn cash with a job', cat: 'econ' },
+  { name: '/daily', desc: 'claim your daily reward', cat: 'econ' },
+  { name: '/rob', desc: 'attempt to rob another user', cat: 'econ' },
+  { name: '/lotto', desc: 'buy lottery tickets', cat: 'econ' },
+  { name: '/shop', desc: 'browse the server shop', cat: 'econ' },
+  { name: '/ticket', desc: 'open a support ticket', cat: 'util' },
+  { name: '/workflow', desc: 'build custom automations', cat: 'util' },
+  { name: '/embed', desc: 'build custom embed messages', cat: 'util' },
+  { name: '/selfprefix', desc: 'let members set their own prefix', cat: 'util' },
+  { name: '/vcstats', desc: 'view voice activity stats', cat: 'util' },
+  { name: '/stats', desc: 'view your personal stats', cat: 'util' },
+  { name: '/help', desc: 'show all commands', cat: 'util' }
+];
+
+const cmdList = document.getElementById('cmdList');
+const cmdSearch = document.getElementById('cmdSearch');
+const cmdCatChips = document.querySelectorAll('#cmdCats .cat-chip');
+let activeCat = 'all';
+let searchTerm = '';
+
+function renderCommands() {
+  const filtered = CMD_DATA.filter(c => {
+    const matchCat = activeCat === 'all' || c.cat === activeCat;
+    const matchSearch = !searchTerm || c.name.toLowerCase().includes(searchTerm) || c.desc.toLowerCase().includes(searchTerm);
+    return matchCat && matchSearch;
+  });
+
+  if (!filtered.length) {
+    cmdList.innerHTML = '<div class="cmd-empty">no commands match. try a different search.</div>';
+    return;
+  }
+
+  cmdList.innerHTML = filtered.map(c => `
+    <div class="cmd-row">
+      <div class="cmd-name">${c.name}</div>
+      <div class="cmd-desc">${c.desc}</div>
+      <div class="cmd-cat">${c.cat}</div>
+    </div>
+  `).join('');
+}
+
+cmdSearch.addEventListener('input', (e) => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  renderCommands();
+});
+
+cmdCatChips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    cmdCatChips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeCat = chip.dataset.cat;
+    renderCommands();
+  });
+});
+
+renderCommands();
+
+/* ═══ FAQ ACCORDION ═══ */
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
 /* ═══ CAROUSEL ═══ */
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
@@ -2321,8 +3088,6 @@ function goToSlide(idx) {
   slides.forEach((s, i) => s.classList.toggle('active', i === idx));
   dots.forEach((d, i) => d.classList.toggle('active', i === idx));
   currentSlide = idx;
-  const active = slides[idx];
-  if (active.dataset.slideTheme) setTheme(active.dataset.slideTheme);
 }
 function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
 function startAutoSlide() {
@@ -2336,23 +3101,6 @@ dots.forEach(d => {
   });
 });
 startAutoSlide();
-
-/* ═══ SECTION THEME OBSERVER ═══ */
-const themeSections = document.querySelectorAll('[data-theme]');
-const themeObs = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const name = entry.target.dataset.theme;
-      if (entry.target.id === 'commands') {
-        const active = entry.target.querySelector('.slide.active');
-        if (active) setTheme(active.dataset.slideTheme);
-      } else {
-        setTheme(name);
-      }
-    }
-  });
-}, { threshold: 0.4 });
-themeSections.forEach(s => themeObs.observe(s));
 
 /* ═══ AUDIO ═══ */
 let audioEnabled = false;
@@ -2403,7 +3151,7 @@ audioToggle.addEventListener('click', () => {
   }
 });
 
-/* ═══ MAGNETIC BUTTONS ═══ */
+/* ═══ MAGNETIC ═══ */
 document.querySelectorAll('.magnetic').forEach(el => {
   el.addEventListener('mousemove', (e) => {
     const r = el.getBoundingClientRect();
@@ -2414,7 +3162,7 @@ document.querySelectorAll('.magnetic').forEach(el => {
   el.addEventListener('mouseleave', () => el.style.transform = '');
 });
 
-/* ═══ 3D TILT ═══ */
+/* ═══ TILT ═══ */
 document.querySelectorAll('.tilt').forEach(el => {
   el.addEventListener('mousemove', (e) => {
     const r = el.getBoundingClientRect();
@@ -2427,7 +3175,7 @@ document.querySelectorAll('.tilt').forEach(el => {
   el.addEventListener('mouseleave', () => el.style.transform = '');
 });
 
-/* ═══ TEXT SCRAMBLE ═══ */
+/* ═══ SCRAMBLE ═══ */
 const SCRAMBLE = '!<>-_\\/[]{}—=+*^?#________';
 document.querySelectorAll('[data-scramble]').forEach(el => {
   const original = el.textContent;
@@ -2450,7 +3198,7 @@ document.querySelectorAll('[data-scramble]').forEach(el => {
   });
 });
 
-/* ═══ MOBILE MENU ═══ */
+/* ═══ MOBILE ═══ */
 const mobileMenu = document.getElementById('mobileMenu');
 document.getElementById('openMenu')?.addEventListener('click', () => mobileMenu.classList.add('open'));
 document.getElementById('closeMenu')?.addEventListener('click', () => mobileMenu.classList.remove('open'));
