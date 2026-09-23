@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>chromed — everything you need in a discord bot</title>
-<meta name="description" content="chromed is discord's most versatile bot. moderation, ai, economy, pets, gambling, and automation — all free." />
+<title>chromed — discord's premier all-in-one bot</title>
+<meta name="description" content="chromed is discord's premier all-in-one bot. moderation, ai, economy, pets, gambling, automation — all free forever." />
 <meta name="theme-color" content="#000000" />
 <link rel="icon" type="image/png" href="chromed.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,7 +28,7 @@
     --blue-soft: #dde2ff;
     --blue-deep: #4a5bd6;
     --blue-glow: rgba(123,143,255,0.4);
-    --blue-glow-soft: rgba(123,143,255,0.15);
+    --blue-glow-soft: rgba(123,143,255,0.14);
     --grad-blue: linear-gradient(180deg, #dde2ff 0%, #a5b3ff 30%, #7b8fff 60%, #4a5bd6 100%);
   }
 
@@ -39,15 +39,13 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     line-height: 1.5;
-    cursor: default;
   }
 
   a { color: inherit; text-decoration: none; }
   img { max-width: 100%; display: block; }
-
   ::selection { background: var(--blue-glow); color: #fff; }
 
-  /* ═══════════ AMBIENT BACKGROUND ═══════════ */
+  /* ═══════════ BACKGROUND ═══════════ */
   .ambient {
     position: fixed;
     inset: 0;
@@ -66,47 +64,33 @@
     width: 900px; height: 900px;
     background: radial-gradient(circle, rgba(74,91,214,0.45), transparent 65%);
     top: -30%; left: -20%;
-    animation: drift1 55s ease-in-out infinite;
+    animation: drift1 60s ease-in-out infinite;
   }
   .smoke.s2 {
     width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(123,143,255,0.28), transparent 65%);
+    background: radial-gradient(circle, rgba(123,143,255,0.26), transparent 65%);
     bottom: -30%; right: -15%;
-    animation: drift2 70s ease-in-out infinite;
-  }
-  .smoke.s3 {
-    width: 550px; height: 550px;
-    background: radial-gradient(circle, rgba(165,179,255,0.18), transparent 65%);
-    top: 40%; left: 50%;
-    animation: drift3 85s ease-in-out infinite;
+    animation: drift2 75s ease-in-out infinite;
   }
   @keyframes drift1 {
     0%, 100% { transform: translate(0,0) scale(1); }
-    33% { transform: translate(15%, 10%) scale(1.2); }
-    66% { transform: translate(5%, 22%) scale(0.95); }
+    50% { transform: translate(15%, 10%) scale(1.2); }
   }
   @keyframes drift2 {
     0%, 100% { transform: translate(0,0) scale(1); }
     50% { transform: translate(-18%,-14%) scale(1.25); }
   }
-  @keyframes drift3 {
-    0%, 100% { transform: translate(0,0) scale(1); }
-    50% { transform: translate(-22%, 18%) scale(1.15); }
-  }
-
-  /* subtle dot grid overlay */
   .grid-bg {
     position: fixed;
     inset: 0;
     z-index: -2;
     pointer-events: none;
     background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: radial-gradient(ellipse 100% 80% at 50% 50%, black 20%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 50%, black 20%, transparent 80%);
-    opacity: 0.55;
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 100% 70% at 50% 40%, black 15%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 40%, black 15%, transparent 75%);
+    opacity: 0.5;
   }
-
   .noise {
     position: fixed;
     inset: 0;
@@ -114,21 +98,6 @@
     pointer-events: none;
     opacity: 0.028;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* cursor glow — soft light that follows */
-  .cursor-glow {
-    position: fixed;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--blue-glow-soft), transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.4s;
-    opacity: 0;
-    mix-blend-mode: screen;
-    filter: blur(40px);
   }
 
   /* ═══════════ NAV ═══════════ */
@@ -159,23 +128,22 @@
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     color: var(--text);
   }
   .brand img {
-    width: 32px; height: 32px;
-    border-radius: 9px;
+    width: 30px; height: 30px;
+    border-radius: 8px;
     object-fit: cover;
-    border: 1px solid var(--border-2);
   }
-  .nav-links { display: flex; gap: 0.2rem; align-items: center; }
+  .nav-links { display: flex; gap: 0.15rem; align-items: center; }
   .nav-links a {
     color: var(--text-2);
-    font-size: 0.87rem;
-    padding: 0.55rem 0.85rem;
+    font-size: 0.86rem;
+    padding: 0.55rem 0.8rem;
     border-radius: 999px;
     transition: all 0.2s;
   }
@@ -184,7 +152,7 @@
     background: var(--blue);
     color: #fff !important;
     font-weight: 600;
-    padding: 0.6rem 1.15rem !important;
+    padding: 0.6rem 1.1rem !important;
     box-shadow: 0 4px 20px var(--blue-glow);
   }
   .nav-cta:hover { background: var(--blue-hot); color: #000 !important; }
@@ -205,28 +173,26 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 8rem 1.25rem 4rem;
+    padding: 7rem 1.25rem 4rem;
     position: relative;
     z-index: 1;
     overflow: hidden;
   }
-
-  /* breathing glow behind text — the visual anchor */
   .hero-halo {
     position: absolute;
-    top: 50%; left: 30%;
+    top: 40%; left: 35%;
     transform: translate(-50%, -50%);
-    width: 900px; height: 900px;
+    width: 1000px; height: 1000px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(123,143,255,0.22), rgba(74,91,214,0.1) 40%, transparent 70%);
+    background: radial-gradient(circle, rgba(123,143,255,0.20), rgba(74,91,214,0.08) 40%, transparent 70%);
     pointer-events: none;
     z-index: 0;
-    filter: blur(60px);
-    animation: halo 8s ease-in-out infinite;
+    filter: blur(70px);
+    animation: halo 9s ease-in-out infinite;
   }
   @keyframes halo {
     0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
-    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
   }
 
   .hero-inner {
@@ -241,13 +207,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    padding: 0.4rem 0.85rem;
-    background: rgba(123,143,255,0.07);
+    padding: 0.4rem 0.9rem;
+    background: rgba(123,143,255,0.06);
     border: 1px solid rgba(123,143,255,0.22);
     border-radius: 999px;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     color: var(--blue-hot);
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
     letter-spacing: 0.03em;
   }
   .hero-eyebrow .dot {
@@ -265,50 +231,58 @@
   .hero h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
-    font-size: clamp(2.75rem, 7vw, 5.25rem);
-    line-height: 1;
+    font-size: clamp(2.5rem, 6.2vw, 4.75rem);
+    line-height: 1.02;
     letter-spacing: -0.04em;
-    margin-bottom: 1.75rem;
-    max-width: 820px;
+    margin-bottom: 1.5rem;
+    max-width: 900px;
     color: var(--text);
   }
   .hero h1 .accent {
     background: var(--grad-blue);
-    background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     display: inline-block;
-    animation: shimmer 6s ease-in-out infinite;
+  }
+
+  /* animated word switcher */
+  .word-switch {
+    display: inline-block;
     position: relative;
+    vertical-align: baseline;
+    height: 1em;
+    overflow: hidden;
+    min-width: 4ch;
+    padding-right: 0.15em;
   }
-  @keyframes shimmer {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-  .hero h1 .accent::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0; bottom: -8px;
-    height: 4px;
+  .word-switch .word {
+    display: inline-block;
     background: var(--grad-blue);
-    border-radius: 2px;
-    opacity: 0.5;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: opacity 0.4s, transform 0.4s, filter 0.4s;
+  }
+  .word-switch .word.out {
+    opacity: 0;
+    transform: translateY(-0.6em);
+    filter: blur(6px);
   }
 
   .hero p.sub {
     color: var(--text-2);
-    font-size: 1.15rem;
-    line-height: 1.65;
+    font-size: 1.1rem;
+    line-height: 1.7;
     max-width: 620px;
-    margin-bottom: 2.25rem;
+    margin-bottom: 2rem;
   }
 
   .hero-ctas {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
   .btn-primary {
     display: inline-flex;
@@ -318,7 +292,7 @@
     color: #fff;
     font-weight: 600;
     font-size: 0.95rem;
-    padding: 1rem 1.65rem;
+    padding: 0.95rem 1.6rem;
     border-radius: 999px;
     transition: all 0.25s;
     box-shadow: 0 8px 28px var(--blue-glow);
@@ -331,7 +305,7 @@
     inset: 0;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
     transform: translateX(-100%);
-    transition: transform 0.6s;
+    transition: transform 0.7s;
   }
   .btn-primary:hover {
     background: var(--blue-hot);
@@ -350,7 +324,7 @@
     color: var(--text);
     font-weight: 500;
     font-size: 0.95rem;
-    padding: 1rem 1.65rem;
+    padding: 0.95rem 1.6rem;
     border-radius: 999px;
     border: 1px solid var(--border-2);
     transition: all 0.25s;
@@ -363,29 +337,82 @@
   .btn-ghost .arrow { transition: transform 0.25s; color: var(--blue); }
   .btn-ghost:hover .arrow { transform: translateX(4px); }
 
-  .hero-stats {
-    color: var(--text-3);
-    font-size: 1rem;
-    margin-bottom: 3rem;
+  /* hero stat row — 4 columns */
+  .hero-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 720px;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
   }
-  .hero-stats b {
-    color: var(--text);
+  .stat-col { text-align: left; }
+  .stat-col .val {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.65rem;
     font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1;
     font-variant-numeric: tabular-nums;
   }
+  .stat-col .lbl {
+    font-size: 0.72rem;
+    color: var(--text-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
 
-  /* small inline marquee */
+  /* hero terminal demo */
+  .hero-demo {
+    max-width: 620px;
+    background: rgba(8,8,10,0.6);
+    border: 1px solid var(--border-2);
+    border-radius: 14px;
+    padding: 1rem 1.15rem;
+    backdrop-filter: blur(20px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-demo::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(123,143,255,0.5), transparent);
+  }
+  .demo-line {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    color: var(--text-2);
+    padding: 0.32rem 0;
+  }
+  .demo-line .prompt { color: var(--blue); }
+  .demo-line .cmd { color: var(--text); }
+  .demo-line.out { color: var(--text-3); padding-left: 1.15rem; }
+  .demo-line.out b { color: var(--blue-hot); font-weight: 500; }
+  .demo-line.out .ok { color: #6ee7a0; }
+  .demo-line.out .warn { color: #f5b84a; }
+
+  /* small marquee under hero */
   .hero-servers {
     position: relative;
     overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
     padding: 0.5rem 0;
-    max-width: 820px;
+    max-width: 720px;
+    margin-top: 2rem;
   }
   .hero-servers-track {
     display: flex;
-    gap: 2rem;
+    gap: 1.75rem;
     width: max-content;
     animation: scrollLeft 70s linear infinite;
     align-items: center;
@@ -398,46 +425,41 @@
   .mini-server {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     white-space: nowrap;
     flex-shrink: 0;
   }
   .mini-avatar {
-    width: 32px; height: 32px;
+    width: 30px; height: 30px;
     border-radius: 50%;
     background: linear-gradient(135deg, rgba(123,143,255,0.4), rgba(74,91,214,0.2));
     border: 1px solid rgba(123,143,255,0.3);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem; font-weight: 600;
+    font-size: 0.7rem; font-weight: 700;
     color: var(--blue-hot);
     overflow: hidden;
+    flex-shrink: 0;
   }
   .mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .mini-info { display: flex; flex-direction: column; gap: 0.05rem; }
-  .mini-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
-  .mini-count { font-size: 0.7rem; color: var(--text-3); }
+  .mini-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+  .mini-count { font-size: 0.7rem; color: var(--text-3); margin-left: 0.15rem; }
 
   /* ═══════════ SECTIONS ═══════════ */
   section {
-    padding: 7rem 1.25rem;
+    padding: 6rem 1.25rem;
     position: relative;
     z-index: 1;
   }
   .container { max-width: 1080px; margin: 0 auto; }
 
-  /* scroll reveal */
   .reveal {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.9s cubic-bezier(0.2,0.8,0.2,1), transform 0.9s cubic-bezier(0.2,0.8,0.2,1);
-    will-change: opacity, transform;
   }
-  .reveal.in {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
 
-  .section-header { max-width: 720px; margin-bottom: 4rem; }
+  .section-header { max-width: 720px; margin-bottom: 3rem; }
   .section-eyebrow {
     display: inline-block;
     font-size: 0.72rem;
@@ -445,15 +467,15 @@
     letter-spacing: 0.24em;
     text-transform: uppercase;
     font-weight: 600;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1rem;
   }
   .section-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
-    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
     line-height: 1.1;
     letter-spacing: -0.035em;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1rem;
     color: var(--text);
     max-width: 700px;
   }
@@ -465,38 +487,49 @@
   }
   .section-sub {
     color: var(--text-2);
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1.7;
     max-width: 600px;
   }
 
-  /* ═══════════ BIG TRUSTED MARQUEE ═══════════ */
-  .trusted-section {
-    padding: 5rem 0;
+  /* ═══════════ BIG MARQUEE ═══════════ */
+  .marquee-section {
+    padding: 4rem 0;
     overflow: hidden;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     position: relative;
   }
-  .trusted-label {
+  .marquee-head {
     text-align: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+  .marquee-label {
     font-size: 0.72rem;
     letter-spacing: 0.4em;
     text-transform: uppercase;
     color: var(--text-3);
-    margin-bottom: 2.5rem;
     padding-left: 0.4em;
   }
-  .trusted-row {
+  .marquee-count {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 0.5rem;
+  }
+  .marquee-row {
     display: flex;
     gap: 1rem;
     width: max-content;
     padding: 0 1rem;
     margin-bottom: 1rem;
   }
-  .trusted-row.r1 { animation: trustedLeft 60s linear infinite; }
-  .trusted-row.r2 { animation: trustedRight 70s linear infinite; }
-  .trusted-section:hover .trusted-row { animation-play-state: paused; }
+  .marquee-row.r1 { animation: trustedLeft 70s linear infinite; }
+  .marquee-row.r2 { animation: trustedRight 80s linear infinite; }
+  .marquee-row.r3 { animation: trustedLeft 90s linear infinite; }
+  .marquee-section:hover .marquee-row { animation-play-state: paused; }
 
   @keyframes trustedLeft {
     from { transform: translateX(0); }
@@ -507,24 +540,24 @@
     to { transform: translateX(0); }
   }
 
-  .trusted-card {
+  .server-card {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.9rem;
     background: rgba(255,255,255,0.02);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 1rem 1.25rem;
     min-width: 260px;
     flex-shrink: 0;
-    transition: all 0.35s;
+    transition: all 0.3s;
   }
-  .trusted-card:hover {
+  .server-card:hover {
     border-color: rgba(123,143,255,0.45);
     background: rgba(123,143,255,0.04);
     transform: translateY(-2px);
   }
-  .trusted-avatar {
+  .server-avatar {
     width: 48px; height: 48px;
     border-radius: 50%;
     background: linear-gradient(135deg, rgba(123,143,255,0.35), rgba(74,91,214,0.15));
@@ -535,38 +568,35 @@
     flex-shrink: 0;
     overflow: hidden;
   }
-  .trusted-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .trusted-info { min-width: 0; }
-  .trusted-name {
+  .server-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .server-info { min-width: 0; }
+  .server-name {
     font-weight: 600;
     font-size: 0.95rem;
     color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 180px;
+    max-width: 170px;
   }
-  .trusted-count { font-size: 0.8rem; color: var(--text-3); margin-top: 0.15rem; }
+  .server-count { font-size: 0.78rem; color: var(--text-3); margin-top: 0.15rem; }
 
-  /* ═══════════ FEATURE CARDS ═══════════ */
+  /* ═══════════ FEATURE GRID (with mockups) ═══════════ */
   .feature-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  @media (max-width: 860px) {
-    .feature-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 860px) { .feature-grid { grid-template-columns: 1fr; } }
 
   .feature-card {
     background: rgba(255,255,255,0.02);
     border: 1px solid var(--border);
-    border-radius: 22px;
+    border-radius: 20px;
     padding: 1.75rem;
     position: relative;
     overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.2,0.8,0.2,1);
-    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1);
     will-change: transform;
   }
   .feature-card::before {
@@ -574,101 +604,372 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(123,143,255,0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(123,143,255,0.4), transparent);
     opacity: 0.6;
   }
   .feature-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 22px;
+    border-radius: 20px;
     background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(123,143,255,0.09), transparent 40%);
     opacity: 0;
     transition: opacity 0.4s;
     pointer-events: none;
   }
   .feature-card:hover::after { opacity: 1; }
-  .feature-card:hover {
-    border-color: rgba(123,143,255,0.35);
-    background: rgba(255,255,255,0.03);
-  }
+  .feature-card:hover { border-color: rgba(123,143,255,0.32); }
 
   .feature-card .icon {
-    width: 42px; height: 42px;
+    width: 40px; height: 40px;
     border-radius: 12px;
     background: rgba(123,143,255,0.1);
-    border: 1px solid rgba(123,143,255,0.28);
+    border: 1px solid rgba(123,143,255,0.25);
     color: var(--blue);
     display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1rem;
     transition: all 0.4s;
   }
   .feature-card:hover .icon {
-    background: rgba(123,143,255,0.18);
-    box-shadow: 0 0 28px var(--blue-glow-soft);
-    transform: scale(1.05);
+    background: rgba(123,143,255,0.16);
+    box-shadow: 0 0 24px var(--blue-glow-soft);
   }
-  .feature-card .icon svg { width: 20px; height: 20px; }
+  .feature-card .icon svg { width: 19px; height: 19px; }
 
   .feature-card h3 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--text);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
   }
-  .feature-card p {
-    font-size: 0.92rem;
+  .feature-card > p {
+    font-size: 0.9rem;
     color: var(--text-2);
     line-height: 1.6;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.15rem;
   }
   .feature-card .tag {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--text-3);
     letter-spacing: 0.04em;
   }
 
-  /* mini chat inside cards */
-  .mini-chat {
-    background: rgba(0,0,0,0.4);
+  /* mockup container inside cards */
+  .mock {
+    background: rgba(0,0,0,0.45);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 0.9rem 1rem;
-    margin-bottom: 1.25rem;
+    border-radius: 12px;
+    padding: 0.8rem 0.9rem;
+    margin-bottom: 1.1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
+    gap: 0.45rem;
+    font-size: 0.8rem;
   }
-  .mini-msg {
+  .mock-msg {
     display: flex;
-    gap: 0.55rem;
+    gap: 0.5rem;
     align-items: flex-start;
-    font-size: 0.82rem;
   }
-  .mini-msg .av {
+  .mock-msg .av {
     width: 22px; height: 22px;
     border-radius: 50%;
     flex-shrink: 0;
     background: rgba(255,255,255,0.06);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.55rem;
-    font-weight: 700;
+    font-size: 0.55rem; font-weight: 700;
     color: var(--text-2);
   }
-  .mini-msg.bot .av {
+  .mock-msg.bot .av {
     background: var(--blue);
     color: #fff;
-    box-shadow: 0 0 12px var(--blue-glow-soft);
+    box-shadow: 0 0 10px var(--blue-glow-soft);
   }
-  .mini-msg .txt {
+  .mock-msg .txt {
     color: var(--text-2);
     line-height: 1.5;
-    padding-top: 0.15rem;
+    padding-top: 0.1rem;
   }
-  .mini-msg .txt b { color: var(--blue-hot); font-weight: 600; }
+  .mock-msg .txt b { color: var(--blue-hot); font-weight: 600; }
+  .mock-msg .txt .code {
+    background: rgba(255,255,255,0.06);
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: var(--blue-hot);
+  }
+  .mock-msg .txt .ok { color: #6ee7a0; }
+  .mock-msg .txt .warn { color: #f5b84a; }
+  .mock-msg .txt .no { color: #ff7b7b; }
+
+  /* blocked-style chips (evict/bleed style) */
+  .mock-blocked {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,80,80,0.08);
+    border-left: 2px solid #ff5050;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.76rem;
+    color: #ffb3b3;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .mock-blocked .icon-x {
+    color: #ff5050;
+    font-weight: 700;
+  }
+
+  /* stat mini-grid (evict style) */
+  .mock-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+  .mock-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+  }
+  .mock-stat .n {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .mock-stat .l {
+    font-size: 0.6rem;
+    color: var(--text-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.1rem;
+  }
+
+  /* balance mock */
+  .mock-balance {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+  }
+  .mock-balance .cell {
+    text-align: center;
+    padding: 0.6rem 0.4rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .mock-balance .cell .v {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--blue-hot);
+  }
+  .mock-balance .cell .k {
+    font-size: 0.58rem;
+    color: var(--text-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
+
+  /* pet stat bars */
+  .mock-bars { display: flex; flex-direction: column; gap: 0.32rem; }
+  .mock-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+  }
+  .mock-bar-row .k {
+    color: var(--text-3);
+    width: 52px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+  }
+  .mock-bar-row .bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .mock-bar-row .fill {
+    height: 100%;
+    background: var(--grad-blue);
+    border-radius: 2px;
+  }
+  .mock-bar-row .v {
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    width: 24px;
+    text-align: right;
+  }
+
+  /* slots mock */
+  .mock-slots {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+    padding: 0.5rem 0;
+    font-size: 1.5rem;
+  }
+  .mock-slots .reel {
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  /* ═══════════ EVERYTHING ELSE CHIPS ═══════════ */
+  .chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-2);
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-2);
+    transition: all 0.25s;
+  }
+  .chip:hover {
+    border-color: rgba(123,143,255,0.4);
+    color: var(--text);
+    background: rgba(123,143,255,0.05);
+    transform: translateY(-2px);
+  }
+  .chip .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 8px var(--blue-glow);
+  }
+
+  /* ═══════════ INTEGRATIONS ═══════════ */
+  .integration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+  .integration {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    transition: all 0.3s;
+  }
+  .integration:hover {
+    border-color: rgba(123,143,255,0.35);
+    background: rgba(123,143,255,0.03);
+  }
+  .integration-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(123,143,255,0.1);
+    border: 1px solid rgba(123,143,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+  .integration-icon svg { width: 16px; height: 16px; }
+  .integration-info .n { font-weight: 600; font-size: 0.88rem; color: var(--text); }
+  .integration-info .d { font-size: 0.72rem; color: var(--text-3); margin-top: 0.1rem; }
+
+  /* ═══════════ PRICING ═══════════ */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 820px;
+  }
+  @media (max-width: 720px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+  .price-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .price-card.highlight {
+    border-color: rgba(123,143,255,0.4);
+    background: rgba(123,143,255,0.04);
+  }
+  .price-card.highlight::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  }
+  .price-tier {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .price-amount {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .price-amount .unit {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-3);
+    letter-spacing: 0;
+    margin-left: 0.3rem;
+  }
+  .price-desc {
+    color: var(--text-2);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .price-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .price-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--text-2);
+  }
+  .price-list .check {
+    color: var(--blue);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+  .price-list .cross { color: var(--text-3); flex-shrink: 0; margin-top: 0.15rem; }
 
   /* ═══════════ REVIEWS ═══════════ */
   .reviews-grid {
@@ -683,10 +984,10 @@
     background: rgba(255,255,255,0.02);
     border: 1px solid var(--border);
     border-radius: 18px;
-    padding: 1.5rem;
+    padding: 1.4rem;
     position: relative;
     overflow: hidden;
-    transition: all 0.4s;
+    transition: all 0.35s;
     display: flex;
     flex-direction: column;
   }
@@ -698,54 +999,54 @@
     background: linear-gradient(90deg, transparent, rgba(123,143,255,0.4), transparent);
   }
   .review:hover {
-    border-color: rgba(123,143,255,0.35);
-    transform: translateY(-4px);
-    background: rgba(123,143,255,0.03);
+    border-color: rgba(123,143,255,0.32);
+    transform: translateY(-3px);
+    background: rgba(123,143,255,0.02);
   }
   .review-head {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
   }
   .review-avatar {
-    width: 42px; height: 42px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     flex-shrink: 0;
     background: linear-gradient(135deg, rgba(123,143,255,0.35), rgba(74,91,214,0.15));
     border: 1px solid rgba(123,143,255,0.3);
     display: flex; align-items: center; justify-content: center;
     font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 0.95rem;
     color: var(--blue-hot);
     overflow: hidden;
   }
   .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .review-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
-  .review-server { font-size: 0.72rem; color: var(--text-3); margin-top: 0.15rem; }
+  .review-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+  .review-server { font-size: 0.7rem; color: var(--text-3); margin-top: 0.1rem; }
   .review-quote {
     color: var(--text-2);
-    font-size: 0.9rem;
-    line-height: 1.65;
+    font-size: 0.88rem;
+    line-height: 1.6;
     flex: 1;
-    margin-bottom: 1.15rem;
+    margin-bottom: 1rem;
   }
   .review-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 0.9rem;
     border-top: 1px solid var(--border);
   }
-  .review-role { font-size: 0.8rem; color: var(--text); font-weight: 500; }
+  .review-role { font-size: 0.78rem; color: var(--text); font-weight: 500; }
   .review-tag {
     background: rgba(123,143,255,0.12);
     color: var(--blue-hot);
     border: 1px solid rgba(123,143,255,0.28);
-    padding: 0.25rem 0.6rem;
+    padding: 0.22rem 0.55rem;
     border-radius: 999px;
-    font-size: 0.66rem;
+    font-size: 0.63rem;
     font-weight: 600;
     letter-spacing: 0.04em;
   }
@@ -753,7 +1054,7 @@
   /* ═══════════ FINAL ═══════════ */
   .final {
     text-align: center;
-    padding: 8rem 1.25rem 7rem;
+    padding: 7rem 1.25rem 6rem;
     position: relative;
     overflow: hidden;
   }
@@ -763,17 +1064,17 @@
     transform: translate(-50%, -50%);
     width: 800px; height: 800px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(123,143,255,0.18), transparent 65%);
+    background: radial-gradient(circle, rgba(123,143,255,0.16), transparent 65%);
     pointer-events: none;
     z-index: 0;
-    filter: blur(60px);
+    filter: blur(70px);
     animation: halo 9s ease-in-out infinite;
   }
   .final-inner { position: relative; z-index: 1; }
   .final h2 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.9rem, 4.8vw, 3.25rem);
     line-height: 1.1;
     letter-spacing: -0.035em;
     margin-bottom: 1rem;
@@ -787,7 +1088,7 @@
   .final p {
     color: var(--text-2);
     font-size: 1.05rem;
-    margin-bottom: 2.25rem;
+    margin-bottom: 2rem;
   }
   .final .hero-ctas { justify-content: center; margin-bottom: 0; }
 
@@ -809,7 +1110,7 @@
     font-size: 1rem;
     margin-bottom: 1.25rem;
   }
-  .footer-brand img { width: 26px; height: 26px; border-radius: 8px; }
+  .footer-brand img { width: 26px; height: 26px; border-radius: 7px; }
   .footer-links {
     display: flex;
     justify-content: center;
@@ -821,7 +1122,7 @@
   .footer-links a:hover { color: var(--blue-hot); }
   .footer-copy { color: var(--text-3); font-size: 0.76rem; }
 
-  /* ═══════════ MOBILE MENU ═══════════ */
+  /* ═══════════ MOBILE ═══════════ */
   .mobile-menu {
     position: fixed;
     inset: 0;
@@ -861,8 +1162,10 @@
     .hamburger { display: flex; }
     .nav { padding: 0.45rem 0.45rem 0.45rem 0.9rem; }
     .hero { padding: 6rem 1rem 3rem; }
-    section { padding: 4.5rem 1rem; }
-    .trusted-card { min-width: 220px; padding: 0.85rem 1rem; }
+    section { padding: 4rem 1rem; }
+    .hero-stats-row { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .stat-col .val { font-size: 1.35rem; }
+    .server-card { min-width: 220px; padding: 0.85rem 1rem; }
     .hero-halo { left: 50%; }
   }
 
@@ -881,11 +1184,9 @@
 <div class="ambient">
   <div class="smoke s1"></div>
   <div class="smoke s2"></div>
-  <div class="smoke s3"></div>
 </div>
 <div class="grid-bg"></div>
 <div class="noise"></div>
-<div class="cursor-glow" id="cursorGlow"></div>
 
 <!-- mobile menu -->
 <div class="mobile-menu" id="mobileMenu">
@@ -893,7 +1194,8 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
   </button>
   <a href="#features">features</a>
-  <a href="#trusted">trusted</a>
+  <a href="#integrations">integrations</a>
+  <a href="#pricing">pricing</a>
   <a href="#reviews">reviews</a>
   <a href="https://discord.gg/rTrJyPyayg" target="_blank">support</a>
   <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">invite</a>
@@ -907,7 +1209,8 @@
     </a>
     <nav class="nav-links">
       <a href="#features">features</a>
-      <a href="#trusted">trusted</a>
+      <a href="#integrations">integrations</a>
+      <a href="#pricing">pricing</a>
       <a href="#reviews">reviews</a>
       <a href="https://discord.gg/rTrJyPyayg" target="_blank">support</a>
       <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank" class="nav-cta magnetic">invite</a>
@@ -924,22 +1227,23 @@
   <div class="hero-inner">
     <div class="hero-eyebrow">
       <span class="dot"></span>
-      free forever · no subscription · no bullshit
+      free forever · 120+ commands · 99.9% uptime
     </div>
 
     <h1>
-      discord's most powerful<br>
-      <span class="accent">all-in-one</span> bot
+      switch to the<br>
+      <span class="word-switch"><span class="word" id="rotWord">vibe</span></span><br>
+      with <span class="accent">chromed</span>
     </h1>
 
     <p class="sub">
-      transform your server with advanced moderation, ai, economy, pets, and automation — built to fit right for your community.
+      discord's premier all-in-one bot. moderation, ai, economy, pets, gambling, and automation — built to fit right for your community.
     </p>
 
     <div class="hero-ctas">
       <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank" class="btn-primary magnetic">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-        authorize
+        add to discord
       </a>
       <a href="#features" class="btn-ghost magnetic">
         explore features
@@ -947,9 +1251,34 @@
       </a>
     </div>
 
-    <p class="hero-stats">
-      powering <b id="heroMembers" data-target="0">0</b> users across <b id="heroServers" data-target="0">0</b> servers
-    </p>
+    <div class="hero-stats-row">
+      <div class="stat-col">
+        <div class="val" id="statMembers" data-target="0">0</div>
+        <div class="lbl">members</div>
+      </div>
+      <div class="stat-col">
+        <div class="val" id="statServers" data-target="0">0</div>
+        <div class="lbl">servers</div>
+      </div>
+      <div class="stat-col">
+        <div class="val" data-target="120">0</div>
+        <div class="lbl">commands</div>
+      </div>
+      <div class="stat-col">
+        <div class="val" data-target="99" data-suffix=".9%">0</div>
+        <div class="lbl">uptime</div>
+      </div>
+    </div>
+
+    <div class="hero-demo">
+      <div class="demo-line">
+        <span class="prompt">/</span>
+        <span class="cmd">antinuke enable</span>
+      </div>
+      <div class="demo-line out"><span class="ok">▸</span> <b>protection armed</b> · audit trail active</div>
+      <div class="demo-line out"><span class="ok">▸</span> 3 bans / 10s threshold · <b>auto-lockdown ready</b></div>
+      <div class="demo-line out"><span class="warn">▸</span> last raid blocked: <b>4m ago</b> · 12 accounts</div>
+    </div>
 
     <div class="hero-servers">
       <div class="hero-servers-track" id="heroTrack"></div>
@@ -957,11 +1286,15 @@
   </div>
 </section>
 
-<!-- ═══════════ TRUSTED ═══════════ -->
-<section class="trusted-section" id="trusted">
-  <div class="trusted-label">trusted by communities</div>
-  <div class="trusted-row r1" id="trustedRow1"></div>
-  <div class="trusted-row r2" id="trustedRow2"></div>
+<!-- ═══════════ BIG MARQUEE ═══════════ -->
+<section class="marquee-section">
+  <div class="marquee-head">
+    <div class="marquee-label">trusted by communities</div>
+    <div class="marquee-count" id="marqueeCount">—</div>
+  </div>
+  <div class="marquee-row r1" id="mRow1"></div>
+  <div class="marquee-row r2" id="mRow2"></div>
+  <div class="marquee-row r3" id="mRow3"></div>
 </section>
 
 <!-- ═══════════ FEATURES ═══════════ -->
@@ -973,7 +1306,7 @@
         one bot. <span class="accent">every feature.</span>
       </h2>
       <p class="section-sub">
-        moderation, ai, economy, pets, gambling, and automation — all free, all in one bot, all built to work out of the box.
+        moderation, ai, economy, pets, gambling, automation — all free, all in one bot.
       </p>
     </div>
 
@@ -983,16 +1316,16 @@
         <div class="icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
         </div>
-        <h3>ai that actually remembers</h3>
-        <p>gemini-tier reasoning with groq speed. long-term memory per user, custom personalities, imagine, and a hybrid model picker.</p>
-        <div class="mini-chat">
-          <div class="mini-msg">
+        <h3>ai with real memory</h3>
+        <p>gemini-tier reasoning with groq speed. remembers users, custom personalities, imagine generation, model picker.</p>
+        <div class="mock">
+          <div class="mock-msg">
             <div class="av">U</div>
-            <div class="txt">yo do you remember my cat's name</div>
+            <div class="txt">do you remember my cat's name</div>
           </div>
-          <div class="mini-msg bot">
+          <div class="mock-msg bot">
             <div class="av">C</div>
-            <div class="txt">yeah twin, <b>whiskers</b>. she knocked your coffee off the desk 3 weeks ago lol</div>
+            <div class="txt">yeah twin, <b>whiskers</b>. knocked your coffee off the desk 3 weeks ago lol</div>
           </div>
         </div>
         <div class="tag">/ask · /memory · /persona · /imagine</div>
@@ -1004,18 +1337,38 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <h3>antinuke that works</h3>
-        <p>audit trail, auto-lockdown, honeypots, four lock types, and full rollback on mass destructive actions.</p>
-        <div class="mini-chat">
-          <div class="mini-msg">
-            <div class="av">M</div>
-            <div class="txt">/mod ban @raider reason: raiding</div>
+        <p>audit trail, auto-lockdown, honeypots, four lock types, and full rollback on destructive actions.</p>
+        <div class="mock">
+          <div class="mock-blocked">
+            <span class="icon-x">✕</span>
+            <span>@raider attempted mass ban · blocked in 0.4s</span>
           </div>
-          <div class="mini-msg bot">
-            <div class="av">C</div>
-            <div class="txt"><b>banned.</b> case #0042 · previous: 3 warns, 1 timeout</div>
+          <div class="mock-stats">
+            <div class="mock-stat"><div class="n">12</div><div class="l">raids blocked</div></div>
+            <div class="mock-stat"><div class="n">8</div><div class="l">nukers banned</div></div>
           </div>
         </div>
         <div class="tag">/antinuke · /honeypot · /lock</div>
+      </div>
+
+      <!-- Moderation -->
+      <div class="feature-card reveal tilt">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
+        </div>
+        <h3>moderation with cases</h3>
+        <p>every action is a case with an id. escalation, notes, watchlist, warn expiry, per-user history.</p>
+        <div class="mock">
+          <div class="mock-msg bot">
+            <div class="av">C</div>
+            <div class="txt"><b>case #0042</b> · ban issued</div>
+          </div>
+          <div class="mock-msg bot">
+            <div class="av">C</div>
+            <div class="txt">@raider · reason: raiding · previous: <span class="warn">3 warns, 1 timeout</span></div>
+          </div>
+        </div>
+        <div class="tag">/mod · /moderation</div>
       </div>
 
       <!-- Economy -->
@@ -1023,16 +1376,17 @@
         <div class="icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg>
         </div>
-        <h3>full economy system</h3>
-        <p>jobs, bank with daily interest, robberies, daily streaks, prestige tiers, achievements, and a shop — all one wallet.</p>
-        <div class="mini-chat">
-          <div class="mini-msg bot">
+        <h3>economy with depth</h3>
+        <p>jobs, bank with daily interest, robberies, daily streaks, prestige tiers, achievements, shop — all one wallet.</p>
+        <div class="mock">
+          <div class="mock-msg bot">
             <div class="av">C</div>
-            <div class="txt">daily claimed · <b>+375 cash</b> · streak 12 days</div>
+            <div class="txt">daily claimed · <b>+375 cash</b> · streak 12</div>
           </div>
-          <div class="mini-msg bot">
-            <div class="av">C</div>
-            <div class="txt">balance: <b>4,820 cash</b> · bank: <b>18,200</b></div>
+          <div class="mock-balance">
+            <div class="cell"><div class="v">4,820</div><div class="k">wallet</div></div>
+            <div class="cell"><div class="v">18,200</div><div class="k">bank</div></div>
+            <div class="cell"><div class="v">12</div><div class="k">streak</div></div>
           </div>
         </div>
         <div class="tag">/economy · 8 jobs · 18 achievements</div>
@@ -1044,18 +1398,20 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
         </div>
         <h3>tamagotchi on discord</h3>
-        <p>adopt a pet, feed it, play with it, watch it grow. 7 species, real decay mechanics, sickness, and even death.</p>
-        <div class="mini-chat">
-          <div class="mini-msg bot">
+        <p>7 species, real stats that decay every 10 minutes, sickness system, sleep cycles, and yes — permadeath.</p>
+        <div class="mock">
+          <div class="mock-msg bot">
             <div class="av">C</div>
-            <div class="txt">whiskers · hunger <b>82</b> · happy <b>91</b> · energy <b>64</b></div>
+            <div class="txt">whiskers · cat · 82/100</div>
           </div>
-          <div class="mini-msg">
-            <div class="av">U</div>
-            <div class="txt">/pets feed food:cupcake</div>
+          <div class="mock-bars">
+            <div class="mock-bar-row"><span class="k">hunger</span><div class="bar"><div class="fill" style="width:82%"></div></div><span class="v">82</span></div>
+            <div class="mock-bar-row"><span class="k">thirst</span><div class="bar"><div class="fill" style="width:71%"></div></div><span class="v">71</span></div>
+            <div class="mock-bar-row"><span class="k">happy</span><div class="bar"><div class="fill" style="width:91%"></div></div><span class="v">91</span></div>
+            <div class="mock-bar-row"><span class="k">energy</span><div class="bar"><div class="fill" style="width:64%"></div></div><span class="v">64</span></div>
           </div>
         </div>
-        <div class="tag">/pets · 7 species · real stats</div>
+        <div class="tag">/pets · 7 species · real decay</div>
       </div>
 
       <!-- Gambling -->
@@ -1064,18 +1420,19 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
         </div>
         <h3>casino with 8 games</h3>
-        <p>slots, blackjack, roulette, wheel of fortune, crash, horse race, coinflip, dice. all in one wallet with your economy.</p>
-        <div class="mini-chat">
-          <div class="mini-msg">
-            <div class="av">U</div>
-            <div class="txt">/gamble slots bet:all</div>
+        <p>slots, blackjack, roulette, wheel of fortune, crash, horse race, coinflip, dice. double-or-nothing after wins.</p>
+        <div class="mock">
+          <div class="mock-slots">
+            <div class="reel">💎</div>
+            <div class="reel">💎</div>
+            <div class="reel">💎</div>
           </div>
-          <div class="mini-msg bot">
+          <div class="mock-msg bot">
             <div class="av">C</div>
-            <div class="txt">💎 💎 💎 <b>x25!</b> payout: <b>12,500 cash</b></div>
+            <div class="txt">triple diamond · <b>x25</b> · payout <b>12,500 cash</b></div>
           </div>
         </div>
-        <div class="tag">/gamble · 8 games · double-or-nothing</div>
+        <div class="tag">/gamble · 8 games · linked to economy</div>
       </div>
 
       <!-- Automation -->
@@ -1085,17 +1442,201 @@
         </div>
         <h3>no-code automation</h3>
         <p>trigger → conditions → actions. build server workflows without touching a single line of code.</p>
-        <div class="mini-chat">
-          <div class="mini-msg bot">
+        <div class="mock">
+          <div class="mock-msg bot">
             <div class="av">C</div>
-            <div class="txt">automation <b>welcome-flow</b> · member join → dm + role + log</div>
+            <div class="txt"><b>welcome-flow</b></div>
           </div>
-          <div class="mini-msg bot">
+          <div class="mock-msg bot">
             <div class="av">C</div>
-            <div class="txt">fires: <b>148</b> · errors: <b>0</b></div>
+            <div class="txt">member join → dm + role + log · <span class="ok">148 fires · 0 errors</span></div>
           </div>
         </div>
         <div class="tag">/automation · 11 triggers · 23 actions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EVERYTHING ELSE ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">and the rest</div>
+      <h2 class="section-title">
+        more than just the <span class="accent">big features</span>
+      </h2>
+      <p class="section-sub">
+        the small stuff that ends up mattering every single day.
+      </p>
+    </div>
+
+    <div class="chips-wrap reveal">
+      <div class="chip"><span class="dot"></span>verification</div>
+      <div class="chip"><span class="dot"></span>tickets</div>
+      <div class="chip"><span class="dot"></span>reaction roles</div>
+      <div class="chip"><span class="dot"></span>welcome cards</div>
+      <div class="chip"><span class="dot"></span>starboard</div>
+      <div class="chip"><span class="dot"></span>giveaways</div>
+      <div class="chip"><span class="dot"></span>confessions</div>
+      <div class="chip"><span class="dot"></span>snipe</div>
+      <div class="chip"><span class="dot"></span>custom commands</div>
+      <div class="chip"><span class="dot"></span>embeds</div>
+      <div class="chip"><span class="dot"></span>level system</div>
+      <div class="chip"><span class="dot"></span>voice stats</div>
+      <div class="chip"><span class="dot"></span>afk status</div>
+      <div class="chip"><span class="dot"></span>boost perks</div>
+      <div class="chip"><span class="dot"></span>honeypot traps</div>
+      <div class="chip"><span class="dot"></span>keyword responder</div>
+      <div class="chip"><span class="dot"></span>uwuify</div>
+      <div class="chip"><span class="dot"></span>gif effects</div>
+      <div class="chip"><span class="dot"></span>server stats</div>
+      <div class="chip"><span class="dot"></span>leaderboards</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ INTEGRATIONS ═══════════ -->
+<section id="integrations">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">integrations</div>
+      <h2 class="section-title">
+        built on <span class="accent">solid ground</span>
+      </h2>
+      <p class="section-sub">
+        powered by industry-standard tools and APIs.
+      </p>
+    </div>
+
+    <div class="integration-grid reveal">
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">discord</div>
+          <div class="d">v14 gateway + rest</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">gemini</div>
+          <div class="d">ai reasoning</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">groq</div>
+          <div class="d">fast inference</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">postgresql</div>
+          <div class="d">data persistence</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">render</div>
+          <div class="d">cloud hosting</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">canvas</div>
+          <div class="d">image generation</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 6v8l-9 6-9-6V8z"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">bloxlink</div>
+          <div class="d">roblox verification trap</div>
+        </div>
+      </div>
+
+      <div class="integration">
+        <div class="integration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="integration-info">
+          <div class="n">webhooks</div>
+          <div class="d">custom endpoints</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">pricing</div>
+      <h2 class="section-title">
+        free. <span class="accent">forever.</span>
+      </h2>
+      <p class="section-sub">
+        every feature on every server. no premium tier, no hidden paywalls, no subscriptions.
+      </p>
+    </div>
+
+    <div class="pricing-grid reveal">
+      <div class="price-card highlight">
+        <div class="price-tier">chromed</div>
+        <div class="price-amount">$0<span class="unit">/ forever</span></div>
+        <div class="price-desc">every feature unlocked, on every server, forever.</div>
+        <ul class="price-list">
+          <li><span class="check">✓</span> moderation + antinuke</li>
+          <li><span class="check">✓</span> ai chat + memory + imagine</li>
+          <li><span class="check">✓</span> economy + pets + casino</li>
+          <li><span class="check">✓</span> automation + verification</li>
+          <li><span class="check">✓</span> tickets + reaction roles</li>
+          <li><span class="check">✓</span> 120+ commands</li>
+          <li><span class="check">✓</span> priority support</li>
+          <li><span class="check">✓</span> unlimited servers</li>
+        </ul>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier" style="color: var(--text-3);">typical premium bots</div>
+        <div class="price-amount">$40.95<span class="unit">/ month</span></div>
+        <div class="price-desc">what you'd pay stacking five separate premium bots to get everything chromed has built in.</div>
+        <ul class="price-list">
+          <li><span class="cross">✕</span> moderation · $9.99/mo</li>
+          <li><span class="cross">✕</span> ai chat · $14.99/mo</li>
+          <li><span class="cross">✕</span> tickets · $4.99/mo</li>
+          <li><span class="cross">✕</span> economy · $6.99/mo</li>
+          <li><span class="cross">✕</span> custom commands · $3.99/mo</li>
+          <li><span class="cross">✕</span> priority support · extra</li>
+          <li><span class="cross">✕</span> server limits apply</li>
+          <li><span class="cross">✕</span> feature gates</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -1110,15 +1651,14 @@
         loved by <span class="accent">real servers</span>
       </h2>
       <p class="section-sub">
-        real reviews from owners who put chromed on the front lines of their community.
+        real reviews from owners who put chromed on the front lines.
       </p>
     </div>
 
     <div class="reviews-grid">
-
       <!-- ═══════════════════════════════════════════════
            EDIT BELOW — 6 review cards
-           avatar: replace the letter with <img src="review1.png" alt="" />
+           to add avatar: <img src="review1.png" alt="" />
            ═══════════════════════════════════════════════ -->
 
       <div class="review reveal">
@@ -1129,9 +1669,7 @@
             <div class="review-server">their server · 4.7k members</div>
           </div>
         </div>
-        <div class="review-quote">
-          replace this with their quote. keep it under 200 characters so it fits cleanly in the card.
-        </div>
+        <div class="review-quote">replace this with their quote. keep it under 200 characters so it fits cleanly.</div>
         <div class="review-footer">
           <div class="review-role">their role</div>
           <div class="review-tag">verified</div>
@@ -1146,9 +1684,7 @@
             <div class="review-server">their server · 2.1k members</div>
           </div>
         </div>
-        <div class="review-quote">
-          replace this with their quote. keep it under 200 characters so it fits cleanly in the card.
-        </div>
+        <div class="review-quote">replace this with their quote. keep it under 200 characters so it fits cleanly.</div>
         <div class="review-footer">
           <div class="review-role">their role</div>
           <div class="review-tag">verified</div>
@@ -1163,9 +1699,7 @@
             <div class="review-server">their server · 1.2k members</div>
           </div>
         </div>
-        <div class="review-quote">
-          replace this with their quote. keep it under 200 characters so it fits cleanly in the card.
-        </div>
+        <div class="review-quote">replace this with their quote. keep it under 200 characters so it fits cleanly.</div>
         <div class="review-footer">
           <div class="review-role">their role</div>
           <div class="review-tag">verified</div>
@@ -1180,9 +1714,7 @@
             <div class="review-server">their server · 890 members</div>
           </div>
         </div>
-        <div class="review-quote">
-          replace this with their quote. keep it under 200 characters so it fits cleanly in the card.
-        </div>
+        <div class="review-quote">replace this with their quote. keep it under 200 characters so it fits cleanly.</div>
         <div class="review-footer">
           <div class="review-role">their role</div>
           <div class="review-tag">verified</div>
@@ -1197,9 +1729,7 @@
             <div class="review-server">their server · 612 members</div>
           </div>
         </div>
-        <div class="review-quote">
-          replace this with their quote. keep it under 200 characters so it fits cleanly in the card.
-        </div>
+        <div class="review-quote">replace this with their quote. keep it under 200 characters so it fits cleanly.</div>
         <div class="review-footer">
           <div class="review-role">their role</div>
           <div class="review-tag">verified</div>
@@ -1214,9 +1744,7 @@
             <div class="review-server">their server · 348 members</div>
           </div>
         </div>
-        <div class="review-quote">
-          replace this with their quote. keep it under 200 characters so it fits cleanly in the card.
-        </div>
+        <div class="review-quote">replace this with their quote. keep it under 200 characters so it fits cleanly.</div>
         <div class="review-footer">
           <div class="review-role">their role</div>
           <div class="review-tag">verified</div>
@@ -1256,7 +1784,8 @@
   </div>
   <div class="footer-links">
     <a href="#features">features</a>
-    <a href="#trusted">trusted</a>
+    <a href="#integrations">integrations</a>
+    <a href="#pricing">pricing</a>
     <a href="#reviews">reviews</a>
     <a href="https://discord.gg/rTrJyPyayg" target="_blank">support</a>
     <a href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID" target="_blank">invite</a>
@@ -1265,24 +1794,19 @@
 </footer>
 
 <script>
-/* ═══════════ CURSOR GLOW ═══════════ */
-const cursorGlow = document.getElementById('cursorGlow');
-let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-let gx = mx, gy = my;
-
-window.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursorGlow.style.opacity = '0.55';
-});
-window.addEventListener('mouseleave', () => cursorGlow.style.opacity = '0');
-
-function glowLoop() {
-  gx += (mx - gx) * 0.08;
-  gy += (my - gy) * 0.08;
-  cursorGlow.style.transform = `translate(${gx - 250}px, ${gy - 250}px)`;
-  requestAnimationFrame(glowLoop);
+/* ═══════════ WORD SWITCHER ═══════════ */
+const WORDS = ['vibe', 'future', 'generation', 'chaos', 'movement', 'underground', 'new wave'];
+let wordIdx = 0;
+const wordEl = document.getElementById('rotWord');
+function switchWord() {
+  wordEl.classList.add('out');
+  setTimeout(() => {
+    wordIdx = (wordIdx + 1) % WORDS.length;
+    wordEl.textContent = WORDS[wordIdx];
+    wordEl.classList.remove('out');
+  }, 400);
 }
-glowLoop();
+setInterval(switchWord, 2400);
 
 /* ═══════════ SCROLL REVEAL ═══════════ */
 const revealEls = document.querySelectorAll('.reveal');
@@ -1293,22 +1817,20 @@ const revealObs = new IntersectionObserver(entries => {
       revealObs.unobserve(e.target);
     }
   });
-}, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 revealEls.forEach(el => revealObs.observe(el));
 
-/* ═══════════ 3D TILT on feature cards ═══════════ */
+/* ═══════════ 3D TILT ═══════════ */
 document.querySelectorAll('.tilt').forEach(el => {
   el.addEventListener('mousemove', e => {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(1000px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg) translateY(-2px)`;
+    el.style.transform = `perspective(1000px) rotateY(${x * 3}deg) rotateX(${-y * 3}deg)`;
     el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
     el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
   });
-  el.addEventListener('mouseleave', () => {
-    el.style.transform = '';
-  });
+  el.addEventListener('mouseleave', () => { el.style.transform = ''; });
 });
 
 /* ═══════════ MAGNETIC BUTTONS ═══════════ */
@@ -1317,46 +1839,64 @@ document.querySelectorAll('.magnetic').forEach(el => {
     const r = el.getBoundingClientRect();
     const x = e.clientX - r.left - r.width / 2;
     const y = e.clientY - r.top - r.height / 2;
-    el.style.transform = `translate(${x * 0.15}px, ${y * 0.28}px)`;
+    el.style.transform = `translate(${x * 0.12}px, ${y * 0.24}px)`;
   });
   el.addEventListener('mouseleave', () => el.style.transform = '');
 });
 
-/* ═══════════ COUNTER ANIMATION ═══════════ */
-function animateCounter(el, target) {
+/* ═══════════ COUNTERS ═══════════ */
+function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
+}
+function animateCounter(el, target, suffix = '') {
   const duration = 1800;
   const start = performance.now();
   function step(t) {
     const p = Math.min(1, (t - start) / duration);
     const eased = 1 - Math.pow(1 - p, 3);
     const val = Math.floor(target * eased);
-    el.textContent = formatNum(val);
+    el.textContent = formatNum(val) + suffix;
     if (p < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
 
+/* ═══════════ ICON URL FIX ═══════════
+   Discord API returns icon as a hash, not a URL.
+   Build the CDN URL: https://cdn.discordapp.com/icons/{id}/{hash}.{ext}
+   Animated gifs start with "a_" prefix → .gif
+*/
+function getIconUrl(g) {
+  if (!g) return null;
+  if (g.iconUrl && typeof g.iconUrl === 'string' && g.iconUrl.startsWith('http')) return g.iconUrl;
+  if (g.icon && typeof g.icon === 'string') {
+    if (g.icon.startsWith('http')) return g.icon;
+    const guildId = g.id || g.guildId || g.guild_id;
+    if (guildId) {
+      const ext = g.icon.startsWith('a_') ? 'gif' : 'png';
+      return `https://cdn.discordapp.com/icons/${guildId}/${g.icon}.${ext}?size=128`;
+    }
+  }
+  return null;
+}
+
 /* ═══════════ FETCH SERVERS ═══════════ */
 const FALLBACK = [
-  { name: 'repentt', memberCount: 913 },
-  { name: 'drift boosts', memberCount: 842 },
-  { name: 'defixion', memberCount: 2847 },
-  { name: 'chaos lounge', memberCount: 1204 },
-  { name: 'juul warriors', memberCount: 892 },
-  { name: 'gremlin den', memberCount: 441 },
-  { name: 'the abyss', memberCount: 287 },
-  { name: 'night owls', memberCount: 612 },
-  { name: 'pixel pit', memberCount: 348 },
-  { name: 'vibe check', memberCount: 195 },
-  { name: 'midnight cafe', memberCount: 728 },
-  { name: 'sigma lounge', memberCount: 471 },
+  { id: '1', name: 'repentt', memberCount: 913 },
+  { id: '2', name: 'drift boosts', memberCount: 842 },
+  { id: '3', name: 'defixion', memberCount: 2847 },
+  { id: '4', name: 'chaos lounge', memberCount: 1204 },
+  { id: '5', name: 'juul warriors', memberCount: 892 },
+  { id: '6', name: 'gremlin den', memberCount: 441 },
+  { id: '7', name: 'the abyss', memberCount: 287 },
+  { id: '8', name: 'night owls', memberCount: 612 },
+  { id: '9', name: 'pixel pit', memberCount: 348 },
+  { id: '10', name: 'vibe check', memberCount: 195 },
+  { id: '11', name: 'midnight cafe', memberCount: 728 },
+  { id: '12', name: 'sigma lounge', memberCount: 471 },
 ];
-
-function formatNum(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-  return String(n);
-}
 
 async function loadServers() {
   let guilds = FALLBACK;
@@ -1369,11 +1909,20 @@ async function loadServers() {
   const serverCount = guilds.length;
   const memberCount = guilds.reduce((s, g) => s + (g.memberCount || 0), 0);
 
-  animateCounter(document.getElementById('heroMembers'), memberCount);
-  animateCounter(document.getElementById('heroServers'), serverCount);
+  animateCounter(document.getElementById('statMembers'), memberCount);
+  animateCounter(document.getElementById('statServers'), serverCount);
+  document.querySelectorAll('.stat-col .val[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    if (el.id === 'statMembers' || el.id === 'statServers') return;
+    animateCounter(el, target, suffix);
+  });
+
+  document.getElementById('marqueeCount').textContent =
+    `${formatNum(serverCount)}+ communities · ${formatNum(memberCount)} members served`;
 
   buildHeroTrack(guilds);
-  buildTrustedRows(guilds);
+  buildMarquees(guilds);
 }
 
 function buildHeroTrack(guilds) {
@@ -1381,40 +1930,65 @@ function buildHeroTrack(guilds) {
   if (!track) return;
   const items = guilds.slice(0, 14).map(g => {
     const initial = (g.name || '?').charAt(0).toUpperCase();
-    const avatar = g.icon ? `<img src="${g.icon}" alt="" />` : initial;
+    const iconUrl = getIconUrl(g);
+    const avatar = iconUrl
+      ? `<img src="${iconUrl}" alt="" onerror="this.style.display='none';this.parentNode.textContent='${initial}';" />`
+      : initial;
     return `
       <div class="mini-server">
         <div class="mini-avatar">${avatar}</div>
-        <div class="mini-info">
-          <div class="mini-name">${(g.name || 'unknown').slice(0, 20)}</div>
-          <div class="mini-count">${formatNum(g.memberCount || 0)} members</div>
-        </div>
+        <span class="mini-name">${(g.name || 'unknown').slice(0, 20)}</span>
+        <span class="mini-count">· ${formatNum(g.memberCount || 0)}</span>
       </div>
     `;
   }).join('');
   track.innerHTML = items + items;
 }
 
-function buildTrustedRows(guilds) {
-  const r1 = document.getElementById('trustedRow1');
-  const r2 = document.getElementById('trustedRow2');
-  if (!r1 || !r2) return;
-  const shuffled = [...guilds].sort(() => Math.random() - 0.5);
-  const half = Math.ceil(shuffled.length / 2);
-  r1.innerHTML = buildCards(shuffled.slice(0, half)) + buildCards(shuffled.slice(0, half));
-  r2.innerHTML = buildCards(shuffled.slice(half)) + buildCards(shuffled.slice(half));
+function buildMarquees(guilds) {
+  // sort by member count descending, filter out tiny servers
+  const sorted = [...guilds]
+    .filter(g => (g.memberCount || 0) >= 30)
+    .sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+
+  // if we filtered too many, just use all
+  const pool = sorted.length >= 6 ? sorted : [...guilds].sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+
+  const total = pool.length;
+  const third = Math.ceil(total / 3);
+  const row1 = pool.slice(0, third);
+  const row2 = pool.slice(third, third * 2);
+  const row3 = pool.slice(third * 2);
+
+  const pad = (arr) => {
+    if (arr.length >= 5) return arr;
+    const out = [...arr];
+    while (out.length < 5 && pool.length) out.push(pool[out.length % pool.length]);
+    return out;
+  };
+
+  const r1 = pad(row1);
+  const r2 = pad(row2);
+  const r3 = pad(row3);
+
+  document.getElementById('mRow1').innerHTML = buildCards(r1) + buildCards(r1);
+  document.getElementById('mRow2').innerHTML = buildCards(r2) + buildCards(r2);
+  document.getElementById('mRow3').innerHTML = buildCards(r3) + buildCards(r3);
 }
 
 function buildCards(list) {
   return list.map(g => {
     const initial = (g.name || '?').charAt(0).toUpperCase();
-    const avatar = g.icon ? `<img src="${g.icon}" alt="" />` : initial;
+    const iconUrl = getIconUrl(g);
+    const avatar = iconUrl
+      ? `<img src="${iconUrl}" alt="" onerror="this.style.display='none';this.parentNode.textContent='${initial}';" />`
+      : initial;
     return `
-      <div class="trusted-card">
-        <div class="trusted-avatar">${avatar}</div>
-        <div class="trusted-info">
-          <div class="trusted-name">${(g.name || 'unknown').slice(0, 22)}</div>
-          <div class="trusted-count">${formatNum(g.memberCount || 0)} members</div>
+      <div class="server-card">
+        <div class="server-avatar">${avatar}</div>
+        <div class="server-info">
+          <div class="server-name">${(g.name || 'unknown').slice(0, 22)}</div>
+          <div class="server-count">${formatNum(g.memberCount || 0)} members</div>
         </div>
       </div>
     `;
